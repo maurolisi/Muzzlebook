@@ -1,6 +1,6 @@
 ﻿#pubblicare su github
 git add .
-git commit -m "Descrizione delle modifiche fatte"
+git commit -m "Aggiunta Tabella Breeds con le razze di cani"
 git push origin main
 
 #ricevere da github
@@ -10,12 +10,19 @@ git pull origin main
 ssh root@31.70.156.199
 
 #pubblicare su VPS IONOS
-# 1. Compila e pubblica l'app nella cartella di produzione
+
+#spostati nella carella di pubblicazione
+cd /root/MuzzlebookRepo
+
+#ricevi i file da github
+git pull origin main
+
+# Compila e pubblica l'app nella cartella di produzione
 dotnet publish /root/MuzzlebookRepo/Muzzlebook.csproj -c Release -o /var/www/muzzlebook
 
-# 2. Assegna i permessi all'utente del web server
+# Assegna i permessi all'utente del web server
 chown -R www-data:www-data /var/www/muzzlebook
 
-# 3. Riavvia l'applicazione
+# Riavvia l'applicazione
 systemctl restart muzzlebook.service
 
