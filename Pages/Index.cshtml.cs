@@ -22,7 +22,7 @@ public class IndexModel : PageModel
 
     public async Task OnGetAsync()
     {
-        // 🔍 LETTURA: Recupera tutti i cani memorizzati nel database SQLite
+        // LETTURA: Recupera tutti i cani
         var sql = "SELECT * FROM Dogs ORDER BY CreatedAt DESC;";
         DogsList = await _db.QueryAsync<Dog>(sql);
     }
@@ -34,15 +34,23 @@ public class IndexModel : PageModel
             return Page();
         }
 
-        // ✍️ SCRITTURA: Inserisci un nuovo record nella tabella Dogs usando Dapper
+        // SCRITTURA: Inserimento
         var sql = @"
             INSERT INTO Dogs (OwnerId, Name, Breed, DateOfBirth, Gender, Microchip, CurrentWeightKg)
             VALUES (@OwnerId, @Name, @Breed, @DateOfBirth, @Gender, @Microchip, @CurrentWeightKg);";
 
-        // Assegniamo temporaneamente un ID utente di prova
         NewDog.OwnerId = "User_Test_123";
 
         await _db.ExecuteAsync(sql, NewDog);
+
+        return RedirectToPage();
+    }
+
+    // 🗑️ CANCELLAZIONE: Handler per rimuovere un cane in base al suo ID
+    public async Task<IActionResult> OnPostDeleteAsync(int id)
+    {
+        var sql = "DELETE FROM Dogs WHERE Id = @Id;";
+        await _db.ExecuteAsync(sql, new { Id = id });
 
         return RedirectToPage();
     }

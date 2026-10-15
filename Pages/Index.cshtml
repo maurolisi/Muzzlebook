@@ -11,7 +11,7 @@
     <form method="post" class="row g-3 my-3 p-3 border rounded bg-light">
         <div class="col-md-6">
             <label class="form-label">Nome</label>
-            <input asp-for="NewDog.Name" class="form-control" required placeholder="Es. Mozzle" />
+            <input asp-for="NewDog.Name" class="form-control" required placeholder="Es. Muzzle" />
         </div>
         <div class="col-md-6">
             <label class="form-label">Razza</label>
@@ -39,7 +39,7 @@
 
     <hr class="my-4" />
 
-    <!-- Tabella di Lettura -->
+    <!-- Tabella di Lettura ed Eliminazione -->
     <h2>Elenco Cani Registrati</h2>
     @if (!Model.DogsList.Any())
     {
@@ -57,6 +57,7 @@
                     <th>Microchip</th>
                     <th>Peso (kg)</th>
                     <th>Data Creazione</th>
+                    <th class="text-center">Azioni</th>
                 </tr>
             </thead>
             <tbody>
@@ -70,6 +71,14 @@
                         <td>@dog.Microchip</td>
                         <td>@dog.CurrentWeightKg</td>
                         <td>@dog.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td class="text-center">
+                            <!-- Form di Cancellazione con richiesta di conferma JavaScript -->
+                            <form method="post" asp-page-handler="Delete" asp-route-id="@dog.Id" onsubmit="return confirm('Sei sicuro di voler eliminare @dog.Name?');" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Elimina
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 }
             </tbody>
