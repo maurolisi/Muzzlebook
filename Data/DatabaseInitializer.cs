@@ -96,8 +96,6 @@ public static class DatabaseInitializer
         // Seeding automatico delle razze leggendo dal file JSON
         var count = db.ExecuteScalar<int>("SELECT COUNT(*) FROM Breeds;");
 
-        // Seeding automatico delle razze leggendo dal file JSON
-        var count = db.ExecuteScalar<int>("SELECT COUNT(*) FROM Breeds;");
 
         if (count == 0)
         {

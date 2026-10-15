@@ -26,3 +26,9 @@ chown -R www-data:www-data /var/www/muzzlebook
 # Riavvia l'applicazione
 systemctl restart muzzlebook.service
 
+
+
+#***cancellare il db:
+systemctl stop muzzlebook.service
+rm /var/www/muzzlebook/muzzlebook.db
+systemctl start muzzlebook.service
