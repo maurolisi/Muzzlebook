@@ -96,33 +96,47 @@ public static class DatabaseInitializer
         // Seeding automatico delle razze leggendo dal file JSON
         var count = db.ExecuteScalar<int>("SELECT COUNT(*) FROM Breeds;");
 
+        // Seeding automatico delle razze leggendo dal file JSON
+        var count = db.ExecuteScalar<int>("SELECT COUNT(*) FROM Breeds;");
+
         if (count == 0)
         {
-            // Cerca il file JSON nella cartella Data
-            var jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "breeds.json");
+            // Usa AppContext.BaseDirectory: sul VPS punterà infallibilmente a /var/www/muzzlebook/
+            var jsonPath = Path.Combine(AppContext.BaseDirectory, "Data", "breeds.json");
 
             if (File.Exists(jsonPath))
             {
-                var jsonString = File.ReadAllText(jsonPath);
-
-                // Deserializza il contenuto
-                var breeds = JsonSerializer.Deserialize<List<Breed>>(jsonString);
-
-                if (breeds != null && breeds.Any())
+                try
                 {
-                    // Query parametrizzata pronta per Dapper
-                    var insertSql = @"
-                        INSERT INTO Breeds (FciGroup, Name, Size, OriginCountry, Temperament) 
-                        VALUES (@FciGroup, @Name, @Size, @OriginCountry, @Temperament);";
+                    var jsonString = File.ReadAllText(jsonPath);
 
-                    // Dapper mappa automaticamente la List<Breed> e cicla gli insert
-                    db.Execute(insertSql, breeds);
+                    // Aggiungiamo le opzioni case-insensitive per massima sicurezza
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
+                    var breeds = JsonSerializer.Deserialize<List<Breed>>(jsonString, options);
+
+                    if (breeds != null && breeds.Any())
+                    {
+                        var insertSql = @"
+                            INSERT INTO Breeds (FciGroup, Name, Size, OriginCountry, Temperament) 
+                            VALUES (@FciGroup, @Name, @Size, @OriginCountry, @Temperament);";
+
+                        db.Execute(insertSql, breeds);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Se il JSON è malformato, l'errore finirà nei log di systemd
+                    Console.WriteLine($"Errore durante l'importazione del JSON Breeds: {ex.Message}");
                 }
             }
             else
             {
-                // Utile per il debug in caso il file non si trovi dove ci si aspetta
-                Console.WriteLine($"File non trovato: {jsonPath}");
+                // Se il file non c'è, lasciamo una traccia chiara nei log
+                Console.WriteLine($"ERRORE CRITICO SEEDING: File non trovato in {jsonPath}");
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿#pubblicare su github
 git add .
-git commit -m "Aggiunta Tabella Breeds con le razze di cani"
+git commit -m "sostituito Directory.GetCurrentDirectory() con AppContext.BaseDirectory"
 git push origin main
 
 #ricevere da github
