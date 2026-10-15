@@ -1,0 +1,830 @@
+[
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Pastore Tedesco",
+    "Size": "Grande",
+    "OriginCountry": "Germania",
+    "Temperament": "Intelligente, leale, versatile"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Pastore Belga (Malinois)",
+    "Size": "Grande",
+    "OriginCountry": "Belgio",
+    "Temperament": "Reattivo, atletico, da lavoro (pelo corto fulvo)"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Pastore Belga (Tervueren)",
+    "Size": "Grande",
+    "OriginCountry": "Belgio",
+    "Temperament": "Vigile, intelligente, affettuoso (pelo lungo fulvo/carbonato)"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Pastore Belga (Groenendael)",
+    "Size": "Grande",
+    "OriginCountry": "Belgio",
+    "Temperament": "Coraggioso, devoto, protettivo (pelo lungo nero)"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Pastore Belga (Laekenois)",
+    "Size": "Grande",
+    "OriginCountry": "Belgio",
+    "Temperament": "Energico, attento, rustico (pelo ruvido fulvo)"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Border Collie",
+    "Size": "Media",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Iperattivo, estremamente intelligente"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Pastore Maremmano Abruzzese",
+    "Size": "Grande",
+    "OriginCountry": "Italia",
+    "Temperament": "Protettivo, indipendente, coraggioso"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Welsh Corgi Pembroke",
+    "Size": "Piccola",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Vivace, affettuoso, attento"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Welsh Corgi Cardigan",
+    "Size": "Piccola",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Leale, intelligente, vigile"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Pastore Scozzese (Collie Pelo Lungo)",
+    "Size": "Grande",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Dolce, protettivo, sensibile"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Shetland Sheepdog (Pastore Scozzese Nano)",
+    "Size": "Piccola",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Vivace, intelligente, leale"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Australian Shepherd",
+    "Size": "Media",
+    "OriginCountry": "USA",
+    "Temperament": "Vivace, versatile, socievole"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Cane Lupo Cecoslovacco",
+    "Size": "Grande",
+    "OriginCountry": "Repubblica Ceca/Slovacchia",
+    "Temperament": "Temperamentoso, attivo, diffidente"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Pastore Svizzero Bianco",
+    "Size": "Grande",
+    "OriginCountry": "Svizzera",
+    "Temperament": "Attento, vivace, equilibrato"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Pastore Bergamasco",
+    "Size": "Media",
+    "OriginCountry": "Italia",
+    "Temperament": "Paziente, intelligente, determinato"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Bobtail (Old English Sheepdog)",
+    "Size": "Grande",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Docile, coraggioso, fedele"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Komondor",
+    "Size": "Gigante",
+    "OriginCountry": "Ungheria",
+    "Temperament": "Incorruttibile, coraggioso, dignitoso"
+  },
+  {
+    "FciGroup": "Gruppo 1 - Pastori e Bovari",
+    "Name": "Australian Cattle Dog",
+    "Size": "Media",
+    "OriginCountry": "Australia",
+    "Temperament": "Instancabile, coraggioso, leale"
+  },
+
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Bulldog Francese (Bouledogue Français)",
+    "Size": "Piccola",
+    "OriginCountry": "Francia",
+    "Temperament": "Affettuoso, giocherellone, da compagnia"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Cane Corso",
+    "Size": "Grande",
+    "OriginCountry": "Italia",
+    "Temperament": "Protettivo, equilibrato, leale"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Boxer",
+    "Size": "Grande",
+    "OriginCountry": "Germania",
+    "Temperament": "Esuberante, affettuoso, paziente"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Rottweiler",
+    "Size": "Grande",
+    "OriginCountry": "Germania",
+    "Temperament": "Calmo, protettivo, sicuro di sé"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Mastino Napoletano",
+    "Size": "Gigante",
+    "OriginCountry": "Italia",
+    "Temperament": "Imponente, pacifico, da guardia"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Alano",
+    "Size": "Gigante",
+    "OriginCountry": "Germania",
+    "Temperament": "Amichevole, docile, maestoso"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Dobermann",
+    "Size": "Grande",
+    "OriginCountry": "Germania",
+    "Temperament": "Vigile, intelligente, fedele"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Schnauzer (Nano/Medio/Gigante)",
+    "Size": "Varia",
+    "OriginCountry": "Germania",
+    "Temperament": "Attento, vivace, leale"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "San Bernardo",
+    "Size": "Gigante",
+    "OriginCountry": "Svizzera",
+    "Temperament": "Tranquillo, benevolo, da soccorso"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Bulldog Inglese",
+    "Size": "Media",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Calmo, ostinato, affettuoso"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Zwergpinscher (Pinscher Nano)",
+    "Size": "Piccola",
+    "OriginCountry": "Germania",
+    "Temperament": "Fiero, energico, intelligente"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Bovaro del Bernese",
+    "Size": "Grande",
+    "OriginCountry": "Svizzera",
+    "Temperament": "Equilibrato, pacifico, affettuoso"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Terranova",
+    "Size": "Gigante",
+    "OriginCountry": "Canada",
+    "Temperament": "Dolce, placido, eccellente nuotatore"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Leonberger",
+    "Size": "Gigante",
+    "OriginCountry": "Germania",
+    "Temperament": "Calmo, sicuro, adatto alle famiglie"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Dogue de Bordeaux",
+    "Size": "Gigante",
+    "OriginCountry": "Francia",
+    "Temperament": "Coraggioso, vigile, molto attaccato al padrone"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Bullmastiff",
+    "Size": "Gigante",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Potente, leale, protettivo"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Mastino Tibetano",
+    "Size": "Gigante",
+    "OriginCountry": "Tibet (Cina)",
+    "Temperament": "Indipendente, protettivo, imponente"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Dogo Argentino",
+    "Size": "Grande",
+    "OriginCountry": "Argentina",
+    "Temperament": "Coraggioso, atletico, silenzioso"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Shar Pei",
+    "Size": "Media",
+    "OriginCountry": "Cina",
+    "Temperament": "Calmo, indipendente, devoto"
+  },
+  {
+    "FciGroup": "Gruppo 2 - Pinscher, Schnauzer e Molossi",
+    "Name": "Cane da Montagna dei Pirenei",
+    "Size": "Gigante",
+    "OriginCountry": "Francia",
+    "Temperament": "Forte, coraggioso, protettore del gregge"
+  },
+
+  {
+    "FciGroup": "Gruppo 3 - Terrier",
+    "Name": "Jack Russell Terrier",
+    "Size": "Piccola",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Energico, audace, curioso"
+  },
+  {
+    "FciGroup": "Gruppo 3 - Terrier",
+    "Name": "Bull Terrier",
+    "Size": "Media",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Giocoso, coraggioso, determinato"
+  },
+  {
+    "FciGroup": "Gruppo 3 - Terrier",
+    "Name": "Yorkshire Terrier",
+    "Size": "Piccola",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Vivace, affettuoso, vigile"
+  },
+  {
+    "FciGroup": "Gruppo 3 - Terrier",
+    "Name": "American Staffordshire Terrier (Amstaff)",
+    "Size": "Media",
+    "OriginCountry": "USA",
+    "Temperament": "Potente, leale, affettuoso"
+  },
+  {
+    "FciGroup": "Gruppo 3 - Terrier",
+    "Name": "West Highland White Terrier (Westie)",
+    "Size": "Piccola",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Indipendente, allegro, intrepido"
+  },
+  {
+    "FciGroup": "Gruppo 3 - Terrier",
+    "Name": "Staffordshire Bull Terrier",
+    "Size": "Media",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Tenace, coraggioso, affettuoso con i bambini"
+  },
+  {
+    "FciGroup": "Gruppo 3 - Terrier",
+    "Name": "Airedale Terrier",
+    "Size": "Grande",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Fiero, intelligente, coraggioso"
+  },
+  {
+    "FciGroup": "Gruppo 3 - Terrier",
+    "Name": "Scottish Terrier",
+    "Size": "Piccola",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Dignitoso, indipendente, risoluto"
+  },
+  {
+    "FciGroup": "Gruppo 3 - Terrier",
+    "Name": "Fox Terrier (Pelo Ruvido/Liscio)",
+    "Size": "Piccola",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Attivo, vivace, impavido"
+  },
+  {
+    "FciGroup": "Gruppo 3 - Terrier",
+    "Name": "Cairn Terrier",
+    "Size": "Piccola",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Allegro, intrepido, assertivo"
+  },
+  {
+    "FciGroup": "Gruppo 3 - Terrier",
+    "Name": "Parson Russell Terrier",
+    "Size": "Piccola",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Tenace, energico, gran lavoratore"
+  },
+
+  {
+    "FciGroup": "Gruppo 4 - Bassotti",
+    "Name": "Bassotto Standard",
+    "Size": "Piccola",
+    "OriginCountry": "Germania",
+    "Temperament": "Curioso, tenace, fedele"
+  },
+  {
+    "FciGroup": "Gruppo 4 - Bassotti",
+    "Name": "Bassotto Nano",
+    "Size": "Piccola",
+    "OriginCountry": "Germania",
+    "Temperament": "Testardo, intelligente, affettuoso"
+  },
+  {
+    "FciGroup": "Gruppo 4 - Bassotti",
+    "Name": "Bassotto Kaninchen",
+    "Size": "Piccola",
+    "OriginCountry": "Germania",
+    "Temperament": "Coraggioso, fiero, astuto"
+  },
+
+  {
+    "FciGroup": "Gruppo 5 - Spitz e Tipo Primitivo",
+    "Name": "Husky Siberiano",
+    "Size": "Media",
+    "OriginCountry": "Russia",
+    "Temperament": "Socievole, energico, indipendente"
+  },
+  {
+    "FciGroup": "Gruppo 5 - Spitz e Tipo Primitivo",
+    "Name": "Alaskan Malamute",
+    "Size": "Grande",
+    "OriginCountry": "USA",
+    "Temperament": "Forte, affettuoso, leale"
+  },
+  {
+    "FciGroup": "Gruppo 5 - Spitz e Tipo Primitivo",
+    "Name": "Akita Inu",
+    "Size": "Grande",
+    "OriginCountry": "Giappone",
+    "Temperament": "Dignitoso, riservato, leale"
+  },
+  {
+    "FciGroup": "Gruppo 5 - Spitz e Tipo Primitivo",
+    "Name": "Shiba Inu",
+    "Size": "Piccola",
+    "OriginCountry": "Giappone",
+    "Temperament": "Attento, indipendente, pulito"
+  },
+  {
+    "FciGroup": "Gruppo 5 - Spitz e Tipo Primitivo",
+    "Name": "Volpino Italiano",
+    "Size": "Piccola",
+    "OriginCountry": "Italia",
+    "Temperament": "Allegro, vigile, affettuoso"
+  },
+  {
+    "FciGroup": "Gruppo 5 - Spitz e Tipo Primitivo",
+    "Name": "Pomerania (Spitz Nano)",
+    "Size": "Piccola",
+    "OriginCountry": "Germania/Polonia",
+    "Temperament": "Estroverso, intelligente, vivace"
+  },
+  {
+    "FciGroup": "Gruppo 5 - Spitz e Tipo Primitivo",
+    "Name": "Spitz Giapponese",
+    "Size": "Piccola",
+    "OriginCountry": "Giappone",
+    "Temperament": "Intelligente, allegro, affettuoso"
+  },
+  {
+    "FciGroup": "Gruppo 5 - Spitz e Tipo Primitivo",
+    "Name": "Samoyedo",
+    "Size": "Grande",
+    "OriginCountry": "Russia",
+    "Temperament": "Amichevole, gioioso, socievole"
+  },
+  {
+    "FciGroup": "Gruppo 5 - Spitz e Tipo Primitivo",
+    "Name": "Chow Chow",
+    "Size": "Media",
+    "OriginCountry": "Cina",
+    "Temperament": "Riservato, indipendente, dignitoso"
+  },
+  {
+    "FciGroup": "Gruppo 5 - Spitz e Tipo Primitivo",
+    "Name": "Eurasier",
+    "Size": "Media",
+    "OriginCountry": "Germania",
+    "Temperament": "Calmo, equilibrato, legato alla famiglia"
+  },
+  {
+    "FciGroup": "Gruppo 5 - Spitz e Tipo Primitivo",
+    "Name": "Basenji",
+    "Size": "Piccola",
+    "OriginCountry": "Africa Centrale",
+    "Temperament": "Curioso, indipendente, non abbaia"
+  },
+  {
+    "FciGroup": "Gruppo 5 - Spitz e Tipo Primitivo",
+    "Name": "Cirneco dell'Etna",
+    "Size": "Media",
+    "OriginCountry": "Italia",
+    "Temperament": "Vigile, veloce, affettuoso"
+  },
+  {
+    "FciGroup": "Gruppo 5 - Spitz e Tipo Primitivo",
+    "Name": "Podenco Ibicenco",
+    "Size": "Grande",
+    "OriginCountry": "Spagna",
+    "Temperament": "Attivo, intelligente, cacciatore visivo"
+  },
+
+  {
+    "FciGroup": "Gruppo 6 - Segugi e Pista di Sangue",
+    "Name": "Beagle",
+    "Size": "Media",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Curioso, affabile, ottimo fiuto"
+  },
+  {
+    "FciGroup": "Gruppo 6 - Segugi e Pista di Sangue",
+    "Name": "Basset Hound",
+    "Size": "Media",
+    "OriginCountry": "Francia/Regno Unito",
+    "Temperament": "Pacato, affettuoso, tenace"
+  },
+  {
+    "FciGroup": "Gruppo 6 - Segugi e Pista di Sangue",
+    "Name": "Segugio Italiano (Pelo Raso/Forte)",
+    "Size": "Media",
+    "OriginCountry": "Italia",
+    "Temperament": "Resistente, passionale nella caccia"
+  },
+  {
+    "FciGroup": "Gruppo 6 - Segugi e Pista di Sangue",
+    "Name": "Dalmata",
+    "Size": "Grande",
+    "OriginCountry": "Croazia",
+    "Temperament": "Attivo, intelligente, amichevole"
+  },
+  {
+    "FciGroup": "Gruppo 6 - Segugi e Pista di Sangue",
+    "Name": "Bloodhound (Chien de Saint-Hubert)",
+    "Size": "Grande",
+    "OriginCountry": "Belgio",
+    "Temperament": "Mite, pacifico, fiuto insuperabile"
+  },
+  {
+    "FciGroup": "Gruppo 6 - Segugi e Pista di Sangue",
+    "Name": "Rhodesian Ridgeback",
+    "Size": "Grande",
+    "OriginCountry": "Sudafrica/Zimbabwe",
+    "Temperament": "Dignitoso, intelligente, protettivo"
+  },
+  {
+    "FciGroup": "Gruppo 6 - Segugi e Pista di Sangue",
+    "Name": "Grand Bleu de Gascogne",
+    "Size": "Grande",
+    "OriginCountry": "Francia",
+    "Temperament": "Coraggioso, fiero, ostinato"
+  },
+  {
+    "FciGroup": "Gruppo 6 - Segugi e Pista di Sangue",
+    "Name": "Foxhound Inglese",
+    "Size": "Media",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Resistente, energico, da muta"
+  },
+
+  {
+    "FciGroup": "Gruppo 7 - Cani da Ferma",
+    "Name": "Setter Inglese",
+    "Size": "Grande",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Elegante, affettuoso, dinamico"
+  },
+  {
+    "FciGroup": "Gruppo 7 - Cani da Ferma",
+    "Name": "Setter Irlandese (Rosso)",
+    "Size": "Grande",
+    "OriginCountry": "Irlanda",
+    "Temperament": "Vivace, intelligente, affettuoso"
+  },
+  {
+    "FciGroup": "Gruppo 7 - Cani da Ferma",
+    "Name": "Setter Gordon",
+    "Size": "Grande",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Leale, fiero, coraggioso"
+  },
+  {
+    "FciGroup": "Gruppo 7 - Cani da Ferma",
+    "Name": "Pointer Inglese",
+    "Size": "Grande",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Atletico, devoto, energico"
+  },
+  {
+    "FciGroup": "Gruppo 7 - Cani da Ferma",
+    "Name": "Bracco Italiano",
+    "Size": "Grande",
+    "OriginCountry": "Italia",
+    "Temperament": "Docile, intelligente, cacciatore"
+  },
+  {
+    "FciGroup": "Gruppo 7 - Cani da Ferma",
+    "Name": "Spinone Italiano",
+    "Size": "Grande",
+    "OriginCountry": "Italia",
+    "Temperament": "Paziente, socievole, rustico"
+  },
+  {
+    "FciGroup": "Gruppo 7 - Cani da Ferma",
+    "Name": "Kurzhaar (Bracco Tedesco Pelo Corto)",
+    "Size": "Grande",
+    "OriginCountry": "Germania",
+    "Temperament": "Energico, equilibrato, versatile"
+  },
+  {
+    "FciGroup": "Gruppo 7 - Cani da Ferma",
+    "Name": "Weimaraner",
+    "Size": "Grande",
+    "OriginCountry": "Germania",
+    "Temperament": "Coraggioso, protettivo, obbediente"
+  },
+  {
+    "FciGroup": "Gruppo 7 - Cani da Ferma",
+    "Name": "Epagneul Breton",
+    "Size": "Media",
+    "OriginCountry": "Francia",
+    "Temperament": "Vivace, intelligente, adattabile"
+  },
+  {
+    "FciGroup": "Gruppo 7 - Cani da Ferma",
+    "Name": "Vizsla (Bracco Ungherese)",
+    "Size": "Media",
+    "OriginCountry": "Ungheria",
+    "Temperament": "Vivace, gentile, affettuoso"
+  },
+
+  {
+    "FciGroup": "Gruppo 8 - Riporto, Cerca e Acqua",
+    "Name": "Labrador Retriever",
+    "Size": "Grande",
+    "OriginCountry": "Canada",
+    "Temperament": "Socievole, docile, ottimo nuotatore"
+  },
+  {
+    "FciGroup": "Gruppo 8 - Riporto, Cerca e Acqua",
+    "Name": "Golden Retriever",
+    "Size": "Grande",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Affettuoso, intelligente, equilibrato"
+  },
+  {
+    "FciGroup": "Gruppo 8 - Riporto, Cerca e Acqua",
+    "Name": "Flat-Coated Retriever",
+    "Size": "Grande",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Allegro, fiducioso, instancabile"
+  },
+  {
+    "FciGroup": "Gruppo 8 - Riporto, Cerca e Acqua",
+    "Name": "Nova Scotia Duck Tolling Retriever",
+    "Size": "Media",
+    "OriginCountry": "Canada",
+    "Temperament": "Intelligente, attento, giocoso"
+  },
+  {
+    "FciGroup": "Gruppo 8 - Riporto, Cerca e Acqua",
+    "Name": "Cocker Spaniel Inglese",
+    "Size": "Media",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Giocoso, affettuoso, esuberante"
+  },
+  {
+    "FciGroup": "Gruppo 8 - Riporto, Cerca e Acqua",
+    "Name": "Cocker Spaniel Americano",
+    "Size": "Media",
+    "OriginCountry": "USA",
+    "Temperament": "Allegro, equilibrato, socievole"
+  },
+  {
+    "FciGroup": "Gruppo 8 - Riporto, Cerca e Acqua",
+    "Name": "English Springer Spaniel",
+    "Size": "Media",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Allegro, obbediente, attivo"
+  },
+  {
+    "FciGroup": "Gruppo 8 - Riporto, Cerca e Acqua",
+    "Name": "Lagotto Romagnolo",
+    "Size": "Media",
+    "OriginCountry": "Italia",
+    "Temperament": "Lavoratore, docile, cerca tartufi"
+  },
+  {
+    "FciGroup": "Gruppo 8 - Riporto, Cerca e Acqua",
+    "Name": "Cão de Água Português",
+    "Size": "Media",
+    "OriginCountry": "Portogallo",
+    "Temperament": "Intelligente, obbediente, coraggioso"
+  },
+  {
+    "FciGroup": "Gruppo 8 - Riporto, Cerca e Acqua",
+    "Name": "Perro de Agua Español",
+    "Size": "Media",
+    "OriginCountry": "Spagna",
+    "Temperament": "Fedele, obbediente, allegro"
+  },
+
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Barboncino (Toy/Nano/Medio/Grande)",
+    "Size": "Varia",
+    "OriginCountry": "Francia",
+    "Temperament": "Estremamente intelligente, affettuoso"
+  },
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Chihuahua",
+    "Size": "Piccola",
+    "OriginCountry": "Messico",
+    "Temperament": "Vivace, sveglio, molto legato al padrone"
+  },
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Cavalier King Charles Spaniel",
+    "Size": "Piccola",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Dolce, gentile, socievole"
+  },
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Maltese",
+    "Size": "Piccola",
+    "OriginCountry": "Italia",
+    "Temperament": "Vivace, affettuoso, elegante"
+  },
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Bolognese",
+    "Size": "Piccola",
+    "OriginCountry": "Italia",
+    "Temperament": "Serio, tranquillo, legato al padrone"
+  },
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Bichon à poil frisé",
+    "Size": "Piccola",
+    "OriginCountry": "Francia/Belgio",
+    "Temperament": "Allegro, giocoso, affabile"
+  },
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Carlino (Pug)",
+    "Size": "Piccola",
+    "OriginCountry": "Cina",
+    "Temperament": "Affettuoso, tranquillo, simpatico"
+  },
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Shih Tzu",
+    "Size": "Piccola",
+    "OriginCountry": "Tibet (Cina)",
+    "Temperament": "Intelligente, indipendente, amichevole"
+  },
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Pechinese",
+    "Size": "Piccola",
+    "OriginCountry": "Cina",
+    "Temperament": "Nobile, indipendente, coraggioso"
+  },
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Lhasa Apso",
+    "Size": "Piccola",
+    "OriginCountry": "Tibet (Cina)",
+    "Temperament": "Allegro, sicuro di sé, diffidente con gli estranei"
+  },
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Boston Terrier",
+    "Size": "Piccola",
+    "OriginCountry": "USA",
+    "Temperament": "Intelligente, vivace, gentile"
+  },
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Papillon (Epagneul Nano Continentale)",
+    "Size": "Piccola",
+    "OriginCountry": "Francia/Belgio",
+    "Temperament": "Vivace, aggraziato, obbediente"
+  },
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Cane Crestato Cinese (Chinese Crested Dog)",
+    "Size": "Piccola",
+    "OriginCountry": "Cina",
+    "Temperament": "Felice, non aggressivo, sensibile"
+  },
+  {
+    "FciGroup": "Gruppo 9 - Cani da Compagnia",
+    "Name": "Coton de Tuléar",
+    "Size": "Piccola",
+    "OriginCountry": "Madagascar",
+    "Temperament": "Allegro, stabile, molto socievole"
+  },
+
+  {
+    "FciGroup": "Gruppo 10 - Levrieri",
+    "Name": "Piccolo Levriero Italiano",
+    "Size": "Piccola",
+    "OriginCountry": "Italia",
+    "Temperament": "Elegante, affettuoso, sensibile"
+  },
+  {
+    "FciGroup": "Gruppo 10 - Levrieri",
+    "Name": "Greyhound",
+    "Size": "Grande",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Velocissimo, docile, calmo"
+  },
+  {
+    "FciGroup": "Gruppo 10 - Levrieri",
+    "Name": "Whippet",
+    "Size": "Media",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Gentile, atletico, silenzioso"
+  },
+  {
+    "FciGroup": "Gruppo 10 - Levrieri",
+    "Name": "Levriero Afgano",
+    "Size": "Grande",
+    "OriginCountry": "Afghanistan",
+    "Temperament": "Nobile, riservato, indipendente"
+  },
+  {
+    "FciGroup": "Gruppo 10 - Levrieri",
+    "Name": "Borzoi (Levriero Russo)",
+    "Size": "Grande",
+    "OriginCountry": "Russia",
+    "Temperament": "Calmo, equilibrato, indipendente"
+  },
+  {
+    "FciGroup": "Gruppo 10 - Levrieri",
+    "Name": "Saluki (Levriero Persiano)",
+    "Size": "Grande",
+    "OriginCountry": "Medio Oriente",
+    "Temperament": "Riservato, intelligente, dignitoso"
+  },
+  {
+    "FciGroup": "Gruppo 10 - Levrieri",
+    "Name": "Irish Wolfhound",
+    "Size": "Gigante",
+    "OriginCountry": "Irlanda",
+    "Temperament": "Dolce con gli amici, temibile se provocato"
+  },
+  {
+    "FciGroup": "Gruppo 10 - Levrieri",
+    "Name": "Scottish Deerhound",
+    "Size": "Gigante",
+    "OriginCountry": "Regno Unito",
+    "Temperament": "Docile, tranquillo, amichevole"
+  },
+  {
+    "FciGroup": "Gruppo 10 - Levrieri",
+    "Name": "Sloughi (Levriero Arabo)",
+    "Size": "Grande",
+    "OriginCountry": "Nord Africa",
+    "Temperament": "Fiero, nobile, molto attaccato al padrone"
+  },
+  {
+    "FciGroup": "Gruppo 10 - Levrieri",
+    "Name": "Galgo Español",
+    "Size": "Grande",
+    "OriginCountry": "Spagna",
+    "Temperament": "Calmo, rustico, affettuoso"
+  }
+]

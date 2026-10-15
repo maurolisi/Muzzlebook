@@ -1,0 +1,118 @@
+﻿@page
+@model Muzzlebook.Pages.BreedsModel
+@{
+    ViewData["Title"] = "Elenco Razze";
+}
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2><i class="bi bi-journal-bookmark-fill me-2"></i>Elenco Razze Canine (FCI)</h2>
+        <span class="badge bg-primary fs-6">Risultati: @Model.BreedsList.Count()</span>
+    </div>
+
+    <!-- Barra di Ricerca e Filtro -->
+    <form method="get" class="row g-2 mb-4">
+        <!-- Mantieni i parametri di ordinamento durante la ricerca -->
+        <input type="hidden" name="SortColumn" value="@Model.SortColumn" />
+        <input type="hidden" name="SortOrder" value="@Model.SortOrder" />
+
+        <div class="col-md-9 col-sm-8">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" asp-for="SearchTerm" class="form-control" placeholder="Cerca per nome, gruppo, taglia, paese o temperamento..." />
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary w-100">Cerca</button>
+            @if (!string.IsNullOrWhiteSpace(Model.SearchTerm))
+            {
+                <a asp-page="/Breeds" class="btn btn-outline-secondary">Reset</a>
+            }
+        </div>
+    </form>
+
+    @if (!Model.BreedsList.Any())
+    {
+        <div class="alert alert-warning text-center my-4" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>Nessuna razza trovata per il criterio di ricerca inserito.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 80px;">
+                            <a asp-page="/Breeds" 
+                               asp-route-SearchTerm="@Model.SearchTerm" 
+                               asp-route-SortColumn="Id" 
+                               asp-route-SortOrder="@Model.GetNextSortOrder("Id")" 
+                               class="text-white text-decoration-none">
+                                ID <i class="bi @Model.GetSortIcon("Id") ms-1"></i>
+                            </a>
+                        </th>
+                        <th>
+                            <a asp-page="/Breeds" 
+                               asp-route-SearchTerm="@Model.SearchTerm" 
+                               asp-route-SortColumn="FciGroup" 
+                               asp-route-SortOrder="@Model.GetNextSortOrder("FciGroup")" 
+                               class="text-white text-decoration-none">
+                                Gruppo FCI <i class="bi @Model.GetSortIcon("FciGroup") ms-1"></i>
+                            </a>
+                        </th>
+                        <th>
+                            <a asp-page="/Breeds" 
+                               asp-route-SearchTerm="@Model.SearchTerm" 
+                               asp-route-SortColumn="Name" 
+                               asp-route-SortOrder="@Model.GetNextSortOrder("Name")" 
+                               class="text-white text-decoration-none">
+                                Nome Razza <i class="bi @Model.GetSortIcon("Name") ms-1"></i>
+                            </a>
+                        </th>
+                        <th>
+                            <a asp-page="/Breeds" 
+                               asp-route-SearchTerm="@Model.SearchTerm" 
+                               asp-route-SortColumn="Size" 
+                               asp-route-SortOrder="@Model.GetNextSortOrder("Size")" 
+                               class="text-white text-decoration-none">
+                                Taglia <i class="bi @Model.GetSortIcon("Size") ms-1"></i>
+                            </a>
+                        </th>
+                        <th>
+                            <a asp-page="/Breeds" 
+                               asp-route-SearchTerm="@Model.SearchTerm" 
+                               asp-route-SortColumn="OriginCountry" 
+                               asp-route-SortOrder="@Model.GetNextSortOrder("OriginCountry")" 
+                               class="text-white text-decoration-none">
+                                Paese d'Origine <i class="bi @Model.GetSortIcon("OriginCountry") ms-1"></i>
+                            </a>
+                        </th>
+                        <th>
+                            <a asp-page="/Breeds" 
+                               asp-route-SearchTerm="@Model.SearchTerm" 
+                               asp-route-SortColumn="Temperament" 
+                               asp-route-SortOrder="@Model.GetNextSortOrder("Temperament")" 
+                               class="text-white text-decoration-none">
+                                Temperamento <i class="bi @Model.GetSortIcon("Temperament") ms-1"></i>
+                            </a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var breed in Model.BreedsList)
+                    {
+                        <tr>
+                            <td>@breed.Id</td>
+                            <td><span class="badge bg-secondary">@breed.FciGroup</span></td>
+                            <td><strong>@breed.Name</strong></td>
+                            <td>@breed.Size</td>
+                            <td>@(breed.OriginCountry ?? "-")</td>
+                            <td><small class="text-muted">@(breed.Temperament ?? "-")</small></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
