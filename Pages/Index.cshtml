@@ -1,10 +1,78 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Gestione Cani";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container my-4">
+    <h2>Aggiungi un nuovo Cane</h2>
+
+    <!-- Form di Scrittura -->
+    <form method="post" class="row g-3 my-3 p-3 border rounded bg-light">
+        <div class="col-md-6">
+            <label class="form-label">Nome</label>
+            <input asp-for="NewDog.Name" class="form-control" required placeholder="Es. Mozzle" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Razza</label>
+            <input asp-for="NewDog.Breed" class="form-control" placeholder="Es. Bouledogue Français" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Sesso</label>
+            <select asp-for="NewDog.Gender" class="form-select">
+                <option value="M">Maschio</option>
+                <option value="F">Femmina</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Microchip</label>
+            <input asp-for="NewDog.Microchip" class="form-control" placeholder="380260000000000" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Peso (kg)</label>
+            <input asp-for="NewDog.CurrentWeightKg" type="number" step="0.1" class="form-control" placeholder="12.5" />
+        </div>
+        <div class="col-12 text-end">
+            <button type="submit" class="btn btn-primary">Salva nel DB</button>
+        </div>
+    </form>
+
+    <hr class="my-4" />
+
+    <!-- Tabella di Lettura -->
+    <h2>Elenco Cani Registrati</h2>
+    @if (!Model.DogsList.Any())
+    {
+        <div class="alert alert-info">Nessun cane registrato nel database.</div>
+    }
+    else
+    {
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Razza</th>
+                    <th>Sesso</th>
+                    <th>Microchip</th>
+                    <th>Peso (kg)</th>
+                    <th>Data Creazione</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dog in Model.DogsList)
+                {
+                    <tr>
+                        <td>@dog.Id</td>
+                        <td><strong>@dog.Name</strong></td>
+                        <td>@dog.Breed</td>
+                        <td>@dog.Gender</td>
+                        <td>@dog.Microchip</td>
+                        <td>@dog.CurrentWeightKg</td>
+                        <td>@dog.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
