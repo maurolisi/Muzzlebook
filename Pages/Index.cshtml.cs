@@ -52,6 +52,15 @@ public class IndexModel : PageModel
         var sql = "DELETE FROM Dogs WHERE Id = @Id;";
         await _db.ExecuteAsync(sql, new { Id = id });
 
-        return RedirectToPage();
+        //return RedirectToPage();
+        return new OkResult();
+    }
+    public async Task<IActionResult> OnGetDeleteAsync(int id)
+    {
+        var sql = "DELETE FROM Dogs WHERE Id = @Id;";
+        await _db.ExecuteAsync(sql, new { Id = id });
+
+        //return RedirectToPage();
+        return new OkResult();
     }
 }

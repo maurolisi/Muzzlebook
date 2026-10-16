@@ -63,7 +63,7 @@
             <tbody>
                 @foreach (var dog in Model.DogsList)
                 {
-                    <tr>
+                    <tr id="dog_@dog.Id">
                         <td>@dog.Id</td>
                         <td><strong>@dog.Name</strong></td>
                         <td>@dog.Breed</td>
@@ -71,13 +71,16 @@
                         <td>@dog.Microchip</td>
                         <td>@dog.CurrentWeightKg</td>
                         <td>@dog.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td class="text-center">
+                        @*                      <td class="text-center">
                             <!-- Form di Cancellazione con richiesta di conferma JavaScript -->
                             <form method="post" asp-page-handler="Delete" asp-route-id="@dog.Id" onsubmit="return confirm('Sei sicuro di voler eliminare @dog.Name?');" class="d-inline">
                                 <button type="submit" class="btn btn-danger btn-sm">
                                     <i class="bi bi-trash"></i> Elimina
                                 </button>
                             </form>
+                        </td> *@
+                        <td class="text-center">
+                            <i onclick="deleteDog(@dog.Id,'@dog.Name')" class="fa-solid fa-trash-can fa-2x c-p text-danger"></i>
                         </td>
                     </tr>
                 }
@@ -85,3 +88,36 @@
         </table>
     }
 </div>
+@Html.AntiForgeryToken()
+@section Scripts {
+    <script>
+        deleteDog = function (id, name) {
+            // Utilizziamo box.confirm passando il messaggio e la funzione di callback
+            box.confirm(`Sei sicuro di voler eliminare ${name}?`,  async (ok) => {
+
+                // Se l'utente clicca su "Conferma", isConfirmed sarà true
+                if (ok) {
+                    // Cerca il token di sicurezza generato nella pagina
+                    const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+                    const token = tokenElement ? tokenElement.value : "";
+
+                    // Esegue la chiamata passando l'id nella querystring e il token nell'header
+                    const response = await fetch(`?handler=Delete&id=${id}`, {
+                        method: 'POST',
+                        headers: {
+                            "RequestVerificationToken": token
+                        }
+                    });
+
+                    if (response.ok) {
+                        //se il server risponde 200 OK...
+                        document.getElementById(`dog_${id}`).remove();
+                    } else {
+                        // Utilizza box.alert invece dell'alert standard di sistema
+                        box.alert('Errore durante l\'eliminazione del cane.');
+                    }
+                }
+            },"Conferma eliminazione","confirm-delete");
+        }
+    </script>
+}

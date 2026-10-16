@@ -1,0 +1,37 @@
+
+
+/* legato a box.js */
+.cssAlert .modal-content {
+    background-color: #FFF3CD;
+    margin-top: 85px;
+    margin-left: -8px;
+    box-shadow: 5px 5px 10px;
+    z-index: 99999
+}
+
+.confirm-delete .modal-content {
+    background-color: #FFF3CD;
+    margin-top: 85px;
+    margin-left: -8px;
+    box-shadow: 5px 5px 10px;
+    z-index: 99999
+}
+
+.confirm-delete .modal-header {
+    border-bottom: solid 1px silver !important;
+}
+
+.confirm-delete .modal-body {
+    border-bottom: solid 1px silver !important;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+.w-40 {
+    max-width: 40em;
+}
+.w-50 {
+    max-width: 50em;
+}
+.w-65 {
+    max-width: 65em;
+}

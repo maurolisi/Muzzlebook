@@ -6,8 +6,11 @@
     <title>@ViewData["Title"] - Muzzlebook</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/box/css/box.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Muzzlebook.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    @await RenderSectionAsync("Styles", required: false)
+    @* <link rel="stylesheet" href="~/Muzzlebook.styles.css" asp-append-version="true" /> *@
 </head>
 <body>
     <header>
@@ -43,10 +46,49 @@
         </div>
     </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+    <script src="~/lib/box/js/box.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+     <script src="~/lib/htmx/htmx.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+            // Aggiunge un header custom a ogni richiesta HTMX.
+            // Lato server (PageHandler) permette di distinguere chiamate HTMX da normali richieste browser:
+            //if (Request.Headers["X-Requested-With"] == "HTMX") { return Partial(...) } else { return Page() }
+            document.body.addEventListener('htmx:configRequest', function (evt) {
+                evt.detail.headers['X-Requested-With'] = 'HTMX';
+            });
+    </script>
+    <script>
+        //gestione della sessione
+            let timeoutSessione;
+            const DURATA_INATTIVITA = 15 * 60 * 1000; // 15 minuti in millisecondi
 
+            // Rende la funzione globale, così puoi chiamarla anche a mano se necessario
+            window.resetTimerSessione = function() {
+                clearTimeout(timeoutSessione);
+                timeoutSessione = setTimeout(() => {
+                    window.location.href = 'index?handler=Logout';
+                }, DURATA_INATTIVITA);
+            };
+
+            // 1. Avvia il timer al primo caricamento della pagina
+            window.resetTimerSessione();
+
+            // 2. Resetta il timer ad ogni chiamata HTMX (se usata)
+            document.body.addEventListener('htmx:beforeRequest', window.resetTimerSessione);
+
+            // 3. Resetta il timer ad ogni chiamata fetch() nativa
+            const originalFetch = window.fetch;
+            window.fetch = async function(...args) {
+                window.resetTimerSessione();
+                return await originalFetch.apply(this, args);
+            };
+
+            // 4. Resetta il timer ad ogni click dell'utente sulla pagina
+            // (Consigliato: copre i casi in cui l'utente interagisce senza fare fetch)
+            document.addEventListener('click', window.resetTimerSessione);
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
