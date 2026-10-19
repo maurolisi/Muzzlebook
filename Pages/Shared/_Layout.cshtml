@@ -13,15 +13,18 @@
     @* <link rel="stylesheet" href="~/Muzzlebook.styles.css" asp-append-version="true" /> *@
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-primary shadow-sm mb-4">
-        <div class="container">
+<header class="sticky-top">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary shadow-sm mb-4  rounded-bottom-4">
+        <div class="container-fluid">
             <!-- Logo e Brand -->
             <a class="navbar-brand d-flex align-items-center gap-2 fw-bold me-4" asp-area="" asp-page="/Index">
-                <div class="bg-white p-1 rounded-circle  border border-danger d-flex align-items-center justify-content-center shadow-sm" style="width: 44px; height: 44px;">
+                <div class="bg-white p-1 rounded-circle border border-danger d-flex align-items-center justify-content-center shadow-sm" style="width: 44px; height: 44px;">
                     <img src="~/images/logo.png" alt="Logo" width="36" height="36" class="img-fluid rounded-circle" />
                 </div>
-                <span class="fs-4">Muzzlebook</span>
+                <div class="position-relative">
+                    <span class="fs-4">Muzzlebook</span>
+                    <div style="font-size: 0.5em;">Il libro dei musi</div>
+                </div>
             </a>
 
             <!-- Toggler per Mobile -->
@@ -48,7 +51,7 @@
         </div>
     </nav>
 </header>
-    <div class="container">
+    <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
