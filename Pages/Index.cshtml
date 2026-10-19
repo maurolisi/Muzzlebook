@@ -1,123 +1,264 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Gestione Cani";
+    ViewData["Title"] = "Home - Il Benessere dei Nostri Amici";
 }
 
-<div class="container my-4">
-    <h2>Aggiungi un nuovo Cane</h2>
+<!-- Hero Section con la tua Cagnolina e il Messaggio -->
+<section class="py-5 bg-primary bg-gradient text-white rounded-4 shadow-sm mb-5 position-relative overflow-hidden">
+    <div class="container py-3 text-center position-relative z-1">
+        
+        <!-- Foto della Cagnolina / Mascot -->
+        <div class="d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-circle p-1 mb-3 border border-danger shadow-lg" style="width: 150px; height: 150px;">
+            <img src="~/images/logo.png" alt="Muzzlebook Mascot" class="img-fluid rounded-circle w-100 h-100" style="object-fit: cover;" />
+        </div>
 
-    <!-- Form di Scrittura -->
-    <form method="post" class="row g-3 my-3 p-3 border rounded bg-light">
-        <div class="col-md-6">
-            <label class="form-label">Nome</label>
-            <input asp-for="NewDog.Name" class="form-control" required placeholder="Es. Muzzle" />
-        </div>
-        <div class="col-md-6">
-            <label class="form-label">Razza</label>
-            <input asp-for="NewDog.Breed" class="form-control" placeholder="Es. Bouledogue Français" />
-        </div>
-        <div class="col-md-4">
-            <label class="form-label">Sesso</label>
-            <select asp-for="NewDog.Gender" class="form-select">
-                <option value="M">Maschio</option>
-                <option value="F">Femmina</option>
-            </select>
-        </div>
-        <div class="col-md-4">
-            <label class="form-label">Microchip</label>
-            <input asp-for="NewDog.Microchip" class="form-control" placeholder="380260000000000" />
-        </div>
-        <div class="col-md-4">
-            <label class="form-label">Peso (kg)</label>
-            <input asp-for="NewDog.CurrentWeightKg" type="number" step="0.1" class="form-control" placeholder="12.5" />
-        </div>
-        <div class="col-12 text-end">
-            <button type="submit" class="btn btn-primary">Salva nel DB</button>
-        </div>
-    </form>
+        <h1 class="display-3 fw-bold mb-1">Muzzlebook</h1>
+        <p class="fs-4 text-white-50 fw-light italic mb-4">"Il libro dei musi"</p>
+        
+        <p class="lead max-w-700 mx-auto mb-4">
+            Il portale dedicato interamente ai nostri cani e al loro <strong>benessere</strong>.<br />
+            Dalle attenzioni quotidiane alle loro fantastiche storie: ogni muso merita amore, con una passione speciale per i fantastici e irripetibili <strong>meticci</strong>!
+        </p>
 
-    <hr class="my-4" />
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="#musi-gallery" class="btn btn-light btn-lg text-primary fw-bold shadow-sm px-4">
+                <i class="bi bi-heart-fill text-danger me-2"></i>Tutti i Musi
+            </a>
+            <a asp-page="/Breeds" class="btn btn-outline-light btn-lg px-4">
+                <i class="bi bi-journal-text me-2"></i>Enciclopedia & Info
+            </a>
+        </div>
+    </div>
+</section>
 
-    <!-- Tabella di Lettura ed Eliminazione -->
-    <h2>Elenco Cani Registrati</h2>
-    @if (!Model.DogsList.Any())
-    {
-        <div class="alert alert-info">Nessun cane registrato nel database.</div>
-    }
-    else
-    {
-        <table class="table table-striped align-middle">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Razza</th>
-                    <th>Sesso</th>
-                    <th>Microchip</th>
-                    <th>Peso (kg)</th>
-                    <th>Data Creazione</th>
-                    <th class="text-center">Azioni</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var dog in Model.DogsList)
-                {
-                    <tr id="dog_@dog.Id">
-                        <td>@dog.Id</td>
-                        <td><strong>@dog.Name</strong></td>
-                        <td>@dog.Breed</td>
-                        <td>@dog.Gender</td>
-                        <td>@dog.Microchip</td>
-                        <td>@dog.CurrentWeightKg</td>
-                        <td>@dog.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-                        @*                      <td class="text-center">
-                            <!-- Form di Cancellazione con richiesta di conferma JavaScript -->
-                            <form method="post" asp-page-handler="Delete" asp-route-id="@dog.Id" onsubmit="return confirm('Sei sicuro di voler eliminare @dog.Name?');" class="d-inline">
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i> Elimina
-                                </button>
-                            </form>
-                        </td> *@
-                        <td class="text-center">
-                            <i onclick="deleteDog(@dog.Id,'@dog.Name')" class="fa-solid fa-trash-can fa-2x c-p text-danger"></i>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
+<!-- I Pilastri di Muzzlebook (Griglia a 4 schede) -->
+<div class="row g-4 text-center mb-5">
+    <!-- Scheda 1: Benessere -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card border-0 bg-light shadow-sm py-4 h-100 rounded-4">
+            <div class="card-body d-flex flex-column align-items-center">
+                <div class="bg-primary-subtle text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <i class="bi bi-heart-pulse-fill fs-3"></i>
+                </div>
+                <h4 class="fw-bold mb-2 fs-5">Benessere Canino</h4>
+                <p class="text-muted small mb-0">Consigli pratici su alimentazione, salute, movimento e cura di tutti i giorni per farlo vivere felice e a lungo.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scheda 2: Viva i Meticci -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card border-0 bg-light shadow-sm py-4 h-100 rounded-4 border-top border-warning border-3">
+            <div class="card-body d-flex flex-column align-items-center">
+                <div class="bg-warning-subtle text-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <i class="bi bi-stars fs-3"></i>
+                </div>
+                <h4 class="fw-bold mb-2 fs-5">Viva i Meticci!</h4>
+                <p class="text-muted small mb-0">I meticci non hanno standard da rispettare: sono pezzi unici di pura simpatia, intelligenza e salute!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scheda 3: Diario -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card border-0 bg-light shadow-sm py-4 h-100 rounded-4">
+            <div class="card-body d-flex flex-column align-items-center">
+                <div class="bg-primary-subtle text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <i class="bi bi-journal-medical fs-3"></i>
+                </div>
+                <h4 class="fw-bold mb-2 fs-5">Diario del Cane</h4>
+                <p class="text-muted small mb-0">Tieni traccia delle visite veterinarie, dei vaccini, della dieta e dei ricordi più belli del tuo compagno a quattro zampe.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scheda 4: NUOVA - Mercatino & Scambio -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card border-0 bg-light shadow-sm py-4 h-100 rounded-4 border-top border-success border-3">
+            <div class="card-body d-flex flex-column align-items-center">
+                <div class="bg-success-subtle text-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                    <i class="bi bi-bag-heart-fill fs-3"></i>
+                </div>
+                <h4 class="fw-bold mb-2 fs-5">Mercatino & Scambio</h4>
+                <p class="text-muted small mb-0">Un'area di scambio e riuso per vestitini, giochi, cucce e accessori non più usati. Dai nuova vita agli oggetti e aiuta altri amici!</p>
+            </div>
+        </div>
+    </div>
 </div>
-@Html.AntiForgeryToken()
-@section Scripts {
-    <script>
-        deleteDog = function (id, name) {
-            // Utilizziamo box.confirm passando il messaggio e la funzione di callback
-            box.confirm(`Sei sicuro di voler eliminare ${name}?`,  async (ok) => {
 
-                // Se l'utente clicca su "Conferma", isConfirmed sarà true
-                if (ok) {
-                    // Cerca il token di sicurezza generato nella pagina
-                    const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
-                    const token = tokenElement ? tokenElement.value : "";
+<!-- Galleria dei Musi -->
+<section id="musi-gallery" class="mb-5">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">
+            <i class="bi bi-camera-fill text-primary me-2"></i>I Musi Più Amati
+        </h2>
+        <p class="text-muted">Dai meticci unici e simpatici fino a ogni sfumatura del mondo canino</p>
+    </div>
 
-                    // Esegue la chiamata passando l'id nella querystring e il token nell'header
-                    const response = await fetch(`?handler=Delete&id=${id}`, {
-                        method: 'POST',
-                        headers: {
-                            "RequestVerificationToken": token
-                        }
-                    });
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        
+        <!-- CARD SPECIALE: Il Meticcio -->
+        <div class="col">
+            <div class="card h-100 border-2 border-warning shadow-sm overflow-hidden muzzle-card bg-warning-subtle">
+                <div class="muzzle-img-wrapper">
+                       <div class="mx-auto" style="width: 180px; height: 180px;">
+        <!-- Inserisci l'SVG direttamente qui o con tag img -->
+        <img src="~/images/meticcio-stilizzato.svg" alt="Il Meticcio Muzzlebook" class="img-fluid" />
+    </div>
+                    <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2 fw-bold">
+                        <i class="bi bi-star-fill me-1"></i>Unico & Irripetibile
+                    </span>
+                </div>
+                <div class="card-body text-center p-3">
+                    <h5 class="fw-bold mb-1 text-dark">Il Meticcio</h5>
+                    <p class="small text-muted mb-0">100% Cuore, Simpatia e Originalità</p>
+                </div>
+            </div>
+        </div>
 
-                    if (response.ok) {
-                        //se il server risponde 200 OK...
-                        document.getElementById(`dog_${id}`).remove();
-                    } else {
-                        // Utilizza box.alert invece dell'alert standard di sistema
-                        box.alert('Errore durante l\'eliminazione del cane.');
-                    }
-                }
-            },"Conferma eliminazione","confirm-delete");
+        <!-- Muso: Bouledogue Francese -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden muzzle-card">
+                <div class="muzzle-img-wrapper position-relative">
+                    <img src="https://images.dogapi.dog/pcvmfh53lfj5mj78az6u20yyfzmc" class="card-img-top muzzle-img" alt="Bouledogue" />
+                    <span class="badge bg-primary position-absolute top-0 end-0 m-2">Bouledogue</span>
+                </div>
+                <div class="card-body text-center p-3">
+                    <h6 class="fw-bold mb-1">Paziente & Giocoso</h6>
+                    <small class="text-muted">Ottimo compagno in famiglia</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Muso: Beagle -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden muzzle-card">
+                <div class="muzzle-img-wrapper position-relative">
+                    <img src="https://images.dogapi.dog/z6fwjutx7l181ucaucepn811qhbn" class="card-img-top muzzle-img" alt="Beagle" />
+                    <span class="badge bg-primary position-absolute top-0 end-0 m-2">Beagle</span>
+                </div>
+                <div class="card-body text-center p-3">
+                    <h6 class="fw-bold mb-1">Curioso & Vivace</h6>
+                    <small class="text-muted">Inesauribile fiuto ed energia</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Muso: Pastore Australiano -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden muzzle-card">
+                <div class="muzzle-img-wrapper position-relative">
+                    <img src="https://images.dogapi.dog/7l1vh84pjhqnfeysix79l1amxztg" class="card-img-top muzzle-img" alt="Australian Shepherd" />
+                    <span class="badge bg-primary position-absolute top-0 end-0 m-2">Aussie</span>
+                </div>
+                <div class="card-body text-center p-3">
+                    <h6 class="fw-bold mb-1">Intelligente & Dinamico</h6>
+                    <small class="text-muted">Sempre pronto all'avventura</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Muso: Akita -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden muzzle-card">
+                <div class="muzzle-img-wrapper position-relative">
+                    <img src="https://images.dogapi.dog/obekr39bs09740rfn0rohdy78fia" class="card-img-top muzzle-img" alt="Akita" />
+                    <span class="badge bg-primary position-absolute top-0 end-0 m-2">Akita</span>
+                </div>
+                <div class="card-body text-center p-3">
+                    <h6 class="fw-bold mb-1">Dignitoso & Leale</h6>
+                    <small class="text-muted">Un legame indissolubile</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Muso: Basenji -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden muzzle-card">
+                <div class="muzzle-img-wrapper position-relative">
+                    <img src="https://images.dogapi.dog/vq2mic91lw5r6lt4m9a7kghvmfkw" class="card-img-top muzzle-img" alt="Basenji" />
+                    <span class="badge bg-primary position-absolute top-0 end-0 m-2">Basenji</span>
+                </div>
+                <div class="card-body text-center p-3">
+                    <h6 class="fw-bold mb-1">Attento & Indipendente</h6>
+                    <small class="text-muted">L'elegante esploratore</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Muso: Appenzeller -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden muzzle-card">
+                <div class="muzzle-img-wrapper position-relative">
+                    <img src="https://images.dogapi.dog/g6bi31i49mwwk1zounz526ha3mp1" class="card-img-top muzzle-img" alt="Appenzeller" />
+                    <span class="badge bg-primary position-absolute top-0 end-0 m-2">Bovaro</span>
+                </div>
+                <div class="card-body text-center p-3">
+                    <h6 class="fw-bold mb-1">Energico & Sicuro</h6>
+                    <small class="text-muted">Custode affettuoso</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Muso: Eskimo Dog -->
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden muzzle-card">
+                <div class="muzzle-img-wrapper position-relative">
+                    <img src="https://images.dogapi.dog/tli5dm2tlvfayr47ywbpa5oglkl2" class="card-img-top muzzle-img" alt="American Eskimo Dog" />
+                    <span class="badge bg-primary position-absolute top-0 end-0 m-2">Eskimo</span>
+                </div>
+                <div class="card-body text-center p-3">
+                    <h6 class="fw-bold mb-1">Morbido & Espressivo</h6>
+                    <small class="text-muted">Un concentrato di dolcezza</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Call To Action Finale -->
+<div class="p-4 p-md-5 mb-4 rounded-4 bg-light text-center border shadow-sm">
+    <h3 class="fw-bold mb-3">Tutti i cani meritano una vita felice e in salute</h3>
+    <p class="text-muted mb-4 max-w-700 mx-auto">
+        Che sia un meticcio adottato in canile o un cane di razza, scopri le caratteristiche, le esigenze e i consigli utili per farlo stare al meglio.
+    </p>
+    <a asp-page="/Breeds" class="btn btn-primary btn-lg px-4 shadow-sm">
+        <i class="bi bi-search me-2"></i>Esplora la Scheda Informazioni
+    </a>
+</div>
+
+@section Styles {
+    <style>
+        .max-w-700 {
+            max-width: 700px;
         }
-    </script>
+
+        .muzzle-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .muzzle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1.2rem rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .muzzle-img-wrapper {
+            height: 220px;
+            overflow: hidden;
+            background-color: #f8f9fa;
+        }
+
+        .muzzle-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .muzzle-card:hover .muzzle-img {
+            transform: scale(1.08);
+        }
+    </style>
 }

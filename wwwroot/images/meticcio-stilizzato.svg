@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="55 35 270 250" width="100%" height="100%" class="img-fluid">
+    <defs>
+        <!-- Sfondi e Sfumature -->
+        <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#0d6efd" stop-opacity="0.15" />
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+        </radialGradient>
+        <linearGradient id="peloBase" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#E2A76F" />
+            <stop offset="100%" stop-color="#C68B4E" />
+        </linearGradient>
+        <linearGradient id="macchiaScura" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#5C3A21" />
+            <stop offset="100%" stop-color="#3D2312" />
+        </linearGradient>
+    </defs>
+
+    <!-- Aura di Sfondo -->
+    <circle cx="200" cy="165" r="150" fill="url(#bgGlow)" />
+
+    <!-- Orecchio Sinistro Dritto (Tipo Pastore / Husky) -->
+    <path d="M 120 160 L 70 50 C 65 40, 85 45, 105 75 Z" fill="#C68B4E" stroke="#3D2312" stroke-width="4" stroke-linejoin="round" />
+    <path d="M 115 150 L 78 65 C 75 58, 88 62, 102 85 Z" fill="#ECA9A0" opacity="0.7" />
+
+    <!-- Orecchio Destro Piegato (Tipo Beagle / Segugio) -->
+    <path d="M 280 160 C 310 160, 340 220, 310 260 C 290 280, 265 240, 265 190 Z" fill="url(#macchiaScura)" stroke="#3D2312" stroke-width="4" stroke-linejoin="round" />
+
+    <!-- Testa / Volto del Meticcio -->
+    <path d="M 110 180 C 100 280, 300 280, 290 180 C 290 120, 110 120, 110 180 Z" fill="url(#peloBase)" stroke="#3D2312" stroke-width="4" />
+
+    <!-- Macchia sul Musetto / Occhio Destro (Tipo Jack Russell / Amstaff) -->
+    <path d="M 215 140 C 275 130, 285 200, 240 225 C 205 210, 200 150, 215 140 Z" fill="url(#macchiaScura)" opacity="0.9" />
+
+    <!-- Occhi Vivaci -->
+    <!-- Occhio Sinistro -->
+    <circle cx="155" cy="180" r="14" fill="#3D2312" />
+    <circle cx="151" cy="176" r="5" fill="#FFFFFF" />
+    <!-- Occhio Destro -->
+    <circle cx="245" cy="180" r="14" fill="#3D2312" />
+    <circle cx="241" cy="176" r="5" fill="#FFFFFF" />
+
+    <!-- Musetto Bianco (Tipo Meticcio / Border Collie) -->
+    <path d="M 150 210 C 150 180, 250 180, 250 210 C 250 265, 150 265, 150 210 Z" fill="#FFF9F2" stroke="#3D2312" stroke-width="3" />
+
+    <!-- Lentiggini / Puntini sul Musetto (Tipo Dalmata / Cattle Dog) -->
+    <circle cx="170" cy="215" r="2.5" fill="#C68B4E" />
+    <circle cx="178" cy="222" r="2" fill="#C68B4E" />
+    <circle cx="165" cy="228" r="2" fill="#C68B4E" />
+    <circle cx="230" cy="215" r="2.5" fill="#5C3A21" />
+    <circle cx="222" cy="222" r="2" fill="#5C3A21" />
+    <circle cx="235" cy="228" r="2" fill="#5C3A21" />
+
+    <!-- Tartufo (Naso) -->
+    <path d="M 182 202 C 182 195, 218 195, 218 202 C 218 215, 200 222, 200 222 C 200 222, 182 215, 182 202 Z" fill="#2B1810" />
+    <ellipse cx="193" cy="201" rx="4" ry="2" fill="#FFFFFF" opacity="0.4" />
+
+    <!-- Bocca Sorridente e Lingua Fuori -->
+    <path d="M 185 222 Q 200 230 200 235 Q 200 230 215 222" fill="none" stroke="#3D2312" stroke-width="3.5" stroke-linecap="round" />
+    <path d="M 192 233 C 192 255, 208 255, 208 233 Z" fill="#FF7B89" stroke="#3D2312" stroke-width="3" />
+    <line x1="200" y1="234" x2="200" y2="247" stroke="#E25565" stroke-width="2" />
+
+    <!-- Ciuffetto di Pelo sulla Testa -->
+    <path d="M 190 125 C 185 110, 200 105, 198 118 C 205 105, 215 112, 206 126 Z" fill="#E2A76F" stroke="#3D2312" stroke-width="2.5" />
+</svg>
