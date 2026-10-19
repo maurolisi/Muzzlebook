@@ -1,15 +1,21 @@
 ﻿#pubblicare su github
 git add .
-git commit -m "sostituito Directory.GetCurrentDirectory() con AppContext.BaseDirectory"
+git commit -m "implementati box,htmx,font-awesome e cancellazione con fetch per evitare il ricaricamento della pagina"
 git push origin main
 
 #ricevere da github
 git pull origin main
 
-#accesso a VPS IONOS (ubuntu 24.04)
+
+
+
+
+#**********************************************
+
+#****accesso a VPS IONOS (ubuntu 24.04)
 ssh root@31.70.156.199
 
-#pubblicare su VPS IONOS
+#*********pubblicare su VPS IONOS
 
 #spostati nella carella di pubblicazione
 cd /root/MuzzlebookRepo
