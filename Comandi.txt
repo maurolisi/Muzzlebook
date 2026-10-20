@@ -1,6 +1,6 @@
 ﻿#pubblicare su github
 git add .
-git commit -m "aggiornate immagine beagle"
+git commit -m "Settaggi Progressive Web App"
 git push origin main
 
 #ricevere da github

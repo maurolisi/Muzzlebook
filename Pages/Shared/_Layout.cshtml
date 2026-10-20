@@ -3,6 +3,12 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="~/manifest.json" />
+    <meta name="theme-color" content="#1b6ec2" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="~/images/icon-512.png" />
     <title>@ViewData["Title"] - Muzzlebook</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -10,7 +16,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     @await RenderSectionAsync("Styles", required: false)
-    @* <link rel="stylesheet" href="~/Muzzlebook.styles.css" asp-append-version="true" /> *@
+   
 </head>
 <body>
 <header class="sticky-top">
@@ -68,6 +74,15 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
      <script src="~/lib/htmx/htmx.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(reg => Console.log('Service Worker registrato con successo:', reg.scope))
+                        .catch(err => Console.error('Errore registrazione Service Worker:', err));
+                });
+            }
+    </script>
     <script>
             // Aggiunge un header custom a ogni richiesta HTMX.
             // Lato server (PageHandler) permette di distinguere chiamate HTMX da normali richieste browser:
