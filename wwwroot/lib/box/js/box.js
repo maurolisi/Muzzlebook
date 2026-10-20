@@ -1,4 +1,4 @@
-﻿// modali bootstrap senza  jQuery.js e bootbox.js
+﻿// modali bootstrap senza  jQuery.js e bootbox.js-
 const box = (() => {
     // Variabile per mantenere l'istanza del loader
     let loaderInstance = null;
