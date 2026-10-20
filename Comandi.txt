@@ -1,6 +1,6 @@
 ﻿#pubblicare su github
 git add .
-git commit -m "implementati box,htmx,font-awesome e cancellazione con fetch per evitare il ricaricamento della pagina"
+git commit -m "aggiornate immagini cani"
 git push origin main
 
 #ricevere da github
