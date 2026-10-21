@@ -1,6 +1,6 @@
 ﻿#pubblicare su github
 git add .
-git commit -m "Settaggi Progressive Web App"
+git commit -m "Sposto il db dentro la cartella data"
 git push origin main
 
 #ricevere da github
@@ -37,4 +37,16 @@ systemctl restart muzzlebook.service
 #***cancellare il db:
 systemctl stop muzzlebook.service
 rm /var/www/muzzlebook/muzzlebook.db
+systemctl start muzzlebook.service
+
+
+#*********Aggiornare il db su VPS IONOS
+#Ferma il servizio dell'app Sul terminale SSH del server
+systemctl stop muzzlebook.service
+
+#Invia il database con SCP
+scp C:\progetti\muzzlebook\Data\muzzlebook.db root@31.70.156.199:/var/www/muzzlebook/Data/
+
+#Ripristina i permessi e riavvia
+chown -R www-data:www-data /var/www/muzzlebook
 systemctl start muzzlebook.service
