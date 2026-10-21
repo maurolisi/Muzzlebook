@@ -1,6 +1,6 @@
 ﻿#pubblicare su github
 git add .
-git commit -m "Sposto il db dentro la cartella data"
+git commit -m "Aggiorno il db e i test scrittura lettura"
 git push origin main
 
 #ricevere da github

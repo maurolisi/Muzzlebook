@@ -1,0 +1,122 @@
+﻿@page
+@model Muzzlebook.Pages.testModel
+@{
+    ViewData["Title"] = "Gestione Cani";
+}
+<div class="container my-4">
+    <h2>Aggiungi un nuovo Cane</h2>
+
+    <!-- Form di Scrittura -->
+    <form method="post" class="row g-3 my-3 p-3 border rounded bg-light">
+        <div class="col-md-6">
+            <label class="form-label">Nome</label>
+            <input asp-for="NewDog.Name" class="form-control" required placeholder="Es. Muzzle" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Razza</label>
+            <input asp-for="NewDog.Breed" class="form-control" placeholder="Es. Bouledogue Français" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Sesso</label>
+            <select asp-for="NewDog.Gender" class="form-select">
+                <option value="M">Maschio</option>
+                <option value="F">Femmina</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Microchip</label>
+            <input asp-for="NewDog.Microchip" class="form-control" placeholder="380260000000000" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Peso (kg)</label>
+            <input asp-for="NewDog.CurrentWeightKg" type="number" step="0.1" class="form-control" placeholder="12.5" />
+        </div>
+        <div class="col-12 text-end">
+            <button type="submit" class="btn btn-primary">Salva nel DB</button>
+        </div>
+    </form>
+
+    <hr class="my-4" />
+
+    <!-- Tabella di Lettura ed Eliminazione -->
+    <h2>Elenco Cani Registrati</h2>
+    @if (!Model.DogsList.Any())
+    {
+        <div class="alert alert-info">Nessun cane registrato nel database.</div>
+    }
+    else
+    {
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Razza</th>
+                    <th>Sesso</th>
+                    <th>Microchip</th>
+                    <th>Peso (kg)</th>
+                    <th>Data Creazione</th>
+                    <th class="text-center">Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var dog in Model.DogsList)
+                {
+                    <tr id="dog_@dog.Id">
+                        <td>@dog.Id</td>
+                        <td><strong>@dog.Name</strong></td>
+                        <td>@dog.Breed</td>
+                        <td>@dog.Gender</td>
+                        <td>@dog.Microchip</td>
+                        <td>@dog.CurrentWeightKg</td>
+                        <td>@dog.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                        @*                      <td class="text-center">
+                            <!-- Form di Cancellazione con richiesta di conferma JavaScript -->
+                            <form method="post" asp-page-handler="Delete" asp-route-id="@dog.Id" onsubmit="return confirm('Sei sicuro di voler eliminare @dog.Name?');" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Elimina
+                                </button>
+                            </form>
+                        </td> *@
+                        <td class="text-center">
+                            <i onclick="deleteDog(@dog.Id,'@dog.Name')" class="fa-solid fa-trash-can fa-2x c-p text-danger"></i>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+@Html.AntiForgeryToken()
+@section Scripts {
+    <script>
+        deleteDog = function (id, name) {
+            // Utilizziamo box.confirm passando il messaggio e la funzione di callback
+            box.confirm(`Sei sicuro di voler eliminare ${name}?`,  async (ok) => {
+
+                // Se l'utente clicca su "Conferma", isConfirmed sarà true
+                if (ok) {
+                    // Cerca il token di sicurezza generato nella pagina
+                    const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+                    const token = tokenElement ? tokenElement.value : "";
+
+                    // Esegue la chiamata passando l'id nella querystring e il token nell'header
+                    const response = await fetch(`?handler=Delete&id=${id}`, {
+                        method: 'POST',
+                        headers: {
+                            "RequestVerificationToken": token
+                        }
+                    });
+
+                    if (response.ok) {
+                        //se il server risponde 200 OK...
+                        document.getElementById(`dog_${id}`).remove();
+                    } else {
+                        // Utilizza box.alert invece dell'alert standard di sistema
+                        box.alert('Errore durante l\'eliminazione del cane.');
+                    }
+                }
+            },"Conferma eliminazione","confirm-delete");
+        }
+    </script>
+}
