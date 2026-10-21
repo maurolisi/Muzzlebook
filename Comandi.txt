@@ -1,6 +1,6 @@
 ﻿#pubblicare su github
 git add .
-git commit -m "Corretti errori case sensitive e aggiunto TestDB"
+git commit -m "Aggiunto login persistente"
 git push origin main
 
 #ricevere da github

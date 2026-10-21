@@ -52,9 +52,14 @@
                             <i class="bi bi-journal-bookmark-fill me-1"></i>TestDB
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item">   
                         <a class="nav-link text-white-50 fw-semibold" asp-area="" asp-page="/Breeds">
                             <i class="bi bi-journal-bookmark-fill me-1"></i>Razze
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white-50 fw-semibold" asp-area="" asp-page="/Index" asp-page-handler="Logout">
+                            <i class="bi bi-journal-bookmark-fill me-1"></i>Logout
                         </a>
                     </li>
                 </ul>
@@ -83,8 +88,8 @@
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
                     navigator.serviceWorker.register('/sw.js')
-                        .then(reg => Console.log('Service Worker registrato con successo:', reg.scope))
-                        .catch(err => Console.error('Errore registrazione Service Worker:', err));
+                        .then(reg => console.log('Service Worker registrato con successo:', reg.scope))
+                        .catch(err => console.error('Errore registrazione Service Worker:', err));
                 });
             }
     </script>
@@ -98,33 +103,33 @@
     </script>
     <script>
         //gestione della sessione
-            let timeoutSessione;
-            const DURATA_INATTIVITA = 15 * 60 * 1000; // 15 minuti in millisecondi
+            // let timeoutSessione;
+            // const DURATA_INATTIVITA = 15 * 60 * 1000; // 15 minuti in millisecondi
 
-            // Rende la funzione globale, così puoi chiamarla anche a mano se necessario
-            window.resetTimerSessione = function() {
-                clearTimeout(timeoutSessione);
-                timeoutSessione = setTimeout(() => {
-                    window.location.href = 'index?handler=Logout';
-                }, DURATA_INATTIVITA);
-            };
 
-            // 1. Avvia il timer al primo caricamento della pagina
-            window.resetTimerSessione();
+            // window.resetTimerSessione = function() {
+            //         clearTimeout(timeoutSessione);
+            //         timeoutSessione = setTimeout(() => {
+            //             window.location.href = '/Index?handler=Logout'; //[cite: 1]
+            //         }, DURATA_INATTIVITA);
+            //     };
 
-            // 2. Resetta il timer ad ogni chiamata HTMX (se usata)
-            document.body.addEventListener('htmx:beforeRequest', window.resetTimerSessione);
+            // // 1. Avvia il timer al primo caricamento della pagina
+            // window.resetTimerSessione();
 
-            // 3. Resetta il timer ad ogni chiamata fetch() nativa
-            const originalFetch = window.fetch;
-            window.fetch = async function(...args) {
-                window.resetTimerSessione();
-                return await originalFetch.apply(this, args);
-            };
+            // // 2. Resetta il timer ad ogni chiamata HTMX (se usata)
+            // document.body.addEventListener('htmx:beforeRequest', window.resetTimerSessione);
 
-            // 4. Resetta il timer ad ogni click dell'utente sulla pagina
-            // (Consigliato: copre i casi in cui l'utente interagisce senza fare fetch)
-            document.addEventListener('click', window.resetTimerSessione);
+            // // 3. Resetta il timer ad ogni chiamata fetch() nativa
+            // const originalFetch = window.fetch;
+            // window.fetch = async function(...args) {
+            //     window.resetTimerSessione();
+            //     return await originalFetch.apply(this, args);
+            // };
+
+            // // 4. Resetta il timer ad ogni click dell'utente sulla pagina
+            // // (Consigliato: copre i casi in cui l'utente interagisce senza fare fetch)
+            // document.addEventListener('click', window.resetTimerSessione);
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
