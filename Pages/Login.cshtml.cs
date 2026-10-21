@@ -73,7 +73,7 @@ public class LoginModel : PageModel
                 user);
         }
 
-        await SignInUserAsync(user);
+        await SignInUserAsync(user, true);
         return RedirectToPage("/Index");
     }
     /// <summary>

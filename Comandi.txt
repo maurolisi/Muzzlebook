@@ -1,6 +1,6 @@
 ﻿#pubblicare su github
 git add .
-git commit -m "Aggiunto login persistente"
+git commit -m "Correzione utente statico"
 git push origin main
 
 #ricevere da github
