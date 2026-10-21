@@ -1,6 +1,6 @@
 ﻿#pubblicare su github
 git add .
-git commit -m "Aggiorno il db e i test scrittura lettura"
+git commit -m "Corretti errori case sensitive e aggiunto TestDB"
 git push origin main
 
 #ricevere da github
