@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims;
+@{
+    string IdUtente = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+    string loginLabel = (string.IsNullOrEmpty(IdUtente)) ? "Login" : "Logout";
+
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -48,6 +54,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link text-white-50 fw-semibold" asp-area="" asp-page="/musi">
+                            <i class="bi bi-journal-bookmark-fill me-1"></i>I miei Musi
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link text-white-50 fw-semibold" asp-area="" asp-page="/test">
                             <i class="bi bi-journal-bookmark-fill me-1"></i>TestDB
                         </a>
@@ -59,7 +70,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white-50 fw-semibold" asp-area="" asp-page="/Index" asp-page-handler="Logout">
-                            <i class="bi bi-journal-bookmark-fill me-1"></i>Logout
+                            <i class="bi bi-journal-bookmark-fill me-1"></i>@loginLabel
                         </a>
                     </li>
                 </ul>

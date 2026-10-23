@@ -4,13 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRazorPages(options =>
-{
-    // Proteggi le pagine che richiedono autenticazione
-    options.Conventions.AuthorizePage("/Index");
-    options.Conventions.AllowAnonymousToPage("/Login");
-    options.Conventions.AllowAnonymousToPage("/Register");
-});
+builder.Services.AddRazorPages();
 
 // Configurazione Cookie Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
