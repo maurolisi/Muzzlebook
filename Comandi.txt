@@ -1,6 +1,6 @@
 ﻿#pubblicare su github
 git add .
-git commit -m "colore PWA"
+git commit -m "colore PWA e refresh"
 git push origin main
 
 #ricevere da github

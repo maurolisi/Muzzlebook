@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = 'muzzlebook-v1';
+﻿const CACHE_NAME = 'muzzlebook-v2';
 const ASSETS_TO_CACHE = [
     '/',
     '/css/site.css',
