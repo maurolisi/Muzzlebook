@@ -12,4 +12,5 @@ public class Dog
     public double? CurrentWeightKg { get; set; }
     public string? ProfileImageUrl { get; set; }
     public DateTime CreatedAt { get; set; }
+
 }

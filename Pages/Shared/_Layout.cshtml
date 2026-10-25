@@ -26,65 +26,65 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     @await RenderSectionAsync("Styles", required: false)
-   
+
 </head>
 <body>
-<header class="sticky-top">
-    <nav class="navbar navbar-expand-sm navbar-dark bg-primary shadow-sm mb-4  rounded-bottom-4">
-        <div class="container-fluid">
-            <!-- Logo e Brand -->
-            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold me-4" asp-area="" asp-page="/Index">
-                <div class="bg-white p-1 rounded-circle border border-danger d-flex align-items-center justify-content-center shadow-sm" style="width: 44px; height: 44px;">
-                    <img src="~/images/logo.png" alt="Logo" width="36" height="36" class="img-fluid rounded-circle" />
-                </div>
-                <div class="position-relative">
-                    <span class="fs-4">Muzzlebook</span>
-                    <div style="font-size: 0.5em;">Il libro dei musi</div>
-                </div>
-            </a>
-            <!-- Pulsante Installa PWA (nascosto di default) -->
-            <button id="pwa-install-btn" type="button" class="btn btn-light btn-sm ms-auto me-2 d-none">
-                <i class="bi bi-download me-1"></i> Installa App
-            </button>
-            <!-- Toggler per Mobile -->
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-primary shadow-sm mb-4  rounded-bottom-4">
+            <div class="container-fluid">
+                <!-- Logo e Brand -->
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold me-4" asp-area="" asp-page="/Index">
+                    <div class="bg-white p-1 rounded-circle border border-danger d-flex align-items-center justify-content-center shadow-sm" style="width: 44px; height: 44px;">
+                        <img src="~/images/logo.png" alt="Logo" width="36" height="36" class="img-fluid rounded-circle" />
+                    </div>
+                    <div class="position-relative">
+                        <span class="fs-4">Muzzlebook</span>
+                        <div style="font-size: 0.5em;">Il libro dei musi</div>
+                    </div>
+                </a>
+                <!-- Pulsante Installa PWA (nascosto di default) -->
+                <button id="pwa-install-btn" type="button" class="btn btn-light btn-sm ms-auto me-2 d-none">
+                    <i class="bi bi-download me-1"></i> Installa App
+                </button>
+                <!-- Toggler per Mobile -->
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <!-- Navigazione -->
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-<ul class="navbar-nav flex-grow-1 gap-1">
-    <li class="nav-item">
-        <a class="nav-link @IsActive("/Index") fw-semibold" asp-area="" asp-page="/Index">
-            <i class="bi bi-house-door-fill me-1"></i>Home
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link @IsActive("/musi") fw-semibold" asp-area="" asp-page="/musi">
-            <i class="bi bi-journal-bookmark-fill me-1"></i>I miei Musi @Html.Raw(unLogin)
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link @IsActive("/test") fw-semibold" asp-area="" asp-page="/test">
-            <i class="bi bi-journal-bookmark-fill me-1"></i>TestDB
-        </a>
-    </li>
-    <li class="nav-item">   
-        <a class="nav-link @IsActive("/Breeds") fw-semibold" asp-area="" asp-page="/Breeds">
-            <i class="bi bi-journal-bookmark-fill me-1"></i>Razze
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link @IsActive("/Login") fw-semibold" asp-area="" asp-page="/Index" asp-page-handler="Logout">
-            <i class="bi bi-journal-bookmark-fill me-1"></i>@loginLabel
-        </a>
-    </li>
-</ul>
+                <!-- Navigazione -->
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 gap-1">
+                        <li class="nav-item">
+                            <a class="nav-link @IsActive("/Index") fw-semibold" asp-area="" asp-page="/Index">
+                                <i class="bi bi-house-door-fill me-1"></i>Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @IsActive("/Musi/Index") fw-semibold" asp-area="" asp-page="/Musi/Index">
+                                <i class="bi bi-journal-bookmark-fill me-1"></i>I miei Musi @Html.Raw(unLogin)
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @IsActive("/test") fw-semibold" asp-area="" asp-page="/test">
+                                <i class="bi bi-journal-bookmark-fill me-1"></i>TestDB
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @IsActive("/Breeds") fw-semibold" asp-area="" asp-page="/Breeds">
+                                <i class="bi bi-journal-bookmark-fill me-1"></i>Razze
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @IsActive("/Login") fw-semibold" asp-area="" asp-page="/Index" asp-page-handler="Logout">
+                                <i class="bi bi-journal-bookmark-fill me-1"></i>@loginLabel
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-</header>
+        </nav>
+    </header>
     <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -100,7 +100,7 @@
     @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
     <script src="~/lib/box/js/box.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-     <script src="~/lib/htmx/htmx.min.js"></script>
+    <script src="~/lib/htmx/htmx.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
             if ('serviceWorker' in navigator) {
@@ -120,34 +120,34 @@
             });
     </script>
     <script>
-        //gestione della sessione
-            // let timeoutSessione;
-            // const DURATA_INATTIVITA = 15 * 60 * 1000; // 15 minuti in millisecondi
+            //gestione della sessione
+                // let timeoutSessione;
+                // const DURATA_INATTIVITA = 15 * 60 * 1000; // 15 minuti in millisecondi
 
 
-            // window.resetTimerSessione = function() {
-            //         clearTimeout(timeoutSessione);
-            //         timeoutSessione = setTimeout(() => {
-            //             window.location.href = '/Index?handler=Logout'; //[cite: 1]
-            //         }, DURATA_INATTIVITA);
-            //     };
+                // window.resetTimerSessione = function() {
+                //         clearTimeout(timeoutSessione);
+                //         timeoutSessione = setTimeout(() => {
+                //             window.location.href = '/Index?handler=Logout'; //[cite: 1]
+                //         }, DURATA_INATTIVITA);
+                //     };
 
-            // // 1. Avvia il timer al primo caricamento della pagina
-            // window.resetTimerSessione();
+                // // 1. Avvia il timer al primo caricamento della pagina
+                // window.resetTimerSessione();
 
-            // // 2. Resetta il timer ad ogni chiamata HTMX (se usata)
-            // document.body.addEventListener('htmx:beforeRequest', window.resetTimerSessione);
+                // // 2. Resetta il timer ad ogni chiamata HTMX (se usata)
+                // document.body.addEventListener('htmx:beforeRequest', window.resetTimerSessione);
 
-            // // 3. Resetta il timer ad ogni chiamata fetch() nativa
-            // const originalFetch = window.fetch;
-            // window.fetch = async function(...args) {
-            //     window.resetTimerSessione();
-            //     return await originalFetch.apply(this, args);
-            // };
+                // // 3. Resetta il timer ad ogni chiamata fetch() nativa
+                // const originalFetch = window.fetch;
+                // window.fetch = async function(...args) {
+                //     window.resetTimerSessione();
+                //     return await originalFetch.apply(this, args);
+                // };
 
-            // // 4. Resetta il timer ad ogni click dell'utente sulla pagina
-            // // (Consigliato: copre i casi in cui l'utente interagisce senza fare fetch)
-            // document.addEventListener('click', window.resetTimerSessione);
+                // // 4. Resetta il timer ad ogni click dell'utente sulla pagina
+                // // (Consigliato: copre i casi in cui l'utente interagisce senza fare fetch)
+                // document.addEventListener('click', window.resetTimerSessione);
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

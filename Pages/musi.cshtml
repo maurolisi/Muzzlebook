@@ -1,8 +1,0 @@
-﻿@page
-@model Muzzlebook.Pages.musiModel
-@using System.Security.Claims;
-@{
-    string IdUtente = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
-}
-
-<h1>Ciao, il tuo ID è: @IdUtente</h1>

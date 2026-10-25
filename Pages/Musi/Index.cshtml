@@ -1,0 +1,194 @@
+﻿@page
+@model Muzzlebook.Pages.Musi.IndexModel
+
+<style>
+    .dog-card {
+        transition: transform 0.25s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.25s ease;
+    }
+    .dog-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 0.8rem 1.8rem rgba(13, 110, 253, 0.12) !important;
+    }
+    .btn-camera {
+        transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+    .btn-camera:hover {
+        transform: scale(1.1);
+    }
+</style>
+
+<!-- Header di Pagina -->
+<div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h2 class="fw-bold text-primary mb-1">
+            <i class="bi bi-heart-fill text-danger me-2"></i>I Tuoi Musi
+        </h2>
+        <p class="text-muted small mb-0">Gestisci le schede e le immagini dei tuoi amici a quattro zampe</p>
+    </div>
+</div>
+
+<!-- Griglia Card Cani -->
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-center">
+    @foreach (var dog in Model.DogsList)
+    {
+        string urlImage = string.IsNullOrEmpty(dog.ProfileImageUrl)
+            ? "/images/logo.png"
+            : "https://media.muzzlebook.it/" + dog.ProfileImageUrl;
+
+        <div class="col" id="dog_@dog.Id">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden text-center dog-card bg-white">
+                
+                <!-- Contenitore Immagine & Azioni Rapide -->
+                <div class="bg-primary-subtle bg-gradient d-flex align-items-center justify-content-center p-4 border-bottom position-relative" style="height: 170px;">
+                    
+                    <!-- Avatar con Pulsante Cambia Foto -->
+                    <div class="position-relative d-inline-block">
+                        <img src="@urlImage" 
+                             id="dogImg_@dog.Id"
+                             alt="@dog.Name" 
+                             class="rounded-circle border border-3 border-white shadow-sm" 
+                             style="width: 110px; height: 110px; object-fit: cover;" />
+                        
+                        <!-- Pulsante Modifica Foto (Icona Fotocamera) -->
+                        <button type="button" 
+                                onclick="document.getElementById('photoInput_@dog.Id').click()" 
+                                class="btn btn-primary btn-sm rounded-circle position-absolute bottom-0 end-0 shadow border border-2 border-white d-flex align-items-center justify-content-center btn-camera" 
+                                style="width: 34px; height: 34px;" 
+                                title="Cambia foto profilo">
+                            <i class="fa-solid fa-camera text-white" style="font-size: 0.85rem;"></i>
+                        </button>
+
+                        <!-- Input File Nascosto per l'Upload -->
+                        <input type="file" 
+                               id="photoInput_@dog.Id" 
+                               class="d-none" 
+                               accept="image/*" 
+                               onchange="uploadProfilePhoto(@dog.Id, this)" />
+                    </div>
+                    
+                    <!-- Pulsante Eliminazione Rapida -->
+                    <button type="button" 
+                            onclick="deleteDog(@dog.Id, '@dog.Name')" 
+                            class="btn btn-sm btn-light text-danger rounded-circle position-absolute top-0 end-0 m-2 shadow-sm" 
+                            title="Elimina">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+
+                <!-- Corpo della Scheda -->
+                <div class="card-body d-flex flex-column justify-content-between p-3">
+                    <div>
+                        <h5 class="fw-bold mb-1 text-dark">@dog.Name</h5>
+                        
+                        @if (!string.IsNullOrEmpty(dog.Breed))
+                        {
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill mb-2 px-3 fw-semibold">
+                                @dog.Breed
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning-subtle text-dark border border-warning-subtle rounded-pill mb-2 px-3 fw-semibold">
+                                Meticcio
+                            </span>
+                        }
+                    </div>
+
+                    <!-- Dettagli (Sesso, Peso) -->
+                    <div class="pt-3 mt-2 border-top d-flex justify-content-around text-secondary small fw-medium">
+                        @if (!string.IsNullOrEmpty(dog.Gender))
+                        {
+                            <span>
+                                <i class="bi @(dog.Gender == "M" ? "bi-gender-male text-primary" : "bi-gender-female text-danger") fs-6 me-1"></i>
+                                @(dog.Gender == "M" ? "Maschio" : "Femmina")
+                            </span>
+                        }
+                        @if (dog.CurrentWeightKg.HasValue && dog.CurrentWeightKg > 0)
+                        {
+                            <span>
+                                <i class="bi bi-speedometer2 text-info me-1"></i>@dog.CurrentWeightKg kg
+                            </span>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+async function uploadProfilePhoto(dogId, inputElement) {
+    const file = inputElement.files[0];
+    if (!file) return;
+
+    // 1. Anteprima immediata nell'interfaccia
+    const imgPreview = document.getElementById(`dogImg_${dogId}`);
+    const originalSrc = imgPreview.src;
+    imgPreview.src = URL.createObjectURL(file);
+
+    try {
+        // 2. Ridimensionamento lato client (Canvas)
+        const resizedBlob = await resizeImage(file, 800, 0.85);
+
+        // 3. Preparazione FormData con il token Anti-Forgery
+        const formData = new FormData();
+        formData.append("dogId", dogId);
+        formData.append("photo", resizedBlob, "profile.webp");
+
+        const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+        const token = tokenElement ? tokenElement.value : "";
+
+        // 4. Invio al backend
+        const response = await fetch("?handler=UploadPhoto", {
+            method: "POST",
+            headers: {
+                "RequestVerificationToken": token
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error("Errore durante il caricamento");
+        }
+
+        const data = await response.json();
+        if (data.newUrl) {
+            imgPreview.src = data.newUrl; // Aggiorna con l'URL definitivo restituito dal server
+        }
+
+    } catch (error) {
+        alert("in fase di sviluppo.");
+        imgPreview.src = originalSrc; // Ripristina l'immagine precedente in caso di errore
+    } finally {
+        inputElement.value = ""; // Resetta l'input file
+    }
+}
+
+// Funzione Helper per ridimensionare l'immagine nel browser
+async function resizeImage(file, maxDimension = 800, quality = 0.85) {
+    const imageBitmap = await createImageBitmap(file);
+    let width = imageBitmap.width;
+    let height = imageBitmap.height;
+
+    if (width > maxDimension || height > maxDimension) {
+        if (width > height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+        } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+        }
+    }
+
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(imageBitmap, 0, 0, width, height);
+
+    return new Promise((resolve) => {
+        canvas.toBlob((blob) => resolve(blob), "image/webp", quality);
+    });
+}
+</script>
