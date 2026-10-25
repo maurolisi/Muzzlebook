@@ -2,7 +2,7 @@
 @{
     string IdUtente = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
     string loginLabel = (string.IsNullOrEmpty(IdUtente)) ? "Login" : "Logout";
-
+    string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title=\"Devi autenticarti per accedere a questa area\" class=\"fa-solid fa-lock\"></i>" : "";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +38,10 @@
                     <div style="font-size: 0.5em;">Il libro dei musi</div>
                 </div>
             </a>
-
+            <!-- Pulsante Installa PWA (nascosto di default) -->
+            <button id="pwa-install-btn" type="button" class="btn btn-light btn-sm ms-auto me-2 d-none">
+                <i class="bi bi-download me-1"></i> Installa App
+            </button>
             <!-- Toggler per Mobile -->
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +58,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white-50 fw-semibold" asp-area="" asp-page="/musi">
-                            <i class="bi bi-journal-bookmark-fill me-1"></i>I miei Musi
+                            <i class="bi bi-journal-bookmark-fill me-1"></i>I miei Musi @Html.Raw(unLogin)
                         </a>
                     </li>
                     <li class="nav-item">
