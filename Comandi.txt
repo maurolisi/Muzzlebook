@@ -1,10 +1,34 @@
 ﻿#pubblicare su github
 git add .
-git commit -m "Aggiunta area dogs"
+git commit -m "Aggiunti nuovi comandi per github"
 git push origin main
 
 #ricevere da github
 git pull origin main
+
+#***************** ripristinare lo stato di github
+#Scarica le ultime novità da GitHub (senza applicarle ancora):
+git fetch origin
+#Ripristina tutti i file tracciati
+git reset --hard origin/main
+#Rimuovi file e cartelle non tracciati
+git clean -fd
+
+#Attenzione: I comandi reset --hard e clean -fd eliminano definitivamente tutte le modifiche locali non committate e non sarà possibile recuperarle. Dopo aver eseguito questi comandi, il tuo progetto sul PC sarà identico al 100% a quello presente su GitHub.
+
+
+#************* clonare repository da github
+#Spostati nella nuova posizione:
+cd C:\NuovoPercorso
+#Clona il repository in una cartella specifica:
+git clone https://github.com/maurolisi/Muzzlebook.git Muzzlebook-Copia
+#Accedi alla nuova cartella
+cd Muzzlebook-Copia
+
+
+
+
+
 
 
 
