@@ -1,4 +1,5 @@
 using Dapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Muzzlebook.Models;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 
 namespace Muzzlebook.Pages.Musi
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly IDbConnection _db;
