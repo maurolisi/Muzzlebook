@@ -60,11 +60,10 @@
 
                         <!-- Input File Nascosto per l'Upload -->
                         <input type="file"
-                               id="photoInput_@dog.Id"
+                               id="mediaInput_@dog.Id"
                                class="d-none"
-                               accept="image/*"
-                               capture="environment"
-                               onchange="uploadProfilePhoto(@dog.Id, this)" />
+                               accept="image/*,video/*,.pdf,.doc,.docx"
+                               onchange="uploadMedia(@dog.Id, this)" />
                     </div>
                     
                     <!-- Pulsante Eliminazione Rapida -->
