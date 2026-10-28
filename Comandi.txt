@@ -56,6 +56,10 @@ chown -R www-data:www-data /var/www/muzzlebook
 # Riavvia l'applicazione
 systemctl restart muzzlebook.service
 
+
+
+
+
 #***Scaricare  il db:
 scp root@31.70.156.199:/var/www/muzzlebook/Data/muzzlebook.db C:\progetti\muzzlebook\Data\muzzlebook_dal_server.db
 //poi rinominarlo in muzzlebook.db e sostituirlo a quello locale
