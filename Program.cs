@@ -1,8 +1,20 @@
 using System.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;// 1. Namespace da aggiungere
 
 var builder = WebApplication.CreateBuilder(args);
+// 2. Definizione della cartella permanente per le chiavi (es. Data/Keys)
+var keysFolder = Path.Combine(builder.Environment.ContentRootPath, "Data", "Keys");
+if (!Directory.Exists(keysFolder))
+{
+    Directory.CreateDirectory(keysFolder);
+}
+
+// 3. Configurazione di Data Protection
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(keysFolder))
+    .SetApplicationName("Muzzlebook"); // Identificativo costante dell'applicazione 
 
 builder.Services.AddRazorPages();
 

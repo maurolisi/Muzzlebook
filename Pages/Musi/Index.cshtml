@@ -117,52 +117,68 @@
 </div>
 
 <script>
-async function uploadProfilePhoto(dogId, inputElement) {
-    const file = inputElement.files[0];
-    if (!file) return;
+    async function uploadProfilePhoto(dogId, inputElement) {
+        const file = inputElement.files[0];
+        if (!file) return;
 
-    // 1. Anteprima immediata nell'interfaccia
-    const imgPreview = document.getElementById(`dogImg_${dogId}`);
-    const originalSrc = imgPreview.src;
-    imgPreview.src = URL.createObjectURL(file);
-
-    try {
-        // 2. Ridimensionamento lato client (Canvas)
-        const resizedBlob = await resizeImage(file, 800, 0.85);
-
-        // 3. Preparazione FormData con il token Anti-Forgery
-        const formData = new FormData();
-        formData.append("dogId", dogId);
-        formData.append("photo", resizedBlob, "profile.webp");
-
-        const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
-        const token = tokenElement ? tokenElement.value : "";
-
-        // 4. Invio al backend
-        const response = await fetch("?handler=UploadPhoto", {
-            method: "POST",
-            headers: {
-                "RequestVerificationToken": token
-            },
-            body: formData
-        });
-
-        if (!response.ok) {
-            throw new Error("Errore durante il caricamento");
+        // Controllo preventivo: verifica se il tipo MIME è un'immagine
+        if (!file.type.startsWith('image/')) {
+            if (typeof box !== 'undefined' && box.alert) {
+                box.alert('Seleziona un file immagine valido (JPG, PNG, WebP, ecc.).');
+            } else {
+                alert('Seleziona un file immagine valido.');
+            }
+            inputElement.value = ''; // Resetta l'input
+            return;
         }
 
-        const data = await response.json();
-        if (data.newUrl) {
-            imgPreview.src = data.newUrl; // Aggiorna con l'URL definitivo restituito dal server
-        }
+        // 1. Anteprima immediata nell'interfaccia
+        const imgPreview = document.getElementById(`dogImg_${dogId}`);
+        const originalSrc = imgPreview.src;
+        imgPreview.src = URL.createObjectURL(file);
 
-    } catch (error) {
-        alert("in fase di sviluppo.");
-        imgPreview.src = originalSrc; // Ripristina l'immagine precedente in caso di errore
-    } finally {
-        inputElement.value = ""; // Resetta l'input file
+        try {
+            // 2. Ridimensionamento lato client (Canvas)
+            const resizedBlob = await resizeImage(file, 800, 0.85);
+
+            // 3. Preparazione FormData con il token Anti-Forgery
+            const formData = new FormData();
+            formData.append("dogId", dogId);
+            formData.append("photo", resizedBlob, "profile.webp");
+
+            const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+            const token = tokenElement ? tokenElement.value : "";
+
+            // 4. Invio al backend
+            const response = await fetch("?handler=UploadPhoto", {
+                method: "POST",
+                headers: {
+                    "RequestVerificationToken": token
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error("Errore durante il caricamento");
+            }
+
+            const data = await response.json();
+            if (data.newUrl) {
+                imgPreview.src = data.newUrl; // Aggiorna con l'URL definitivo restituito dal server
+            }
+
+        } catch (error) {
+@*             if (typeof box !== 'undefined' && box.alert) {
+                box.alert("Si è verificato un errore durante il caricamento.");
+            } else {
+                alert("Si è verificato un errore durante il caricamento.");
+            } *@
+            //imgPreview.src = originalSrc; // Ripristina l'immagine precedente in caso di errore
+            alert("in fase di sviluppo");
+        } finally {
+            inputElement.value = ""; // Resetta l'input file
+        }
     }
-}
 
 // Funzione Helper per ridimensionare l'immagine nel browser
 async function resizeImage(file, maxDimension = 800, quality = 0.85) {
