@@ -47,7 +47,7 @@
                     <!-- Avatar con Pulsante Cambia Foto -->
                     <div class="position-relative d-inline-block">
                         <img src="@urlImage"
-                             onclick="openProfileImage('@urlImage')"
+                             onclick="openProfileImage(@dog.Id)"
                              id="dogImg_@dog.Id"
                              alt="@dog.Name"
                              class="rounded-circle border border-3 border-white shadow-sm c-p"
@@ -207,7 +207,7 @@
             }
         }, "Conferma eliminazione", "confirm-delete");
     }
-    openProfileImage = () => {
+    openProfileImage = (dogId) => {
         const imgPreview = document.getElementById(`dogImg_${dogId}`);
         var image="<div class='text-center'><img src='" + imgPreview.src + "' class='img-fluid'  /></div>";
         box.dialog(image,'Foto Profilo', 'w-85');
