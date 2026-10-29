@@ -40,17 +40,17 @@
 
         <div class="col" id="dog_@dog.Id">
             <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden text-center dog-card bg-white">
-                
+
                 <!-- Contenitore Immagine & Azioni Rapide -->
                 <div class="bg-primary-subtle bg-gradient d-flex align-items-center justify-content-center p-4 border-bottom position-relative" style="height: 170px;">
 
                     <!-- Avatar con Pulsante Cambia Foto -->
                     <div class="position-relative d-inline-block">
-                        <img src="@urlImage" 
-                             onclick="window.open('@urlImage', '_blank')"
+                        <img src="@urlImage"
+                             onclick="openProfileImage('@urlImage')"
                              id="dogImg_@dog.Id"
-                             alt="@dog.Name" 
-                             class="rounded-circle border border-3 border-white shadow-sm c-p" 
+                             alt="@dog.Name"
+                             class="rounded-circle border border-3 border-white shadow-sm c-p"
                              style="width: 110px; height: 110px; object-fit: cover;" />
 
                         <!-- Pulsante Eliminazione Rapida foto profilo -->
@@ -65,28 +65,28 @@
 
 
                         <!-- Pulsante Modifica Foto (Icona Fotocamera) -->
-                        <button type="button" 
-                                onclick="document.getElementById('photoInput_@dog.Id').click()" 
-                                class="btn btn-primary btn-sm rounded-circle position-absolute bottom-0 end-0 shadow border border-2 border-white d-flex align-items-center justify-content-center btn-camera" 
-                                style="width: 34px; height: 34px;" 
+                        <button type="button"
+                                onclick="document.getElementById('photoInput_@dog.Id').click()"
+                                class="btn btn-primary btn-sm rounded-circle position-absolute bottom-0 end-0 shadow border border-2 border-white d-flex align-items-center justify-content-center btn-camera"
+                                style="width: 34px; height: 34px;"
                                 title="Cambia foto profilo">
                             <i class="fa-solid fa-camera text-white" style="font-size: 0.85rem;"></i>
                         </button>
 
                         <!-- Input File Nascosto per l'Upload -->
-                        <input type="file" 
-                               id="photoInput_@dog.Id" 
-                               class="d-none" 
+                        <input type="file"
+                               id="photoInput_@dog.Id"
+                               class="d-none"
                                onchange="uploadProfilePhoto(@dog.Id, this)" />
                     </div>
-                    
+
                 </div>
 
                 <!-- Corpo della Scheda -->
                 <div class="card-body d-flex flex-column justify-content-between p-3">
                     <div>
                         <h5 class="fw-bold mb-1 text-dark">@dog.Name</h5>
-                        
+
                         @if (!string.IsNullOrEmpty(dog.Breed))
                         {
                             <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill mb-2 px-3 fw-semibold">
@@ -147,7 +147,7 @@
             // 2. Anteprima locale immediata
             imgPreview.src = URL.createObjectURL(file);
 
-            // 3. Ridimensionamento lato client tramite Canvas[cite: 3, 4]
+            // 3. Ridimensionamento lato client tramite Canvas
             const resizedBlob = await resizeImage(file, 800, 0.85);
 
             // 4. Preparazione dati FormData
@@ -179,8 +179,8 @@
                 imgPreview.src = baseUrl + data.newUrl; // Imposta il nuovo URL di Cloudflare R2
                 document.getElementById(`deletePicBtn_${dogId}`).classList.remove('d-none');
             }
-            
 
+            
         } catch (error) {
             if (typeof box !== 'undefined' && box.alert) {
                 box.alert("Si è verificato un errore durante l'aggiornamento della foto.");
@@ -207,5 +207,8 @@
             }
         }, "Conferma eliminazione", "confirm-delete");
     }
-    
+    openProfileImage = (url) => {
+        var image="<div class='text-center'><img src='" + url + "' class='img-fluid'  /></div>";
+        box.dialog(image,url, 'w-90');
+    };
 </script>

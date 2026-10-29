@@ -18,7 +18,7 @@ const box = (() => {
             return;
         }
 
-        // Se già aperto, non ricrearlo per evitare sovrapposizioni[cite: 1]
+        // Se già aperto, non ricrearlo per evitare sovrapposizioni
         if (el || loaderInstance) return;
 
         el = document.createElement('div');
@@ -41,10 +41,10 @@ const box = (() => {
 
         document.body.appendChild(el);
 
-        // backdrop: 'static' e keyboard: false impediscono all'utente di chiuderlo inavvertitamente[cite: 1]
+        // backdrop: 'static' e keyboard: false impediscono all'utente di chiuderlo inavvertitamente
         loaderInstance = new bootstrap.Modal(el, { backdrop: 'static', keyboard: false });
 
-        // Cleanup automatico alla chiusura per rimuoverlo dal DOM[cite: 1]
+        // Cleanup automatico alla chiusura per rimuoverlo dal DOM
         el.addEventListener('hidden.bs.modal', () => {
             el.remove();
             loaderInstance = null;

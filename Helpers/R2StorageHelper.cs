@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 
 namespace Muzzlebook.Helpers;
 
-public static class R2StorageHelper
+public static class R2Storage
 {
-    private const string BucketName = "muzzlebook"; // Inserisci il nome del tuo bucket R2[cite: 2, 3]
+    private const string BucketName = "muzzlebook"; // Inserisci il nome del tuo bucket R2
     /// <summary>
     /// Carica un file IFormFile su Cloudflare R2 nel percorso specificato e restituisce l'URL completo.
     /// </summary>
-    public static async Task<string?> UploadProfilePhotoAsync(IAmazonS3 s3Client, int dogId, IFormFile photo)
+    public static async Task<string?> UpProfileAsync(IAmazonS3 s3Client, int dogId, IFormFile photo)
     {
         if (photo == null || photo.Length == 0)
             return null;
 
-        // Genera un nome univoco per il file[cite: 3]
+        // Genera un nome univoco per il file
         string fileName = $"{Guid.NewGuid()}.webp";
 
-        // Struttura del percorso: profile/{dogId}/{fileName}[cite: 3]
+        // Struttura del percorso: profile/{dogId}/{fileName}
         string objectKey = $"profile/{dogId}/{fileName}";
 
         try
@@ -35,14 +35,14 @@ public static class R2StorageHelper
                 Key = objectKey,
                 InputStream = stream,
                 ContentType = photo.ContentType ?? "image/webp",
-                DisablePayloadSigning = true // Ottimizzazione consigliata per R2[cite: 3]
+                DisablePayloadSigning = true // Ottimizzazione consigliata per R2
             };
 
             var response = await s3Client.PutObjectAsync(putRequest);
 
             if (response.HttpStatusCode == HttpStatusCode.OK)
             {
-                // Restituisce l'URL completo del file caricato[cite: 3]
+                // Restituisce l'URL completo del file caricato
                 return "/"+objectKey;
             }
         }
@@ -55,9 +55,9 @@ public static class R2StorageHelper
         return null;
     }
     /// <summary>
-    /// Elimina l'intera cartella (tutti i file con un determinato prefisso) associata al cane dal bucket R2.
+    /// Elimina l'intera cartella @IdDog dentro Profile (tutti i file con un determinato prefisso) associata al cane dal bucket R2.
     /// </summary>
-    public static async Task<bool> DeleteDogFolderAsync(IAmazonS3 s3Client, int dogId)
+    public static async Task<bool> DelProfileAsync(IAmazonS3 s3Client, int dogId)
     {
         // Il prefisso che identifica la "cartella" del cane. 
         // Importante: mantenere lo slash finale (/) per non eliminare per sbaglio cartelle come "profile/1234/" se si passa "123".

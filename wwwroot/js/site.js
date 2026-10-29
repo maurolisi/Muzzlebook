@@ -59,7 +59,7 @@ if (isIOS && !isStandalone) {
     // "Per installare Muzzlebook su iPhone: premi il tasto Condividi e seleziona 'Aggiungi a schermata Home'"
 }
 
-        // Funzione Helper per ridimensionamento Canvas[cite: 3, 4]
+        // Funzione Helper per ridimensionamento Canvas
     async function resizeImage(file, maxDimension = 800, quality = 0.85) {
         const imageBitmap = await createImageBitmap(file);
         let width = imageBitmap.width;

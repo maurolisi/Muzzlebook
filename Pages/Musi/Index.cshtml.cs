@@ -38,9 +38,9 @@ namespace Muzzlebook.Pages.Musi
         public async Task<IActionResult> OnPostUploadPhotoAsync(int dogId, IFormFile photo)
         {
             // Elimina la cartella del cane da R2
-            await R2StorageHelper.DeleteDogFolderAsync(_s3Client, dogId);
+            await R2Storage.DelProfileAsync(_s3Client, dogId);
             //poi aggiungo la nuova foto
-            string? newUrl = await R2StorageHelper.UploadProfilePhotoAsync(_s3Client, dogId, photo);
+            string? newUrl = await R2Storage.UpProfileAsync(_s3Client, dogId, photo);
 
             if (newUrl == null)
                 return BadRequest();
@@ -67,7 +67,7 @@ namespace Muzzlebook.Pages.Musi
             var sqlUpdate = "UPDATE Dogs SET ProfileImageUrl = NULL WHERE Id = @DogId;";
             await _db.ExecuteAsync(sqlUpdate, new { DogId = dogId });
             // Elimina la cartella del cane da R2
-            await R2StorageHelper.DeleteDogFolderAsync(_s3Client, dogId);
+            await R2Storage.DelProfileAsync(_s3Client, dogId);
             return new JsonResult(new { success = true });
         }
     }
