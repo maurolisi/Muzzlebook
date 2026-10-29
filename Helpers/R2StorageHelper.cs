@@ -10,9 +10,7 @@ namespace Muzzlebook.Helpers;
 
 public static class R2StorageHelper
 {
-    private const string BucketName = "il-tuo-bucket-r2"; // Inserisci il nome del tuo bucket R2[cite: 2, 3]
-    private const string BaseMediaUrl = "https://media.muzzlebook.it"; // Il tuo dominio personalizzato R2
-
+    private const string BucketName = "muzzlebook"; // Inserisci il nome del tuo bucket R2[cite: 2, 3]
     /// <summary>
     /// Carica un file IFormFile su Cloudflare R2 nel percorso specificato e restituisce l'URL completo.
     /// </summary>
@@ -45,7 +43,7 @@ public static class R2StorageHelper
             if (response.HttpStatusCode == HttpStatusCode.OK)
             {
                 // Restituisce l'URL completo del file caricato[cite: 3]
-                return $"{BaseMediaUrl}/{objectKey}";
+                return "/"+objectKey;
             }
         }
         catch (Exception ex)
@@ -55,5 +53,59 @@ public static class R2StorageHelper
         }
 
         return null;
+    }
+    /// <summary>
+    /// Elimina l'intera cartella (tutti i file con un determinato prefisso) associata al cane dal bucket R2.
+    /// </summary>
+    public static async Task<bool> DeleteDogFolderAsync(IAmazonS3 s3Client, int dogId)
+    {
+        // Il prefisso che identifica la "cartella" del cane. 
+        // Importante: mantenere lo slash finale (/) per non eliminare per sbaglio cartelle come "profile/1234/" se si passa "123".
+        string folderPrefix = $"profile/{dogId}/";
+
+        try
+        {
+            var listRequest = new ListObjectsV2Request
+            {
+                BucketName = BucketName,
+                Prefix = folderPrefix
+            };
+
+            ListObjectsV2Response listResponse;
+
+            // Usa un ciclo do-while per gestire la paginazione, nel caso ci siano più di 1000 file
+            do
+            {
+                listResponse = await s3Client.ListObjectsV2Async(listRequest);
+
+                if (listResponse.S3Objects.Count > 0)
+                {
+                    var deleteRequest = new DeleteObjectsRequest
+                    {
+                        BucketName = BucketName
+                    };
+
+                    // Aggiungi tutte le chiavi trovate alla richiesta di cancellazione di massa
+                    foreach (var obj in listResponse.S3Objects)
+                    {
+                        deleteRequest.AddKey(obj.Key);
+                    }
+
+                    // Esegue l'eliminazione
+                    await s3Client.DeleteObjectsAsync(deleteRequest);
+                }
+
+                // Prepara il token per la prossima pagina di risultati (se la lista era troncata)
+                listRequest.ContinuationToken = listResponse.NextContinuationToken;
+
+            } while (listResponse.IsTruncated==true);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Errore durante l'eliminazione della cartella R2: {ex.Message}");
+            return false;
+        }
     }
 }

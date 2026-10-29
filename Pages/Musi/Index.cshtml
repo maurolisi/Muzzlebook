@@ -1,6 +1,6 @@
 ﻿@page
 @model Muzzlebook.Pages.Musi.IndexModel
-
+@Html.AntiForgeryToken()
 <style>
     .dog-card {
         transition: transform 0.25s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.25s ease;
@@ -33,14 +33,17 @@
     {
         string urlImage = string.IsNullOrEmpty(dog.ProfileImageUrl)
             ? "/images/logo.png"
-            : "https://media.muzzlebook.it/" + dog.ProfileImageUrl;
+            : "https://media.muzzlebook.it" + dog.ProfileImageUrl;
+        string hideButton = string.IsNullOrEmpty(dog.ProfileImageUrl)
+            ? "d-none"
+            : "";
 
         <div class="col" id="dog_@dog.Id">
             <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden text-center dog-card bg-white">
                 
                 <!-- Contenitore Immagine & Azioni Rapide -->
                 <div class="bg-primary-subtle bg-gradient d-flex align-items-center justify-content-center p-4 border-bottom position-relative" style="height: 170px;">
-                    
+
                     <!-- Avatar con Pulsante Cambia Foto -->
                     <div class="position-relative d-inline-block">
                         <img src="@urlImage" 
@@ -48,7 +51,18 @@
                              alt="@dog.Name" 
                              class="rounded-circle border border-3 border-white shadow-sm" 
                              style="width: 110px; height: 110px; object-fit: cover;" />
-                        
+
+                        <!-- Pulsante Eliminazione Rapida foto profilo -->
+                        <button type="button"
+                                id="deletePicBtn_@dog.Id"
+                                onclick="deletePicDog(@dog.Id, '@dog.Name')"
+                                class="btn btn-sm btn-light text-danger rounded-circle position-absolute m-2 shadow-sm @hideButton"
+                                style="right:0;top:-1.3em;"
+                                title="Elimina">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+
+
                         <!-- Pulsante Modifica Foto (Icona Fotocamera) -->
                         <button type="button" 
                                 onclick="document.getElementById('photoInput_@dog.Id').click()" 
@@ -65,13 +79,6 @@
                                onchange="uploadProfilePhoto(@dog.Id, this)" />
                     </div>
                     
-                    <!-- Pulsante Eliminazione Rapida -->
-                    <button type="button" 
-                            onclick="deleteDog(@dog.Id, '@dog.Name')" 
-                            class="btn btn-sm btn-light text-danger rounded-circle position-absolute top-0 end-0 m-2 shadow-sm" 
-                            title="Elimina">
-                        <i class="fa-solid fa-trash-can"></i>
-                    </button>
                 </div>
 
                 <!-- Corpo della Scheda -->
@@ -117,31 +124,32 @@
 </div>
 
 <script>
-    async function uploadProfilePhoto(dogId, inputElement) {
+        async function uploadProfilePhoto(dogId, inputElement) {
         const file = inputElement.files[0];
         if (!file) return;
 
-        // Controllo preventivo: verifica se il tipo MIME è un'immagine
+        // 1. Controllo del tipo MIME (solo immagini)
         if (!file.type.startsWith('image/')) {
             if (typeof box !== 'undefined' && box.alert) {
                 box.alert('Seleziona un file immagine valido (JPG, PNG, WebP, ecc.).');
             } else {
                 alert('Seleziona un file immagine valido.');
             }
-            inputElement.value = ''; // Resetta l'input
+            inputElement.value = '';
             return;
         }
 
-        // 1. Anteprima immediata nell'interfaccia
         const imgPreview = document.getElementById(`dogImg_${dogId}`);
         const originalSrc = imgPreview.src;
-        imgPreview.src = URL.createObjectURL(file);
 
         try {
-            // 2. Ridimensionamento lato client (Canvas)
+            // 2. Anteprima locale immediata
+            imgPreview.src = URL.createObjectURL(file);
+
+            // 3. Ridimensionamento lato client tramite Canvas[cite: 3, 4]
             const resizedBlob = await resizeImage(file, 800, 0.85);
 
-            // 3. Preparazione FormData con il token Anti-Forgery
+            // 4. Preparazione dati FormData
             const formData = new FormData();
             formData.append("dogId", dogId);
             formData.append("photo", resizedBlob, "profile.webp");
@@ -149,14 +157,17 @@
             const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
             const token = tokenElement ? tokenElement.value : "";
 
-            // 4. Invio al backend
-            const response = await fetch("?handler=UploadPhoto", {
-                method: "POST",
-                headers: {
-                    "RequestVerificationToken": token
-                },
-                body: formData
-            });
+            // AGGIUNGI IL TOKEN ANCHE AL FORMDATA!
+            formData.append("__RequestVerificationToken", token);
+
+            // 5. Invio all'handler Razor Pages
+    const response = await fetch("?handler=UploadPhoto", {
+        method: "POST",
+        headers: {
+            "RequestVerificationToken": token
+        },
+        body: formData
+    });
 
             if (!response.ok) {
                 throw new Error("Errore durante il caricamento");
@@ -164,46 +175,36 @@
 
             const data = await response.json();
             if (data.newUrl) {
-                imgPreview.src = data.newUrl; // Aggiorna con l'URL definitivo restituito dal server
+                imgPreview.src = baseUrl + data.newUrl; // Imposta il nuovo URL di Cloudflare R2
+                document.getElementById(`deletePicBtn_${dogId}`).classList.remove('d-none');
             }
+            
 
         } catch (error) {
-@*             if (typeof box !== 'undefined' && box.alert) {
-                box.alert("Si è verificato un errore durante il caricamento.");
+            if (typeof box !== 'undefined' && box.alert) {
+                box.alert("Si è verificato un errore durante l'aggiornamento della foto.");
             } else {
-                alert("Si è verificato un errore durante il caricamento.");
-            } *@
-            //imgPreview.src = originalSrc; // Ripristina l'immagine precedente in caso di errore
-            alert("in fase di sviluppo");
+                alert("Si è verificato un errore durante l'aggiornamento della foto.");
+            }
+            imgPreview.src = originalSrc; // Ripristina l'immagine originale in caso di errore
         } finally {
             inputElement.value = ""; // Resetta l'input file
         }
     }
-
-// Funzione Helper per ridimensionare l'immagine nel browser
-async function resizeImage(file, maxDimension = 800, quality = 0.85) {
-    const imageBitmap = await createImageBitmap(file);
-    let width = imageBitmap.width;
-    let height = imageBitmap.height;
-
-    if (width > maxDimension || height > maxDimension) {
-        if (width > height) {
-            height = Math.round((height * maxDimension) / width);
-            width = maxDimension;
-        } else {
-            width = Math.round((width * maxDimension) / height);
-            height = maxDimension;
-        }
+    async function deletePicDog(dogId, dogName) {
+        box.confirm(`Sei sicuro di voler eliminare la foto profilo di ${dogName}?`, async (ok) => {
+            if (ok) {
+                const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+                const token = tokenElement ? tokenElement.value : "";
+                const response = await fetch(`?handler=DeletePhoto&dogId=${dogId}`);
+                if (response.ok) {
+                    document.getElementById(`dogImg_${dogId}`).src = "/images/logo.png";
+                    document.getElementById(`deletePicBtn_${dogId}`).classList.add('d-none');
+                } else {
+                    box.alert('Errore durante l\'eliminazione della foto.');
+                }
+            }
+        }, "Conferma eliminazione", "confirm-delete");
     }
-
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(imageBitmap, 0, 0, width, height);
-
-    return new Promise((resolve) => {
-        canvas.toBlob((blob) => resolve(blob), "image/webp", quality);
-    });
-}
+    
 </script>

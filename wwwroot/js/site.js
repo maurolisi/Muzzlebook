@@ -1,7 +1,7 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿
 
-// Write your JavaScript code.
+// url di base per lo storage cloudflare, da usare per le immagini e i file statici
+const baseUrl = 'https://media.muzzlebook.it';
 
 let deferredPrompt = null;
 const installBtn = document.getElementById('pwa-install-btn');
@@ -58,3 +58,30 @@ if (isIOS && !isStandalone) {
     // Puoi mostrare un piccolo banner o un pulsante che apre un box informativo:
     // "Per installare Muzzlebook su iPhone: premi il tasto Condividi e seleziona 'Aggiungi a schermata Home'"
 }
+
+        // Funzione Helper per ridimensionamento Canvas[cite: 3, 4]
+    async function resizeImage(file, maxDimension = 800, quality = 0.85) {
+        const imageBitmap = await createImageBitmap(file);
+        let width = imageBitmap.width;
+        let height = imageBitmap.height;
+
+        if (width > maxDimension || height > maxDimension) {
+            if (width > height) {
+                height = Math.round((height * maxDimension) / width);
+                width = maxDimension;
+            } else {
+                width = Math.round((width * maxDimension) / height);
+                height = maxDimension;
+            }
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(imageBitmap, 0, 0, width, height);
+
+        return new Promise((resolve) => {
+            canvas.toBlob((blob) => resolve(blob), "image/webp", quality);
+        });
+    }
