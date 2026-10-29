@@ -47,9 +47,10 @@
                     <!-- Avatar con Pulsante Cambia Foto -->
                     <div class="position-relative d-inline-block">
                         <img src="@urlImage" 
+                             onclick="window.open('@urlImage', '_blank')"
                              id="dogImg_@dog.Id"
                              alt="@dog.Name" 
-                             class="rounded-circle border border-3 border-white shadow-sm" 
+                             class="rounded-circle border border-3 border-white shadow-sm c-p" 
                              style="width: 110px; height: 110px; object-fit: cover;" />
 
                         <!-- Pulsante Eliminazione Rapida foto profilo -->
