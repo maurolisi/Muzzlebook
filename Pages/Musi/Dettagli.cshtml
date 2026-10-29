@@ -1,0 +1,93 @@
+﻿@page "{id:int?}"
+@model Muzzlebook.Pages.Musi.DettagliModel
+@{
+    ViewData["Title"] = $"Dettagli di {Model.CurrentDog.Name}";
+
+    // Gestione dell'URL immagine (R2 o default)
+    string urlImage = string.IsNullOrEmpty(Model.CurrentDog.ProfileImageUrl)
+        ? "/images/logo.png"
+        : "https://media.muzzlebook.it" + Model.CurrentDog.ProfileImageUrl;
+}
+
+<div class="container my-4">
+    <!-- Intestazione con pulsante Indietro -->
+    <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
+        <a asp-page="/Musi/Index" class="btn btn-outline-secondary rounded-pill me-3 shadow-sm">
+            <i class="bi bi-arrow-left"></i> Indietro
+        </a>
+        <h2 class="fw-bold text-primary mb-0">
+            <i class="fa-solid fa-book-open text-danger me-2"></i>Dettagli di @Model.CurrentDog.Name
+        </h2>
+    </div>
+
+    <div class="row g-4">
+        <!-- Colonna Sinistra: Card Foto e Taglia/Sesso -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 text-center overflow-hidden h-100">
+                <div class="bg-primary-subtle bg-gradient p-4 border-bottom d-flex justify-content-center">
+                    <img src="@urlImage"
+                         alt="@Model.CurrentDog.Name"
+                         class="rounded-circle border border-4 border-white shadow"
+                         style="width: 160px; height: 160px; object-fit: cover;" />
+                </div>
+                <div class="card-body">
+                    <h3 class="fw-bold mb-1">@Model.CurrentDog.Name</h3>
+
+                    @if (!string.IsNullOrEmpty(Model.CurrentDog.Breed))
+                    {
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill mb-3 px-3 fw-semibold">
+                            @Model.CurrentDog.Breed
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning-subtle text-dark border border-warning-subtle rounded-pill mb-3 px-3 fw-semibold">
+                            Meticcio
+                        </span>
+                    }
+
+                    <div class="d-flex justify-content-center gap-2 mt-2">
+                        @if (!string.IsNullOrEmpty(Model.CurrentDog.Gender))
+                        {
+                            <span class="badge @(Model.CurrentDog.Gender == "M" ? "bg-primary" : "bg-danger") px-3 py-2 fs-6 rounded-pill">
+                                <i class="bi @(Model.CurrentDog.Gender == "M" ? "bi-gender-male" : "bi-gender-female") me-1"></i>
+                                @(Model.CurrentDog.Gender == "M" ? "Maschio" : "Femmina")
+                            </span>
+                        }
+                        @if (Model.CurrentDog.CurrentWeightKg.HasValue && Model.CurrentDog.CurrentWeightKg > 0)
+                        {
+                            <span class="badge bg-info text-dark px-3 py-2 fs-6 rounded-pill">
+                                <i class="bi bi-speedometer2 me-1"></i>@Model.CurrentDog.CurrentWeightKg kg
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colonna Destra: Informazioni Anagrafiche -->
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-card-list text-primary me-2"></i>Scheda Anagrafica</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center p-4">
+                            <div><i class="bi bi-calendar3 text-muted me-2 fs-5"></i><strong>Data di Nascita</strong></div>
+                            <span class="fs-6">@(Model.CurrentDog.DateOfBirth?.ToString("dd/MM/yyyy") ?? "Non specificata")</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center p-4">
+                            <div><i class="bi bi-upc-scan text-muted me-2 fs-5"></i><strong>Microchip</strong></div>
+                            <span class="fs-6">@(string.IsNullOrEmpty(Model.CurrentDog.Microchip) ? "Non inserito" : Model.CurrentDog.Microchip)</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center p-4">
+                            <div><i class="bi bi-clock-history text-muted me-2 fs-5"></i><strong>Aggiunto il</strong></div>
+                            <span class="fs-6 text-muted">@Model.CurrentDog.CreatedAt.ToString("dd/MM/yyyy")</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -41,9 +41,18 @@
         <div class="col" id="dog_@dog.Id">
             <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden text-center dog-card bg-white">
 
+
+
                 <!-- Contenitore Immagine & Azioni Rapide -->
                 <div class="bg-primary-subtle bg-gradient d-flex align-items-center justify-content-center p-4 border-bottom position-relative" style="height: 170px;">
-
+                    <!-- Pulsante apri profilo -->
+                    <a asp-page="/Musi/Dettagli" asp-route-id="@dog.Id"
+                       id="detailsBtn_@dog.Id"
+                       class="btn btn-sm btn-light text-primary rounded-circle position-absolute top-0 end-0 m-2 shadow-sm @hideButton"
+                       title="Dettagli @dog.Name"
+                       style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-book-open fa-3x"></i>
+                    </a>
                     <!-- Avatar con Pulsante Cambia Foto -->
                     <div class="position-relative d-inline-block">
                         <img src="@urlImage"
@@ -57,18 +66,18 @@
                         <button type="button"
                                 id="deletePicBtn_@dog.Id"
                                 onclick="deletePicDog(@dog.Id, '@dog.Name')"
-                                class="btn btn-sm btn-light text-danger rounded-circle position-absolute m-2 shadow-sm @hideButton"
-                                style="right:0;top:-1.3em;"
+                                class="btn btn-sm btn-primary  rounded-circle position-absolute m-2 shadow border border-2 border-white d-flex align-items-center justify-content-center btn-camera @hideButton"
+                                style="width: 34px; height: 34px;right:-1.3em;top:-.7em;"
                                 title="Elimina">
-                            <i class="fa-solid fa-trash-can"></i>
+                            <i class="fa-solid fa-trash-can text-white" style="font-size: 0.85rem;"></i>
                         </button>
 
 
                         <!-- Pulsante Modifica Foto (Icona Fotocamera) -->
                         <button type="button"
                                 onclick="document.getElementById('photoInput_@dog.Id').click()"
-                                class="btn btn-primary btn-sm rounded-circle position-absolute bottom-0 end-0 shadow border border-2 border-white d-flex align-items-center justify-content-center btn-camera"
-                                style="width: 34px; height: 34px;"
+                                class="btn btn-primary btn-sm rounded-circle position-absolute shadow border border-2 border-white d-flex align-items-center justify-content-center btn-camera"
+                                style="width: 34px; height: 34px;right:-.7em;bottom:0;"
                                 title="Cambia foto profilo">
                             <i class="fa-solid fa-camera text-white" style="font-size: 0.85rem;"></i>
                         </button>
