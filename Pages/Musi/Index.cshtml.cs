@@ -30,8 +30,15 @@ namespace Muzzlebook.Pages.Musi
             var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (int.TryParse(userIdStr, out int userId))
             {
-                var sql = "SELECT * FROM Dogs WHERE OwnerId = @OwnerId ORDER BY CreatedAt DESC;";
-                DogsList = await _db.QueryAsync<Dog>(sql, new { OwnerId = userId });
+                //var sql = "SELECT * FROM Dogs WHERE OwnerId = @OwnerId ORDER BY CreatedAt DESC;";
+                //DogsList = await _db.QueryAsync<Dog>(sql, new { OwnerId = userId });
+                // Esempio nel PageModel per recuperare i cani dell'utente loggato
+                var sql = @"
+                    SELECT d.* FROM Dogs d
+                    INNER JOIN DogOwners do ON d.Id = do.DogId
+                    WHERE do.UserId = @UserId;";
+
+                DogsList = await _db.QueryAsync<Dog>(sql, new { UserId = userId });
             }
 
         }
@@ -57,8 +64,13 @@ namespace Muzzlebook.Pages.Musi
                 return Unauthorized();
             }
             // Verifica che il cane appartenga all'utente
-            var sqlCheck = "SELECT COUNT(1) FROM Dogs WHERE Id = @DogId AND OwnerId = @OwnerId;";
-            var count = await _db.ExecuteScalarAsync<int>(sqlCheck, new { DogId = dogId, OwnerId = userId });
+            var sqlCheck = @"
+                SELECT COUNT(1) 
+                FROM DogOwners 
+                WHERE DogId = @DogId 
+                  AND UserId = @UserId 
+                  AND Role <> 'readonly';";
+            var count = await _db.ExecuteScalarAsync<int>(sqlCheck, new { DogId = dogId, UserId = userId });
             if (count == 0)
             {
                 return NotFound();

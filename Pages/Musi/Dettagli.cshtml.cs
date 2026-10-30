@@ -30,8 +30,17 @@ public class DettagliModel : PageModel
         }
 
         // Recupera il cane, assicurandosi che appartenga all'utente corrente
-        var sql = "SELECT * FROM Dogs WHERE Id = @Id AND OwnerId = @OwnerId;";
-        var dog = await _db.QueryFirstOrDefaultAsync<Dog>(sql, new { Id = id, OwnerId = userId });
+        var sql = @"
+            SELECT 
+                d.*, 
+                d.[Id], 
+                o.[UserId]
+            FROM [Dogs] AS d
+            INNER JOIN [DogOwners] AS o 
+                ON o.[DogId] = d.[Id]
+            WHERE d.[Id] =@Id   
+               And o.[UserId] = @UserId;";
+        var dog = await _db.QueryFirstOrDefaultAsync<Dog>(sql, new { Id = id, UserId = userId });
 
         // Se il cane non esiste o non è del proprietario, torna alla lista
         if (dog == null)

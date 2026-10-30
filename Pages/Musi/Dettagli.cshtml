@@ -90,4 +90,73 @@
             </div>
         </div>
     </div>
+
+    <!-- Nuova Sezione in calce: Accordion Fascicolo Sanitario -->
+    <div class="mt-5">
+        <h4 class="fw-bold mb-3"><i class="bi bi-folder2-open text-primary me-2"></i>Fascicolo Sanitario</h4>
+        
+        <div class="accordion shadow-sm rounded-4 overflow-hidden" id="accordionFascicolo">
+            
+            <!-- 1. Vaccinazioni -->
+            <div class="accordion-item border-0 border-bottom">
+                <h2 class="accordion-header" id="headingVaccinazioni">
+                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVaccinazioni" aria-expanded="false" aria-controls="collapseVaccinazioni">
+                        <i class="bi bi-syringe text-success me-2 fs-5"></i> Vaccinazioni
+                    </button>
+                </h2>
+                <div id="collapseVaccinazioni" class="accordion-collapse collapse" aria-labelledby="headingVaccinazioni" data-bs-parent="#accordionFascicolo">
+                    <div class="accordion-body bg-light">
+                        <p class="text-muted mb-0">Nessuna vaccinazione registrata.</p>
+                        <!-- Qui inserirai la tabella o il form delle vaccinazioni -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Trattamenti Parassitari -->
+            <div class="accordion-item border-0 border-bottom">
+                <h2 class="accordion-header" id="headingParassitari">
+                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseParassitari" aria-expanded="false" aria-controls="collapseParassitari">
+                        <i class="bi bi-bug text-warning me-2 fs-5"></i> Trattamenti Parassitari
+                    </button>
+                </h2>
+                <div id="collapseParassitari" class="accordion-collapse collapse" aria-labelledby="headingParassitari" data-bs-parent="#accordionFascicolo">
+                    <div class="accordion-body bg-light">
+                        <p class="text-muted mb-0">Nessun trattamento parassitario registrato.</p>
+                        <!-- Qui inserirai la tabella o il form dei trattamenti -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Visite Mediche -->
+            <div class="accordion-item border-0 border-bottom">
+                <h2 class="accordion-header" id="headingVisite">
+                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVisite" aria-expanded="false" aria-controls="collapseVisite">
+                        <i class="bi bi-heart-pulse text-danger me-2 fs-5"></i> Visite Mediche
+                    </button>
+                </h2>
+                <div id="collapseVisite" class="accordion-collapse collapse" aria-labelledby="headingVisite" data-bs-parent="#accordionFascicolo">
+                    <div class="accordion-body bg-light">
+                        <p class="text-muted mb-0">Nessuna visita medica registrata.</p>
+                        <!-- Qui inserirai la tabella o il form delle visite mediche -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Documenti Clinici -->
+            <div class="accordion-item border-0">
+                <h2 class="accordion-header" id="headingDocumenti">
+                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDocumenti" aria-expanded="false" aria-controls="collapseDocumenti">
+                        <i class="bi bi-file-earmark-medical text-info me-2 fs-5"></i> Documenti Clinici
+                    </button>
+                </h2>
+                <div id="collapseDocumenti" class="accordion-collapse collapse" aria-labelledby="headingDocumenti" data-bs-parent="#accordionFascicolo">
+                    <div class="accordion-body bg-light">
+                        <p class="text-muted mb-0">Nessun documento clinico caricato.</p>
+                        <!-- Qui inserirai la tabella o l'upload dei documenti clinici -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
