@@ -1,0 +1,280 @@
+﻿@page
+@{
+    ViewData["Title"] = "Benessere Canino";
+}
+
+<div class="container my-4">
+    <!-- Hero Banner -->
+    <section class="py-5 bg-primary bg-gradient text-white rounded-4 shadow-sm mb-5 position-relative overflow-hidden">
+        <div class="container py-2 text-center position-relative z-1">
+            <div class="d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-circle p-3 mb-3 border border-4 border-white shadow-lg" style="width: 90px; height: 90px;">
+                <img src="~/images/logo.png" alt="Muzzlebook Mascot" class="img-fluid rounded-circle w-100 h-100" style="object-fit: cover;" />
+            </div>
+            <h1 class="display-4 fw-bold mb-2">Benessere Canino</h1>
+            <p class="lead max-w-700 mx-auto mb-0 opacity-90">
+                Consigli pratici su alimentazione, salute, movimento e cura di tutti i giorni per farlo vivere felice e a lungo.
+            </p>
+        </div>
+    </section>
+
+    <!-- Statistiche e Pillole di Saggezza -->
+    <div class="row g-3 mb-5">
+        <div class="col-6 col-md-3">
+            <div class="card border-0 bg-primary-subtle text-primary rounded-4 p-3 text-center h-100 shadow-sm">
+                <i class="bi bi-apple fs-2 mb-1"></i>
+                <h6 class="fw-bold mb-1">Dieta Bilanciata</h6>
+                <small class="text-secondary">70% del benessere parte dalla ciotola</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 bg-success-subtle text-success rounded-4 p-3 text-center h-100 shadow-sm">
+                <i class="bi bi-activity fs-2 mb-1"></i>
+                <h6 class="fw-bold mb-1">Movimento</h6>
+                <small class="text-secondary">Almeno 30-60 min al giorno</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 bg-warning-subtle text-dark rounded-4 p-3 text-center h-100 shadow-sm">
+                <i class="bi bi-shield-check fs-2 mb-1"></i>
+                <h6 class="fw-bold mb-1">Prevenzione</h6>
+                <small class="text-secondary">Visita veterinaria ogni 6-12 mesi</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 bg-info-subtle text-dark rounded-4 p-3 text-center h-100 shadow-sm">
+                <i class="bi bi-emoji-smile fs-2 mb-1"></i>
+                <h6 class="fw-bold mb-1">Stimolazione</h6>
+                <small class="text-secondary">Mente attiva = Cane sereno</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schede di Guida Interattive (Tab) -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
+        <div class="card-header bg-white border-bottom p-3">
+            <ul class="nav nav-pills nav-fill flex-column flex-sm-row gap-2" id="benessereTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active rounded-pill fw-semibold py-2" id="nutrizione-tab" data-bs-toggle="tab" data-bs-target="#nutrizione" type="button" role="tab">
+                        <i class="bi bi-egg-fried me-2"></i>Alimentazione
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-pill fw-semibold py-2" id="salute-tab" data-bs-toggle="tab" data-bs-target="#salute" type="button" role="tab">
+                        <i class="bi bi-hospital me-2"></i>Salute & Cura
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-pill fw-semibold py-2" id="movimento-tab" data-bs-toggle="tab" data-bs-target="#movimento" type="button" role="tab">
+                        <i class="bi bi-radar me-2"></i>Attività & Gioco
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-pill fw-semibold py-2" id="igiene-tab" data-bs-toggle="tab" data-bs-target="#igiene" type="button" role="tab">
+                        <i class="bi bi-droplet-half me-2"></i>Igiene Quotidiana
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-body p-4 bg-light-subtle">
+            <div class="tab-content" id="benessereTabsContent">
+                
+                <!-- TAB 1: ALIMENTAZIONE -->
+                <div class="tab-pane fade show active" id="nutrizione" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 h-100 p-4">
+                                <h5 class="fw-bold text-primary mb-3">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>Regole d'Oro della Ciotola
+                                </h5>
+                                <ul class="list-group list-group-flush border-0">
+                                    <li class="list-group-item bg-transparent px-0 py-2">
+                                        <strong>Quantità Calcolate:</strong> Pesa le razioni in base a età, peso ideale e livello di attività fisica.
+                                    </li>
+                                    <li class="list-group-item bg-transparent px-0 py-2">
+                                        <strong>Acqua Fresca Sempre Disponibile:</strong> Cambiala almeno due volte al giorno e pulisci la ciotola.
+                                    </li>
+                                    <li class="list-group-item bg-transparent px-0 py-2">
+                                        <strong>Orari Regolari:</strong> Mantieni gli stessi orari per favorire una corretta digestione.
+                                    </li>
+                                    <li class="list-group-item bg-transparent px-0 py-2">
+                                        <strong>Riposo Dopo i Pasti:</strong> Evita corse sfrenate subito dopo mangiato per prevenire la torsione dello stomaco.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 h-100 p-4 bg-danger-subtle">
+                                <h5 class="fw-bold text-danger mb-3">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>Cibi Tossici da Evitare
+                                </h5>
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    <span class="badge bg-danger fs-6 px-3 py-2 rounded-pill"><i class="bi bi-x-circle me-1"></i>Cioccolato & Cacao</span>
+                                    <span class="badge bg-danger fs-6 px-3 py-2 rounded-pill"><i class="bi bi-x-circle me-1"></i>Cipolle & Aglio</span>
+                                    <span class="badge bg-danger fs-6 px-3 py-2 rounded-pill"><i class="bi bi-x-circle me-1"></i>Uva & Uvetta</span>
+                                    <span class="badge bg-danger fs-6 px-3 py-2 rounded-pill"><i class="bi bi-x-circle me-1"></i>Xilitolo (Dolcificante)</span>
+                                    <span class="badge bg-danger fs-6 px-3 py-2 rounded-pill"><i class="bi bi-x-circle me-1"></i>Ossa Cotte</span>
+                                    <span class="badge bg-danger fs-6 px-3 py-2 rounded-pill"><i class="bi bi-x-circle me-1"></i>Caffè & Alcol</span>
+                                </div>
+                                <p class="small text-danger-emphasis mb-0">
+                                    In caso di ingestione accidentale di uno di questi alimenti, contatta immediatamente il tuo veterinario di fiducia o una clinica h24.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: SALUTE & PREVENZIONE -->
+                <div class="tab-pane fade" id="salute" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm rounded-4 h-100 p-3 text-center">
+                                <div class="bg-primary-subtle text-primary rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px;">
+                                    <i class="bi bi-syringe fs-3"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2">Vaccini & Richiami</h5>
+                                <p class="small text-muted mb-0">Proteggi il tuo cane da malattie virali gravi (Cimurro, Parvovirosi, Epatite, Leptospirosi). Rispetta le scadenze del libretto sanitario.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm rounded-4 h-100 p-3 text-center">
+                                <div class="bg-warning-subtle text-warning rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px;">
+                                    <i class="bi bi-bug fs-3"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2">Antiparassitari</h5>
+                                <p class="small text-muted mb-0">Usa regolarmente spot-on, collari o compresse contro pulci, zecche e pappataci (Leishmaniosi) durante tutto l'anno.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm rounded-4 h-100 p-3 text-center">
+                                <div class="bg-success-subtle text-success rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 60px; height: 60px;">
+                                    <i class="bi bi-heart-pulse fs-3"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2">Check-up Periodico</h5>
+                                <p class="small text-muted mb-0">Una visita annuale (o semestrale per i cani anziani) permette di individuare precocemente qualsiasi anomalia fisica o ematica.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: ATTIVITÀ & MOVIMENTO -->
+                <div class="tab-pane fade" id="movimento" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 h-100 p-4">
+                                <h5 class="fw-bold text-primary mb-3">
+                                    <i class="bi bi-tree-fill text-success me-2"></i>Passeggiate ed Esplorazione
+                                </h5>
+                                <p class="text-muted small">La passeggiata non serve solo ai bisogni fisiologici, ma è il momento in cui il cane conosce il mondo attraverso l'olfatto.</p>
+                                <ul class="list-unstyled mb-0 small">
+                                    <li class="mb-2"><i class="bi bi-check2 text-primary me-2"></i>Lascialo annusare: l'olfatto stimola il cervello e riduce lo stress.</li>
+                                    <li class="mb-2"><i class="bi bi-check2 text-primary me-2"></i>Varia i percorsi per offrirgli stimoli sensoriali sempre nuovi.</li>
+                                    <li><i class="bi bi-check2 text-primary me-2"></i>Usa una pettorina comoda ed evita strappi al guinzaglio.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 h-100 p-4">
+                                <h5 class="fw-bold text-primary mb-3">
+                                    <i class="bi bi-puzzle-fill text-warning me-2"></i>Giochi di Attivazione Mentale
+                                </h5>
+                                <p class="text-muted small">15 minuti di lavoro mentale stancano e appagano un cane più di un'ora di corsa continuativa.</p>
+                                <ul class="list-unstyled mb-0 small">
+                                    <li class="mb-2"><i class="bi bi-check2 text-primary me-2"></i><strong>Kong & Tapetti Olfattivi:</strong> Ottimi per incanalare la concentrazione.</li>
+                                    <li class="mb-2"><i class="bi bi-check2 text-primary me-2"></i><strong>Ricerca olfattiva:</strong> Nascondi premietti in casa o nel giardino.</li>
+                                    <li><i class="bi bi-check2 text-primary me-2"></i><strong>Corsi di Agility o Nosework:</strong> Per rafforzare l'intesa con te.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: IGIENE QUOTIDIANA -->
+                <div class="tab-pane fade" id="igiene" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+                                <h5 class="fw-bold text-primary mb-3">
+                                    <i class="bi bi-brush me-2"></i>Pelo, Orecchie e Denti
+                                </h5>
+                                <ul class="list-group list-group-flush border-0 small">
+                                    <li class="list-group-item bg-transparent px-0 py-2">
+                                        <strong>Spazzolatura:</strong> Spazzola il pelo 2-3 volte a settimana per rimuovere il pelo morto e prevenire nodi.
+                                    </li>
+                                    <li class="list-group-item bg-transparent px-0 py-2">
+                                        <strong>Igiene Orale:</strong> Pulisci i denti con spazzolini ed enzymatici appositi o usa snack masticabili per prevenire il tartaro.
+                                    </li>
+                                    <li class="list-group-item bg-transparent px-0 py-2">
+                                        <strong>Controllo Orecchie & Zampe:</strong> Ispeziona dopo ogni passeggiata nei prati per verificare la presenza di forasacchi o zecche.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-light">
+                                <h5 class="fw-bold text-primary mb-3">
+                                    <i class="bi bi-heart-fill text-danger me-2"></i>Segnali di Benessere Emotivo
+                                </h5>
+                                <p class="text-muted small">Un cane felice si riconosce da piccoli dettagli quotidiani:</p>                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-emoji-smile-fill text-success fs-5 me-2"></i>
+                                    <span class="small">Sguardo rilassato e postura corporea morbida</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-emoji-smile-fill text-success fs-5 me-2"></i>
+                                    <span class="small">Appetito regolare e sonno tranquillo</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-emoji-smile-fill text-success fs-5 me-2"></i>
+                                    <span class="small">Desiderio di interagire e giocare con la famiglia</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner Finale Promemoria -->
+    <div class="p-4 p-md-5 rounded-4 bg-primary-subtle border border-primary-subtle text-center shadow-sm">
+        <h4 class="fw-bold text-primary mb-2">Registra i progressi sul Diario di Muzzlebook</h4>
+        <p class="text-secondary max-w-700 mx-auto mb-4">
+            Tieni traccia delle scadenze dei vaccini, delle visite mediche e del peso del tuo cane nella sua scheda personale.
+        </p>
+        <a asp-page="/Musi/Index" class="btn btn-primary rounded-pill px-4 py-2 fw-semibold shadow-sm">
+            <i class="bi bi-journal-bookmark-fill me-2"></i>Vai ai Miei Musi
+        </a>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .max-w-700 {
+            max-width: 700px;
+        }
+
+        .nav-pills .nav-link {
+            color: #495057;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            transition: all 0.25s ease;
+        }
+
+        .nav-pills .nav-link.active {
+            color: #fff;
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            box-shadow: 0 0.25rem 0.5rem rgba(13, 110, 253, 0.25);
+        }
+
+        .nav-pills .nav-link:hover:not(.active) {
+            background-color: #e9ecef;
+        }
+    </style>
+}

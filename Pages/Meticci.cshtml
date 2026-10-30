@@ -1,0 +1,286 @@
+﻿@page
+@{
+    ViewData["Title"] = "Viva i Meticci!";
+}
+
+<div class="container my-4">
+    <!-- Hero Banner -->
+    <section class="py-5 bg-warning bg-gradient text-dark rounded-4 shadow-sm mb-5 position-relative overflow-hidden">
+        <div class="container py-2 text-center position-relative z-1">
+            <div class="d-inline-flex align-items-center justify-content-center bg-white text-danger rounded-circle p-3 mb-3 border border-4 border-white shadow-lg" style="width: 90px; height: 90px;">
+                <img src="~/images/HomeBreeds/Meticcio.png" alt="Muzzlebook Mascot" class="img-fluid rounded-circle w-100 h-100" style="object-fit: cover;" />
+            </div>
+            <span class="badge bg-danger text-white rounded-pill px-3 py-2 fs-6 mb-2 d-block mx-auto max-w-200">
+                <i class="bi bi-stars me-1"></i> Pezzi Unici al Mondo
+            </span>
+            <h1 class="display-4 fw-black mb-2 text-dark">Viva i Meticci!</h1>
+            <p class="lead max-w-700 mx-auto mb-0 fw-medium">
+                I meticci non hanno standard da rispettare: sono pezzi unici di pura simpatia, intelligenza e salute!
+            </p>
+        </div>
+    </section>
+
+    <!-- I Superpoteri del Meticcio (Grid 4 colonne) -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6 col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100 meticcio-card">
+                <div class="bg-danger-subtle text-danger rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 65px; height: 65px;">
+                    <i class="bi bi-shield-fill-check fs-2"></i>
+                </div>
+                <h5 class="fw-bold mb-2">Vigore Ibrido</h5>
+                <p class="small text-muted mb-0">
+                    La variabilità genetica riduce l'incidenza delle malattie ereditarie tipiche delle razze pure.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100 meticcio-card">
+                <div class="bg-primary-subtle text-primary rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 65px; height: 65px;">
+                    <i class="bi bi-palette-fill fs-2"></i>
+                </div>
+                <h5 class="fw-bold mb-2">Design Irripetibile</h5>
+                <p class="small text-muted mb-0">
+                    Orecchie storte, macchie a sorpresa, mantelli fantastici: nessun altro cane sarà mai identico al tuo!
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100 meticcio-card">
+                <div class="bg-success-subtle text-success rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 65px; height: 65px;">
+                    <i class="bi bi-lightbulb-fill fs-2"></i>
+                </div>
+                <h5 class="fw-bold mb-2">Intelligenza Pratica</h5>
+                <p class="small text-muted mb-0">
+                    L'unione di diversi istinti e attitudini rende i meticci svegli, flessibili e veloci nell'apprendimento.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100 meticcio-card">
+                <div class="bg-warning-subtle text-dark rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 65px; height: 65px;">
+                    <i class="bi bi-emoji-laughing-fill fs-2"></i>
+                </div>
+                <h5 class="fw-bold mb-2">Carattere Sorprendente</h5>
+                <p class="small text-muted mb-0">
+                    Ogni meticcio è un'avventura da scoprire: mix di dolcezza, vivacità, lealtà ed esuberanza pura.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sezione Approfondimenti: Tab Interattive -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
+        <div class="card-header bg-white border-bottom p-3">
+            <ul class="nav nav-pills nav-fill flex-column flex-sm-row gap-2" id="meticciTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active rounded-pill fw-semibold py-2" id="perche-tab" data-bs-toggle="tab" data-bs-target="#perche" type="button" role="tab">
+                        <i class="bi bi-heart me-2"></i>Perché Sceglierlo
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-pill fw-semibold py-2" id="falsimiti-tab" data-bs-toggle="tab" data-bs-target="#falsimiti" type="button" role="tab">
+                        <i class="bi bi-patch-question me-2"></i>Falsi Miti
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link rounded-pill fw-semibold py-2" id="adozione-tab" data-bs-toggle="tab" data-bs-target="#adozione" type="button" role="tab">
+                        <i class="bi bi-house-heart me-2"></i>Consigli per l'Adozione
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-body p-4 bg-light-subtle">
+            <div class="tab-content" id="meticciTabsContent">
+
+                <!-- TAB 1: PERCHÉ SCEGLIERLO -->
+                <div class="tab-pane fade show active" id="perche" role="tabpanel">
+                    <div class="row g-4 align-items-center">
+                        <div class="col-md-6">
+                            <h4 class="fw-bold text-primary mb-3">L'Amore Non Ha Pedigree</h4>
+                            <p class="text-muted">
+                                Scegliere un meticcio significa spesso dare una seconda possibilità a un cane in cerca di casa nei rifugi o nei canili. La loro gratitudine si trasforma in un legame indissolubile con la famiglia.
+                            </p>
+                            <ul class="list-group list-group-flush border-0 small">
+                                <li class="list-group-item bg-transparent px-0 py-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i><strong>Longevità Media Maggiore:</strong> Molti studi evidenziano una speranza di vita più elevata grazie alla minore consanguineità.
+                                </li>
+                                <li class="list-group-item bg-transparent px-0 py-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i><strong>Adozione Responsabile:</strong> Riduci il fenomeno dell'abbandono e sostieni l'operato dei volontari.
+                                </li>
+                                <li class="list-group-item bg-transparent px-0 py-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i><strong>Unico e Irripetibile:</strong> Avrai un compagno di vita che nessun altro al mondo possiede.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="bg-primary-subtle p-4 rounded-4 border border-primary-subtle text-center">
+                                <i class="bi bi-quote text-primary fs-1"></i>
+                                <blockquote class="blockquote mb-3 fs-6 italic">
+                                    "Un meticcio non ha uno standard da rispettare nei concorsi, perché il suo unico standard è volerti bene ogni giorno di più."
+                                </blockquote>
+                                <span class="badge bg-primary text-white rounded-pill px-3 py-1">Community di Muzzlebook</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: FALSI MITI -->
+                <div class="tab-pane fade" id="falsimiti" role="tabpanel">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+                                <div class="d-flex align-items-start">
+                                    <div class="badge bg-danger rounded-circle p-2 me-3 fs-6"><i class="bi bi-x-lg"></i></div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">"Non sai mai la stazza che raggiungerà"</h6>
+                                        <p class="small text-muted mb-0">
+                                            <strong>Realtà:</strong> Guardando la dimensione delle zampe da cucciolo, la struttura della madre o chiedendo consiglio ai veterinari del canile, è possibile stimare con ottima precisione la taglia adulta.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+                                <div class="d-flex align-items-start">
+                                    <div class="badge bg-danger rounded-circle p-2 me-3 fs-6"><i class="bi bi-x-lg"></i></div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">"I meticci sono meno intelligenti o addestrabili"</h6>
+                                        <p class="small text-muted mb-0">
+                                            <strong>Realtà:</strong> Falso! Il mix genetico unisce l'ingegno e la prontezza di più razze. Rispondono benissimo all'educazione basata sul rinforzo positivo.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+                                <div class="d-flex align-items-start">
+                                    <div class="badge bg-danger rounded-circle p-2 me-3 fs-6"><i class="bi bi-x-lg"></i></div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">"I meticci adulti non si affezionano al nuovo padrone"</h6>
+                                        <p class="small text-muted mb-0">
+                                            <strong>Realtà:</strong> I cani adottati da adulti o anziani sviluppano una devozione incredibile e una capacità d'adattamento straordinaria.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100">
+                                <div class="d-flex align-items-start">
+                                    <div class="badge bg-danger rounded-circle p-2 me-3 fs-6"><i class="bi bi-x-lg"></i></div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">"I meticci non ammalano mai"</h6>
+                                        <p class="small text-muted mb-0">
+                                            <strong>Realtà:</strong> Hanno una costituzione generalmente più solida, ma necessitano delle stesse cure, vaccinazioni, antiparassitari e controlli di qualsiasi cane!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: CONSIGLI PER L'ADOZIONE -->
+                <div class="tab-pane fade" id="adozione" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm rounded-4 p-3 text-center h-100 bg-white">
+                                <div class="bg-warning-subtle text-dark rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 55px; height: 55px;">
+                                    <span class="fw-bold fs-4">1</span>
+                                </div>
+                                <h6 class="fw-bold mb-2">Visita un Rifugio / Canile</h6>
+                                <p class="small text-muted mb-0">Parla con i volontari: conoscono perfettamente il carattere di ogni cane e sapranno indicarti quello più adatto al tuo stile di vita.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm rounded-4 p-3 text-center h-100 bg-white">
+                                <div class="bg-warning-subtle text-dark rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 55px; height: 55px;">
+                                    <span class="fw-bold fs-4">2</span>
+                                </div>
+                                <h6 class="fw-bold mb-2">Passeggiate Conoscitive</h6>
+                                <p class="small text-muted mb-0">Fai qualche incontro prima di portarlo a casa per instaurare da subito fiducia reciproca e sintonia.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm rounded-4 p-3 text-center h-100 bg-white">
+                                <div class="bg-warning-subtle text-dark rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 55px; height: 55px;">
+                                    <span class="fw-bold fs-4">3</span>
+                                </div>
+                                <h6 class="fw-bold mb-2">Crea la sua Scheda su Muzzlebook</h6>
+                                <p class="small text-muted mb-0">Registra i dettagli, le scadenze del libretto sanitario e carica le foto del tuo bellissimo fantastico fido!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner Finale CTA -->
+    <div class="p-4 p-md-5 rounded-4 bg-warning bg-gradient text-dark text-center shadow-sm border border-warning">
+        <h3 class="fw-bold mb-2"><i class="bi bi-heart-fill text-danger me-2"></i>Hai un Fantastico Meticcio in Famiglia?</h3>
+        <p class="text-dark-emphasis max-w-700 mx-auto mb-4 fw-medium">
+            Aggiungilo subito al tuo profilo Muzzlebook e mantieni organizzato il suo fascicolo sanitario!
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a asp-page="/Musi/Index" class="btn btn-dark btn-lg rounded-pill px-4 shadow-sm fw-semibold fs-6">
+                <i class="bi bi-journal-bookmark-fill me-2"></i>I Miei Musi
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .max-w-700 {
+            max-width: 700px;
+        }
+
+        .max-w-200 {
+            max-width: 220px;
+        }
+
+        .fw-black {
+            font-weight: 900;
+        }
+
+        .meticcio-card {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .meticcio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1.2rem rgba(0, 0, 0, 0.12) !important;
+        }
+
+        .nav-pills .nav-link {
+            color: #495057;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            transition: all 0.25s ease;
+        }
+
+        .nav-pills .nav-link.active {
+            color: #212529;
+            background-color: #ffc107;
+            border-color: #ffc107;
+            box-shadow: 0 0.25rem 0.5rem rgba(255, 193, 7, 0.3);
+        }
+
+        .nav-pills .nav-link:hover:not(.active) {
+            background-color: #e9ecef;
+        }
+    </style>
+}
