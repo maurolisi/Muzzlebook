@@ -6,7 +6,7 @@
     // Gestione dell'URL immagine (R2 o default)
     string urlImage = string.IsNullOrEmpty(Model.CurrentDog.ProfileImageUrl)
         ? "/images/logo.png"
-        : "https://media.muzzlebook.it" + Model.CurrentDog.ProfileImageUrl;
+        : "https://media.muzzlebook.it/" + Model.CurrentDog.ProfileImageUrl;
 }
 
 <div class="container my-4">
@@ -91,7 +91,7 @@
         </div>
     </div>
 
-    <!-- Nuova Sezione in calce: Accordion Fascicolo Sanitario -->
+    <!-- Nuova Sezione: Accordion Fascicolo Sanitario (con data-section) -->
     <div class="mt-5">
         <h4 class="fw-bold mb-3"><i class="bi bi-folder2-open text-primary me-2"></i>Fascicolo Sanitario</h4>
         
@@ -104,10 +104,9 @@
                         <i class="bi bi-syringe text-success me-2 fs-5"></i> Vaccinazioni
                     </button>
                 </h2>
-                <div id="collapseVaccinazioni" class="accordion-collapse collapse" aria-labelledby="headingVaccinazioni" data-bs-parent="#accordionFascicolo">
+                <div id="collapseVaccinazioni" class="accordion-collapse collapse" data-section="vaccinazioni" aria-labelledby="headingVaccinazioni" data-bs-parent="#accordionFascicolo">
                     <div class="accordion-body bg-light">
-                        <p class="text-muted mb-0">Nessuna vaccinazione registrata.</p>
-                        <!-- Qui inserirai la tabella o il form delle vaccinazioni -->
+                        <div class="contenitore-dati text-muted mb-0">Clicca per caricare i dati...</div>
                     </div>
                 </div>
             </div>
@@ -119,10 +118,9 @@
                         <i class="bi bi-bug text-warning me-2 fs-5"></i> Trattamenti Parassitari
                     </button>
                 </h2>
-                <div id="collapseParassitari" class="accordion-collapse collapse" aria-labelledby="headingParassitari" data-bs-parent="#accordionFascicolo">
+                <div id="collapseParassitari" class="accordion-collapse collapse" data-section="parassitari" aria-labelledby="headingParassitari" data-bs-parent="#accordionFascicolo">
                     <div class="accordion-body bg-light">
-                        <p class="text-muted mb-0">Nessun trattamento parassitario registrato.</p>
-                        <!-- Qui inserirai la tabella o il form dei trattamenti -->
+                        <div class="contenitore-dati text-muted mb-0">Clicca per caricare i dati...</div>
                     </div>
                 </div>
             </div>
@@ -134,10 +132,9 @@
                         <i class="bi bi-heart-pulse text-danger me-2 fs-5"></i> Visite Mediche
                     </button>
                 </h2>
-                <div id="collapseVisite" class="accordion-collapse collapse" aria-labelledby="headingVisite" data-bs-parent="#accordionFascicolo">
+                <div id="collapseVisite" class="accordion-collapse collapse" data-section="visite" aria-labelledby="headingVisite" data-bs-parent="#accordionFascicolo">
                     <div class="accordion-body bg-light">
-                        <p class="text-muted mb-0">Nessuna visita medica registrata.</p>
-                        <!-- Qui inserirai la tabella o il form delle visite mediche -->
+                        <div class="contenitore-dati text-muted mb-0">Clicca per caricare i dati...</div>
                     </div>
                 </div>
             </div>
@@ -149,10 +146,9 @@
                         <i class="bi bi-file-earmark-medical text-info me-2 fs-5"></i> Documenti Clinici
                     </button>
                 </h2>
-                <div id="collapseDocumenti" class="accordion-collapse collapse" aria-labelledby="headingDocumenti" data-bs-parent="#accordionFascicolo">
+                <div id="collapseDocumenti" class="accordion-collapse collapse" data-section="documenti" aria-labelledby="headingDocumenti" data-bs-parent="#accordionFascicolo">
                     <div class="accordion-body bg-light">
-                        <p class="text-muted mb-0">Nessun documento clinico caricato.</p>
-                        <!-- Qui inserirai la tabella o l'upload dei documenti clinici -->
+                        <div class="contenitore-dati text-muted mb-0">Clicca per caricare i dati...</div>
                     </div>
                 </div>
             </div>
@@ -160,3 +156,40 @@
         </div>
     </div>
 </div>
+
+<!-- Script per la Fetch Dinamica -->
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const accordion = document.getElementById('accordionFascicolo');
+            const dogId = @Model.CurrentDog.Id;
+
+            accordion.addEventListener('show.bs.collapse', async (event) => {
+                const panel = event.target;
+                const body = panel.querySelector('.contenitore-dati');
+                const section = panel.getAttribute('data-section');
+
+                // Evita chiamate ripetute se i dati sono già stati caricati con successo
+                if (panel.hasAttribute('data-loaded')) return;
+
+                body.innerHTML = '<div class="text-center text-muted"><i class="spinner-border spinner-border-sm me-2"></i>Caricamento in corso...</div>';
+                    try {
+                        const response = await fetch(`?handler=DatiFascicolo&id=${dogId}&sezione=${section}`);
+    
+                        if (response.ok) {
+                            // Prende direttamente l'HTML generato dalla Partial View
+                            const html = await response.text(); 
+                            body.innerHTML = html;
+                            panel.setAttribute('data-loaded', 'true');
+                        } else {
+                            body.innerHTML = '<div class="text-danger">Errore durante il recupero dei dati.</div>';
+                        }
+                    } catch (error) {
+                        body.innerHTML = '<div class="text-danger">Errore di rete.</div>';
+                    }
+            });
+        });
+
+       
+    </script>
+}

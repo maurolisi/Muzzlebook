@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Muzzlebook.Models.DTOs.VaccinationDto>
+
+@if (!Model.Any())
+{
+    <p class="text-muted mb-0">Nessuna vaccinazione registrata.</p>
+}
+else
+{
+    <ul class="list-group list-group-flush rounded shadow-sm">
+        @foreach (var item in Model)
+        {
+            <li class="list-group-item bg-white p-3">
+                <strong>@item.VaccineName</strong> <br />
+                <small class="text-muted">
+                    <i class="bi bi-calendar-check me-1"></i>Somministrato: @(item.AdministeredDate?.ToString("dd/MM/yyyy") ?? "-")
+                </small>
+            </li>
+        }
+    </ul>
+}

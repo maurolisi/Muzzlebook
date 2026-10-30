@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Muzzlebook.Models.DTOs.ParasiteTreatmentDto>
+
+@if (!Model.Any())
+{
+    <p class="text-muted mb-0">Nessun trattamento parassitario registrato.</p>
+}
+else
+{
+    <ul class="list-group list-group-flush rounded shadow-sm">
+        @foreach (var item in Model)
+        {
+            <li class="list-group-item bg-white p-3">
+                <strong>@item.ProductName</strong> <span class="badge bg-light text-dark border ms-2">@item.TreatmentType</span> <br />
+                <small class="text-muted">
+                    <i class="bi bi-calendar-check me-1"></i>Data: @(item.AdministeredDate?.ToString("dd/MM/yyyy") ?? "-")
+                </small>
+            </li>
+        }
+    </ul>
+}
