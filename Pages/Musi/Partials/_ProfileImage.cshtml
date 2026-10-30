@@ -1,0 +1,105 @@
+﻿
+@model Muzzlebook.Models.DTOs.DogDto
+@{
+    // Gestione sicura dell'URL dell'immagine con Cloudflare R2
+    string urlImage = string.IsNullOrEmpty(Model?.ProfileImageUrl)
+        ? "/images/logo.png"
+        : (Model.ProfileImageUrl.StartsWith("http") 
+            ? Model.ProfileImageUrl 
+            : "https://media.muzzlebook.it/" + Model.ProfileImageUrl.TrimStart('/'));
+}
+
+<style>
+    /* Styling per il contenitore avatar interattivo */
+    .avatar-wrapper {
+        position: relative;
+        width: 170px;
+        height: 170px;
+        zoom: 300%;
+        margin: 0 auto;
+    }
+
+    .image-profile-preview {
+        width: 170px;
+        height: 170px;
+        object-fit: cover;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .avatar-wrapper:hover .image-profile-preview {
+        transform: scale(1.03);
+    }
+
+    /* Badge overlay per fotocamera su hover */
+    .avatar-overlay-btn {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        width: 42px;
+        height: 42px;
+        border: 3px solid #ffffff;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .avatar-overlay-btn:hover {
+        transform: scale(1.1);
+    }
+    @@media (max-width: 768px) {
+            .avatar-wrapper{
+              zoom: 100%; 
+            }
+        }
+</style>
+
+<!-- Header del Modal -->
+<div class="modal-header border-bottom bg-light py-3">
+    <h5 class="modal-title fw-bold text-primary">
+        <i class="bi bi-person-circle me-2"></i>Immagine Profilo
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+</div>
+
+<!-- Corpo del Modal -->
+<div class="modal-body text-center p-4">
+    <p class="text-muted mb-4">
+        Gestisci la foto profilo di <span class="fw-bold text-dark">@Model.Name</span>
+    </p>
+
+    <!-- Avatar centrale con foto e pulsante rapido -->
+    <div class="avatar-wrapper mb-4">
+        <img id="image-profile-current"
+             src="@urlImage"
+             alt="Foto profilo di @Model.Name"
+             class="rounded-circle border border-4 border-primary-subtle shadow image-profile-preview" />
+
+        <!-- Pulsante con fotocamera posizionato sopra l'avatar -->
+        <button type="button"
+                onclick="document.getElementById('photoInput_@Model.Id').click()"
+                class="btn btn-primary rounded-circle shadow avatar-overlay-btn d-flex align-items-center justify-content-center"
+                title="Carica nuova foto">
+            <i class="bi bi-camera-fill fs-5"></i>
+        </button>
+    </div>
+
+    <!-- Input Nascosto per l'Upload -->
+    <input type="file"
+           id="photoInput_@Model.Id"
+           class="d-none"
+           accept="image/*"
+           onchange="uploadProfilePhoto(@Model.Id, this)" />
+</div>
+
+<!-- Footer del Modal con Pulsanti di Azione -->
+<div class="modal-footer bg-light justify-content-between p-3 border-top">
+    <button type="button" 
+            onclick="deletePicDog(@Model.Id, '@Model.Name')" 
+            class="btn btn-outline-danger rounded-pill px-4">
+        <i class="bi bi-trash3 me-1"></i> Rimuovi Foto
+    </button>
+    
+    <button type="button" 
+            onclick="document.getElementById('photoInput_@Model.Id').click()" 
+            class="btn btn-primary rounded-pill px-4 shadow-sm">
+        <i class="bi bi-upload me-1"></i> Carica Nuova
+    </button>
+</div>

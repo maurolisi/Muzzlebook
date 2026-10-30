@@ -49,8 +49,12 @@
         public string? ContentType { get; init; }
         public int Dimensioni { get; init; }
         public string? DescFile { get; init; }
-        public int IdDoc { get; init; }
-        public int IdProfile { get; init; }
+        public int IdDoc { get; init; }         // Foreign key to Dogs
+        public int IdCliDoc { get; init; }      // Foreign key to ClinicalDocuments
+        public int IdMedVis { get; init; }      // Foreign key to MedicalVisits
+        public int IdParTre { get; init; }      // Foreign key to ParasiteTreatments
+        public int IdVaccin { get; init; }      // Foreign key to Vaccinations
+        public int IdUser { get; init; }        // Foreign key to Users
     }
 
     public record MedicalVisitDto

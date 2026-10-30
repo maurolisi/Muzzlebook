@@ -6,9 +6,9 @@
     // Gestione dell'URL immagine (R2 o default)
     string urlImage = string.IsNullOrEmpty(Model.CurrentDog.ProfileImageUrl)
         ? "/images/logo.png"
-        : "https://media.muzzlebook.it/" + Model.CurrentDog.ProfileImageUrl;
+        : "https://media.muzzlebook.it" + Model.CurrentDog.ProfileImageUrl;
 }
-
+@Html.AntiForgeryToken()
 <div class="container my-4">
     <!-- Intestazione con pulsante Indietro -->
     <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
@@ -26,8 +26,11 @@
             <div class="card border-0 shadow-sm rounded-4 text-center overflow-hidden h-100">
                 <div class="bg-primary-subtle bg-gradient p-4 border-bottom d-flex justify-content-center">
                     <img src="@urlImage"
+                        title="Gestisci Immagine Profilo"
+                         onclick="openProfileImage(@Model.CurrentDog.Id)"
+                         id="dogImg_@Model.CurrentDog.Id"
                          alt="@Model.CurrentDog.Name"
-                         class="rounded-circle border border-4 border-white shadow"
+                         class="rounded-circle border border-4 border-white shadow c-p"
                          style="width: 160px; height: 160px; object-fit: cover;" />
                 </div>
                 <div class="card-body">
@@ -189,7 +192,115 @@
                     }
             });
         });
+        //#region Gestione Imagine
+          uploadProfilePhoto = async (dogId, inputElement)=> {
+            const file = inputElement.files[0];
+            if (!file) return;
 
-       
+            // 1. Controllo del tipo MIME (solo immagini)
+            if (!file.type.startsWith('image/')) {
+                if (typeof box !== 'undefined' && box.alert) {
+                    box.alert('Seleziona un file immagine valido (JPG, PNG, WebP, ecc.).');
+                } else {
+                    alert('Seleziona un file immagine valido.');
+                }
+                inputElement.value = '';
+                return;
+            }
+
+            const imgPreview = document.getElementById(`dogImg_${dogId}`);
+            const imgCurrent = document.getElementById(`image-profile-current`);
+            const originalSrc = imgPreview.src;
+
+            try {
+                // 2. Anteprima locale immediata
+                imgPreview.src = URL.createObjectURL(file);
+                imgCurrent.src = URL.createObjectURL(file);
+
+                // 3. Ridimensionamento lato client tramite Canvas
+                const resizedBlob = await resizeImage(file, 800, 0.85);
+
+                // 4. Preparazione dati FormData
+                const formData = new FormData();
+                formData.append("dogId", dogId);
+                formData.append("photo", resizedBlob, "profile.webp");
+
+                const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+                const token = tokenElement ? tokenElement.value : "";
+
+                // AGGIUNGI IL TOKEN ANCHE AL FORMDATA!
+                formData.append("__RequestVerificationToken", token);
+
+                // 5. Invio all'handler Razor Pages
+        const response = await fetch("/musi/index?handler=UploadPhoto", {
+            method: "POST",
+            headers: {
+                "RequestVerificationToken": token
+            },
+            body: formData
+        });
+
+                if (!response.ok) {
+                    throw new Error("Errore durante il caricamento");
+                }
+
+                const data = await response.json();
+                if (data.newUrl) {
+                    imgPreview.src = baseUrl + data.newUrl; // Imposta il nuovo URL di Cloudflare R2
+                    imgCurrent.src = baseUrl + data.newUrl; // Imposta il nuovo URL di Cloudflare R2
+                    //document.getElementById(`deletePicBtn_${dogId}`).classList.remove('d-none');
+                }
+
+            
+            } catch (error) {
+                if (typeof box !== 'undefined' && box.alert) {
+                    box.alert("Si è verificato un errore durante l'aggiornamento della foto.");
+                } else {
+                    alert("Si è verificato un errore durante l'aggiornamento della foto.");
+                }
+                imgPreview.src = originalSrc; // Ripristina l'immagine originale in caso di errore
+                console.error(error);
+
+            } finally {
+                inputElement.value = ""; // Resetta l'input file
+            }
+        }
+        deletePicDog = async (dogId, dogName) =>{
+            box.confirm(`Sei sicuro di voler eliminare la foto profilo di ${dogName}?`, async (ok) => {
+                if (ok) {
+                    const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+                    const token = tokenElement ? tokenElement.value : "";
+                    const response = await fetch(`/musi/index?handler=DeletePhoto&dogId=${dogId}`);
+                    if (response.ok) {
+                        document.getElementById(`dogImg_${dogId}`).src = "/images/logo.png";
+                        box.hideAll();
+                        //document.getElementById(`image-profile-current`).src = "/images/logo.png";
+                        //document.getElementById(`deletePicBtn_${dogId}`).classList.add('d-none');
+                    } else {
+                        box.alert('Errore durante l\'eliminazione della foto.');
+                    }
+                }
+            }, "Conferma eliminazione", "confirm-delete");
+        }
+      openProfileImage = async (dogId) => {
+        const loader = "<div id='divImageProfile'><div class='text-center p-4'><i class='spinner-border text-primary me-2'></i>Caricamento immagine...</div></div>";
+        box.dialog(loader,'', 'w-90');
+          const body=document.getElementById('divImageProfile');
+          try {
+              const response = await fetch(`?handler=OpenProfileImage&id=${dogId}`);
+
+              if (response.ok) {
+                  // Prende direttamente l'HTML generato dalla Partial View
+                  const html = await response.text();
+                    body.innerHTML=html;
+              } else {
+                  body.innerHTML = '<div class="text-danger">Errore durante il recupero dei dati.</div>';
+              }
+          } catch (error) {
+              body.innerHTML = '<div class="text-danger">Errore di rete.</div>';
+          }
+      }
+      //#endregion
+    
     </script>
 }

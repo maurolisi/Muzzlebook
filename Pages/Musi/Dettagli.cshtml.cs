@@ -99,5 +99,13 @@ namespace Muzzlebook.Pages.Musi
                     return BadRequest("Sezione non valida");
             }
         }
+        public async Task<IActionResult> OnGetOpenProfileImageAsync(int id)
+        {
+            var sql = @"SELECT * FROM Dogs WHERE Id=@Id";
+            var dog = await _db.QueryFirstOrDefaultAsync<DogDto>(sql, new { Id = id });
+
+            return Partial("Partials/_ProfileImage", dog);
+
+        }
     }
 }
