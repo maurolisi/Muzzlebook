@@ -59,28 +59,29 @@ const baseUrl = 'https://media.muzzlebook.it';
 //     // "Per installare Muzzlebook su iPhone: premi il tasto Condividi e seleziona 'Aggiungi a schermata Home'"
 // }
 // ==========================================
-// GESTIONE PWA INSTALL BANNER
+// GESTIONE PWA INSTALL BANNER (Mostra a ogni ricarica/sessione)
 // ==========================================
 let deferredPrompt = null;
 const pwaBanner = document.getElementById('pwa-install-banner');
 const acceptBtn = document.getElementById('pwa-accept-btn');
 const closeBtn = document.getElementById('pwa-close-btn');
 
-// Funzione per verificare se lo schermo è piccolo (mobile)
-function isMobileScreen() {
-    return window.innerWidth < 768;
+// Funzione per verificare se siamo nella Home e lo schermo è piccolo (mobile)
+function shouldShowBanner() {
+    const isMobile = window.innerWidth < 768;
+    // Controlla se siamo esattamente nella root ("/" o "/Index")
+    const isHome = window.location.pathname === '/' || window.location.pathname.toLowerCase() === '/index';
+    
+    return isMobile && isHome;
 }
 
 // 1. Intercetta l'evento di installabilità del browser
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Impedisce la comparsa del mini-infobar nativo del browser
     e.preventDefault();
-    
-    // Salva l'evento per poterlo attivare al click sul pulsante "Installa"
     deferredPrompt = e;
 
-    // Mostra il banner solo se siamo su mobile e l'utente non lo ha chiuso in precedenza
-    if (isMobileScreen() && !localStorage.getItem('pwa_banner_closed')) {
+    // Mostra il banner se siamo su mobile, in home, e l'utente non lo ha chiuso in questa sessione
+    if (shouldShowBanner() && !sessionStorage.getItem('pwa_banner_closed_session')) {
         if (pwaBanner) {
             pwaBanner.classList.remove('d-none');
             setTimeout(() => pwaBanner.classList.add('show-banner'), 50);
@@ -92,14 +93,11 @@ window.addEventListener('beforeinstallprompt', (e) => {
 if (acceptBtn) {
     acceptBtn.addEventListener('click', async () => {
         if (!deferredPrompt) {
-            // Se l'evento non è disponibile (es. test manuali), avvisa l'utente
             alert("L'installazione automatica non è al momento disponibile su questo browser/dispositivo.");
             return;
         }
 
-        // Mostra il prompt nativo di installazione del browser
         deferredPrompt.prompt();
-        
         const { outcome } = await deferredPrompt.userChoice;
         console.log(`Scelta utente PWA: ${outcome}`);
 
@@ -108,12 +106,12 @@ if (acceptBtn) {
     });
 }
 
-// 3. Gestisci il click sulla "X" per chiudere il banner
+// 3. Gestisci il click sulla "X" per chiudere il banner nella sessione corrente
 if (closeBtn) {
     closeBtn.addEventListener('click', () => {
         nascondiBanner();
-        // Salva la scelta nel browser per non mostrarlo continuamente
-        localStorage.setItem('pwa_banner_closed', 'true');
+        // Usa sessionStorage: il banner ricomparirà ricaricando o riaprendo il sito
+        sessionStorage.setItem('pwa_banner_closed_session', 'true');
     });
 }
 
@@ -124,7 +122,7 @@ function nascondiBanner() {
     }
 }
 
-// 4. Nascondi il banner se la PWA è stata installata
+// 4. Nascondi il banner se la PWA è già stata installata
 window.addEventListener('appinstalled', () => {
     console.log('Muzzlebook PWA è stata installata con successo!');
     nascondiBanner();
