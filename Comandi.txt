@@ -6,9 +6,11 @@ git push origin main
 #ricevere da github (fa fare prima di cominciare)
 git pull origin main
 
+
 #verificare se sono sicronizzato con github
 git fetch
 git status
+
 
 #***************** ripristinare lo stato di github
 #Scarica le ultime novità da GitHub (senza applicarle ancora):
