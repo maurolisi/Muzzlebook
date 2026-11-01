@@ -96,7 +96,24 @@
             &copy; 2026 - Muzzlebook - <a asp-area="" asp-page="/Privacy">Privacy</a>
         </div>
     </footer>
-
+    <!-- Banner Installazione PWA dal basso (stile mobile) -->
+    <div id="pwa-install-banner" class="pwa-banner fixed-bottom bg-white border-top shadow-lg p-3 d-none">
+        <div class="container d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <img src="~/images/logo.png" alt="Muzzlebook" width="40" height="40" class="rounded-circle border" />
+                <div>
+                    <h6 class="fw-bold mb-0 text-dark">Installa Muzzlebook</h6>
+                    <small class="text-muted">Aggiungi l'app alla schermata home per un accesso rapido.</small>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button id="pwa-accept-btn" class="btn btn-primary btn-sm rounded-pill px-3 fw-semibold">Installa</button>
+                <button id="pwa-close-btn" class="btn btn-light btn-sm text-secondary rounded-circle" title="Chiudi">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+        </div>
+    </div>
     @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
     <script src="~/lib/box/js/box.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

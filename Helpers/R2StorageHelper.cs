@@ -6,7 +6,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Muzzlebook.Helpers;
+namespace Muzzlebook.Helpers; 
 
 public static class R2Storage
 {
@@ -59,6 +59,7 @@ public static class R2Storage
     /// </summary>
     public static async Task<bool> DelProfileAsync(IAmazonS3 s3Client, int dogId)
     {
+        return true;
         // Il prefisso che identifica la "cartella" del cane. 
         // Importante: mantenere lo slash finale (/) per non eliminare per sbaglio cartelle come "profile/1234/" se si passa "123".
         string folderPrefix = $"profile/{dogId}/";
