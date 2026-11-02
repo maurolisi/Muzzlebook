@@ -12,6 +12,59 @@ public static class R2Storage
 {
     private const string BucketName = "muzzlebook"; // Inserisci il nome del tuo bucket R2
     /// <summary>
+    /// Carica una immagine o un breve video su Cloudflare R2 nel percorso specificato e restituisce l'URL completo.
+    /// </summary>
+    public static async Task<string?> UpDogMediaAsync(IAmazonS3 s3Client, int dogId, IFormFile mediaFile)
+    {
+        if (mediaFile == null || mediaFile.Length == 0)
+            return null;
+
+        // 1. Estrae l'estensione originale dal file caricato (es. .jpg, .mp4, .webm)
+        string extension = Path.GetExtension(mediaFile.FileName).ToLowerInvariant();
+
+        // Fallback di sicurezza se il browser non invia l'estensione nel nome
+        if (string.IsNullOrEmpty(extension))
+        {
+            extension = mediaFile.ContentType?.StartsWith("video/") == true ? ".mp4" : ".webp";
+        }
+
+        // 2. Genera un nome univoco mantenendo l'estensione corretta
+        string fileName = $"{Guid.NewGuid()}{extension}";
+
+        // Struttura del percorso: DogMedia/{dogId}/{fileName}
+        string objectKey = $"DogMedia/{dogId}/{fileName}";
+
+        try
+        {
+            using var stream = mediaFile.OpenReadStream();
+
+            var putRequest = new PutObjectRequest
+            {
+                BucketName = BucketName,
+                Key = objectKey,
+                InputStream = stream,
+                // 3. Usa il ContentType inviato dal browser, fondamentale per far riprodurre i video correttamente
+                ContentType = mediaFile.ContentType ?? (extension == ".mp4" ? "video/mp4" : "image/webp"),
+                DisablePayloadSigning = true // Ottimizzazione consigliata per R2
+            };
+
+            var response = await s3Client.PutObjectAsync(putRequest);
+
+            if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
+            {
+                // Restituisce l'URL parziale o completo del file caricato
+                return "/" + objectKey;
+            }
+        }
+        catch (Exception ex)
+        {
+            // Puoi gestire o tracciare l'eccezione tramite un logger
+            Console.WriteLine($"Errore caricamento R2: {ex.Message}");
+        }
+
+        return null;
+    }
+    /// <summary>
     /// Carica un file IFormFile su Cloudflare R2 nel percorso specificato e restituisce l'URL completo.
     /// </summary>
     public static async Task<string?> UpProfileAsync(IAmazonS3 s3Client, int dogId, IFormFile photo)
@@ -59,7 +112,7 @@ public static class R2Storage
     /// </summary>
     public static async Task<bool> DelProfileAsync(IAmazonS3 s3Client, int dogId)
     {
-        return true;
+        //return true;
         // Il prefisso che identifica la "cartella" del cane. 
         // Importante: mantenere lo slash finale (/) per non eliminare per sbaglio cartelle come "profile/1234/" se si passa "123".
         string folderPrefix = $"profile/{dogId}/";
