@@ -106,7 +106,7 @@
         <!-- Bottone per espandere/richiudere i media -->
         <button class="btn btn-light w-100 text-start d-flex justify-content-between align-items-center p-3 shadow-sm rounded-4 mb-3 border-0" 
                 type="button" data-bs-toggle="collapse" data-bs-target="#wrapperMedia" aria-expanded="false" aria-controls="wrapperMedia">
-            <h4 class="fw-bold mb-0 text-dark"><i class="bi bi-images text-success me-2"></i>Media del muso</h4>
+            <h4 class="fw-bold mb-0 text-dark"><i class="bi bi-images text-success me-2"></i>Le foto del muso</h4>
             <i class="bi bi-chevron-expand fs-4 text-muted"></i>
         </button>
         
@@ -114,7 +114,7 @@
         <div class="collapse" id="wrapperMedia">
             <div class="d-flex justify-content-end mb-3">
                 <button class="btn btn-outline-primary rounded-pill shadow-sm" onclick="document.getElementById('uploadMediaInput').click()">
-                    <i class="bi bi-cloud-arrow-up me-1"></i> Aggiungi Foto/Video
+                    <i class="bi bi-cloud-arrow-up me-1"></i> Aggiungi Foto
                 </button>
                 <input type="file" id="uploadMediaInput" class="d-none"  onchange="uploadDogMedia(@Model.CurrentDog.Id, this)" />
             </div>
@@ -382,28 +382,27 @@
       //#endregion
       
     //#region Gestione Media del Muso
-    uploadDogMedia = async (dogId, inputElement) => {
-        const file = inputElement.files[0];
-        if (!file) return;
+uploadDogMedia = async (dogId, inputElement) => {
+            const file = inputElement.files[0];
+            if (!file) return;
 
-        const isVideo = file.type.startsWith('video/');
-        const isImage = file.type.startsWith('image/');
-    
-        if(!isVideo && !isImage) {
-            if (typeof box !== 'undefined' && box.alert) {
+            const isVideo = file.type.startsWith('video/');
+            const isImage = file.type.startsWith('image/');
+            
+            if (!isVideo && !isImage) {
+                if (typeof box !== 'undefined' && box.alert) {
                     box.alert("Per favore seleziona solo foto o video.");
-            } else {
+                } else {
                     alert("Per favore seleziona solo foto o video.");
+                }
+                inputElement.value = '';
+                return;
             }
-            inputElement.value = '';
-            return;
-        }
 
-        // Nasconde l'eventuale messaggio di "nessun media"
-        const emptyMsg = document.getElementById('emptyMediaMessage');
-        if (emptyMsg) emptyMsg.style.display = 'none';
-
-        // Predisposizione dell'anteprima in pagina
+            // Nasconde l'eventuale messaggio di "nessun media"
+            const emptyMsg = document.getElementById('emptyMediaMessage');
+            if (emptyMsg) emptyMsg.style.display = 'none';
+                    // Predisposizione dell'anteprima in pagina
         const gallery = document.getElementById('dogMediaGallery');
         const localUrl = URL.createObjectURL(file);
     
@@ -422,60 +421,53 @@
             </div>
         `;
         gallery.prepend(colDiv);
-
-        try {
-            const formData = new FormData();
-            formData.append("dogId", dogId);
-        
-            // Se è un'immagine, la ridimensioniamo prima di inviarla per risparmiare spazio e banda
-            if (isImage) {
-                    const resizedBlob = await resizeImage(file, 1200, 0.85); // Usa la funzione di resize che c'è in site.js
+            try {
+                const formData = new FormData();
+                formData.append("dogId", dogId);
+                
+                // Se è un'immagine, la ridimensioniamo prima di inviarla
+                if (isImage) {
+                    const resizedBlob = await resizeImage(file, 1200, 0.85);
                     formData.append("mediaFile", resizedBlob, file.name || "media.webp");
-            } else {
+                } else {
                     formData.append("mediaFile", file);
-            }
+                }
 
-            const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
-            const token = tokenElement ? tokenElement.value : "";
-            formData.append("__RequestVerificationToken", token);
+                const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+                const token = tokenElement ? tokenElement.value : "";
+                formData.append("__RequestVerificationToken", token);
 
-            const response = await fetch("?handler=UploadMedia", {
-                method: "POST",
-                headers: {
-                    "RequestVerificationToken": token
-                },
-                body: formData
-            });
+                const response = await fetch("?handler=UploadMedia", {
+                    method: "POST",
+                    headers: {
+                        "RequestVerificationToken": token
+                    },
+                    body: formData
+                });
 
-            if (!response.ok) {
-                throw new Error("Errore durante il caricamento");
-            }
+                if (!response.ok) {
+                    throw new Error("Errore durante il caricamento");
+                }
 
-            const data = await response.json();
-        
-            if (data.success && data.url) {
-                // Aggiorna l'anteprima rimuovendo lo spinner e caricando l'url reale di R2
-                const realUrl = "https://media.muzzlebook.it" + data.url;
-                colDiv.innerHTML = `
-                    <div class="position-relative rounded-3 overflow-hidden shadow-sm ratio ratio-1x1 border bg-dark">
-                        ${data.isVideo 
-                            ? `<video src="${realUrl}" class="object-fit-contain w-100 h-100" controls></video>` 
-                            : `<img src="${realUrl}" class="object-fit-cover w-100 h-100" />`}
-                    </div>
-                `;
+                // Legge direttamente il frammento HTML restituito dal server
+                const htmlCard = await response.text();
+
+                // Inserisce la nuova card in cima alla galleria
+                const gallery = document.getElementById('dogMediaGallery');
+                gallery.insertAdjacentHTML('afterbegin', htmlCard);
+
+            } catch (error) {
+                if (typeof box !== 'undefined' && box.alert) {
+                    box.alert("Si è verificato un errore durante il caricamento del file.");
+                } else {
+                    alert("Si è verificato un errore durante il caricamento del file.");
+                }
+                console.error(error);
+            } finally {
+                inputElement.value = ""; // Resetta l'input file
+                colDiv.remove();//rimuovo la card temporanea con lo spinner
             }
-        } catch (error) {
-            if (typeof box !== 'undefined' && box.alert) {
-                box.alert("Si è verificato un errore durante il caricamento del file.");
-            } else {
-                alert("Si è verificato un errore durante il caricamento del file.");
-            }
-            colDiv.remove(); // Rimuove l'anteprima fallita
-            console.error(error);
-        } finally {
-            inputElement.value = ""; // Resetta l'input per permettere nuovi caricamenti
         }
-    }
 deleteDogMedia = async (mediaId) => {
         box.confirm(`Sei sicuro di voler eliminare questo file?`, async (ok) => {
             if (ok) {
@@ -515,5 +507,6 @@ deleteDogMedia = async (mediaId) => {
         }, "Conferma eliminazione", "confirm-delete");
     }
     //#endregion
+
     </script>
 }
