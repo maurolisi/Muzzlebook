@@ -116,7 +116,7 @@
                 <button class="btn btn-outline-primary rounded-pill shadow-sm" onclick="document.getElementById('uploadMediaInput').click()">
                     <i class="bi bi-cloud-arrow-up me-1"></i> Aggiungi Foto/Video
                 </button>
-                <input type="file" id="uploadMediaInput" class="d-none" accept="image/*,video/*" onchange="uploadDogMedia(@Model.CurrentDog.Id, this)" />
+                <input type="file" id="uploadMediaInput" class="d-none"  onchange="uploadDogMedia(@Model.CurrentDog.Id, this)" />
             </div>
             
             <!-- Galleria Media -->
