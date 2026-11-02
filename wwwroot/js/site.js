@@ -3,61 +3,46 @@
 // url di base per lo storage cloudflare, da usare per le immagini e i file statici
 const baseUrl = 'https://media.muzzlebook.it';
 
-// let deferredPrompt = null;
-// const installBtn = document.getElementById('pwa-install-btn');
+// ==========================================
+// GESTIONE VOCE DI MENU "INSTALLA APP" (PC & Mobile)
+// ==========================================
+const menuInstallItem = document.getElementById('menu-install-pwa');
+const menuInstallBtn = document.getElementById('menu-install-btn');
 
-// // 1. Intercetta l'evento prima dell'installazione
-// window.addEventListener('beforeinstallprompt', (e) => {
-//     // Previene il banner di default del browser
-//     e.preventDefault();
-    
-//     // Salva l'evento per poterlo attivare al click
-//     deferredPrompt = e;
-    
-//     // Mostra il pulsante custom nell'interfaccia
-//     if (installBtn) {
-//         installBtn.classList.remove('d-none');
-//     }
-// });
+// Verifica se l'app è già installata (modalità standalone)
+const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 
-// // 2. Gestisci il click sul pulsante "Installa App"
-// if (installBtn) {
-//     installBtn.addEventListener('click', async () => {
-//         if (!deferredPrompt) return;
+// Mostra la voce di menu se l'app NON è installata
+if (!isAppInstalled && menuInstallItem) {
+    menuInstallItem.classList.remove('d-none');
+}
 
-//         // Mostra il dialog nativo di installazione
-//         deferredPrompt.prompt();
+// Gestisci il click sul link di menu per avviare il prompt d'installazione
+if (menuInstallBtn) {
+    menuInstallBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
 
-//         // Leggi la risposta dell'utente
-//         const { outcome } = await deferredPrompt.userChoice;
-//         console.log(`Scelta utente PWA: ${outcome}`);
+        if (!deferredPrompt) {
+            alert("L'installazione non è al momento disponibile o l'app è già installata.");
+            return;
+        }
 
-//         // Il prompt può essere usato una sola volta, quindi lo azzeriamo
-//         deferredPrompt = null;
+        // Mostra il prompt nativo del browser (funziona anche su Chrome/Edge da PC)
+        deferredPrompt.prompt();
+        
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`Scelta utente PWA da menu: ${outcome}`);
 
-//         // Nascondi nuovamente il pulsante
-//         installBtn.classList.add('d-none');
-//     });
-// }
-
-// // 3. Nascondi il pulsante se la PWA è già stata installata
-// window.addEventListener('appinstalled', () => {
-//     console.log('Muzzlebook PWA è stata installata con successo!');
-//     if (installBtn) {
-//         installBtn.classList.add('d-none');
-//     }
-//     deferredPrompt = null;
-// });
-
-// //iOS:
-// // Rileva se l'utente è su iOS e l'app non è in modalità Standalone
-// const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-// const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-
-// if (isIOS && !isStandalone) {
-//     // Puoi mostrare un piccolo banner o un pulsante che apre un box informativo:
-//     // "Per installare Muzzlebook su iPhone: premi il tasto Condividi e seleziona 'Aggiungi a schermata Home'"
-// }
+        if (outcome === 'accepted') {
+            // Nascondi la voce di menu dopo l'installazione
+            if (menuInstallItem) {
+                menuInstallItem.classList.add('d-none');
+            }
+        }
+        
+        deferredPrompt = null;
+    });
+}
 // ==========================================
 // GESTIONE PWA INSTALL BANNER (Mostra a ogni ricarica/sessione)
 // ==========================================

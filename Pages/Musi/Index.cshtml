@@ -62,7 +62,7 @@
                              class="rounded-circle border border-3 border-white shadow-sm c-p"
                              style="width: 110px; height: 110px; object-fit: cover;" />
 
-                        <!-- Pulsante Eliminazione Rapida foto profilo -->
+@*                         <!-- Pulsante Eliminazione Rapida foto profilo -->
                         <button type="button"
                                 id="deletePicBtn_@dog.Id"
                                 onclick="deletePicDog(@dog.Id, '@dog.Name')"
@@ -80,13 +80,13 @@
                                 style="width: 34px; height: 34px;right:-.7em;bottom:0;"
                                 title="Cambia foto profilo">
                             <i class="fa-solid fa-camera text-white" style="font-size: 0.85rem;"></i>
-                        </button>
-
+                        </button> *@
+@* 
                         <!-- Input File Nascosto per l'Upload -->
                         <input type="file"
                                id="photoInput_@dog.Id"
                                class="d-none"
-                               onchange="uploadProfilePhoto(@dog.Id, this)" />
+                               onchange="uploadProfilePhoto(@dog.Id, this)" /> *@
                     </div>
 
                 </div>
@@ -134,7 +134,7 @@
 </div>
 
 <script>
-        async function uploadProfilePhoto(dogId, inputElement) {
+      @*   async function uploadProfilePhoto(dogId, inputElement) {
         const file = inputElement.files[0];
         if (!file) return;
 
@@ -215,7 +215,7 @@
                 }
             }
         }, "Conferma eliminazione", "confirm-delete");
-    }
+    } *@
     openProfileImage = (dogId) => {
         const imgPreview = document.getElementById(`dogImg_${dogId}`);
         var image="<div class='text-center'><img src='" + imgPreview.src + "' class='img-fluid'  /></div>";

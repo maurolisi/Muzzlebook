@@ -24,7 +24,14 @@
         <!-- Colonna Sinistra: Card Foto e Taglia/Sesso -->
         <div class="col-md-4">
             <div class="card border-0 shadow-sm rounded-4 text-center overflow-hidden h-100">
-                <div class="bg-primary-subtle bg-gradient p-4 border-bottom d-flex justify-content-center">
+                <div class="bg-primary-subtle bg-gradient p-4 border-bottom d-flex justify-content-center position-relative">
+                    <button type="button"
+                            onclick="openProfileImage(@Model.CurrentDog.Id)"
+                            class="btn btn-primary btn-sm rounded-circle position-absolute shadow border border-2 border-white d-flex align-items-center justify-content-center btn-camera"
+                            style="width: 45px; height: 45px; right: 8.3em; bottom: 1em;"
+                            title="Gestisci foto profilo">
+                        <i class="fa-solid fa-pen-to-square text-white" style="font-size: 1.8em;"></i>
+                    </button> 
                     <img src="@urlImage"
                         title="Gestisci Immagine Profilo"
                          onclick="openProfileImage(@Model.CurrentDog.Id)"

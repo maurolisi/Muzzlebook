@@ -2,20 +2,21 @@
 @{
     string IdUtente = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
     string loginLabel = (string.IsNullOrEmpty(IdUtente)) ? "Login" : "Logout";
-    string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title=\"Devi autenticarti per accedere a questa area\" class=\"fa-solid fa-lock\"></i>" : "";
+string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti per accedere a questa area' class='fa-solid fa-lock'></i>" : "";
     string IsActive(string page) =>
         string.Equals(ViewContext.RouteData.Values["page"]?.ToString(), page, StringComparison.OrdinalIgnoreCase)
             ? "text-white active"
             : "text-white-50";
 }
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="~/manifest.json" />
     <meta name="theme-color" content="#0D6EFD" />
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="apple-touch-icon" href="~/images/icon-512.png" />
@@ -42,10 +43,6 @@
                         <div style="font-size: 0.5em;">Il libro dei musi</div>
                     </div>
                 </a>
-                <!-- Pulsante Installa PWA (nascosto di default) -->
-                <button id="pwa-install-btn" type="button" class="btn btn-light btn-sm ms-auto me-2 ms:d-none d-none">
-                    <i class="bi bi-download me-1"></i> Installa App
-                </button>
                 <!-- Toggler per Mobile -->
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -80,6 +77,11 @@
                                 <i class="bi bi-journal-bookmark-fill me-1"></i>@loginLabel
                             </a>
                         </li>
+                        <li id="menu-install-pwa" class="nav-item d-none">
+                            <a href="#" id="menu-install-btn" class="nav-link fw-semibold text-warning">
+                                <i class="bi bi-download me-1"></i> Installa App
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -107,10 +109,15 @@
                 </div>
             </div>
             <div class="d-flex align-items-center gap-2">
-                <button id="pwa-accept-btn" class="btn btn-primary btn-sm rounded-pill px-3 fw-semibold">Installa</button>
-                <button id="pwa-close-btn" class="btn btn-light btn-sm text-secondary rounded-circle" title="Chiudi">
+                <div class="position-relative">
+                <button id="pwa-close-btn" 
+                class="btn btn-light btn-sm text-secondary rounded-circle border position-absolute" 
+                style="top: -.7em; right: -1.3em; font-size: 1.2em;"
+                title="Chiudi" 
+                >
                     <i class="fa-solid fa-xmark"></i>
                 </button>
+                    <button id="pwa-accept-btn" class="btn btn-primary btn-sm rounded-pill px-3 fw-semibold mt-5 ms-4">Installa</button>
             </div>
         </div>
     </div>
