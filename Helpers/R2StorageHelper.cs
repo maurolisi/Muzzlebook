@@ -65,6 +65,38 @@ public static class R2Storage
         return null;
     }
     /// <summary>
+    /// Elimina un singolo file multimediale dal bucket R2 dato il suo WebLink.
+    /// </summary>
+    public static async Task<bool> DelDogMediaAsync(IAmazonS3 s3Client, string webLink)
+    {
+        if (string.IsNullOrWhiteSpace(webLink))
+            return false;
+
+        try
+        {
+            // Il weblink salvato nel DB inizia solitamente con "/" (es. "/media/15/foto.webp")
+            // Cloudflare R2 / AWS S3 richiede la "Key" senza lo slash iniziale
+            string objectKey = webLink.TrimStart('/');
+
+            var deleteRequest = new DeleteObjectRequest
+            {
+                BucketName = BucketName, // Usa la costante/variabile già definita nella tua classe
+                Key = objectKey
+            };
+
+            // Esegue l'eliminazione del singolo file
+            var response = await s3Client.DeleteObjectAsync(deleteRequest);
+
+            return response.HttpStatusCode == System.Net.HttpStatusCode.NoContent ||
+                   response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Errore durante l'eliminazione del file R2 ({webLink}): {ex.Message}");
+            return false;
+        }
+    }
+    /// <summary>
     /// Carica un file IFormFile su Cloudflare R2 nel percorso specificato e restituisce l'URL completo.
     /// </summary>
     public static async Task<string?> UpProfileAsync(IAmazonS3 s3Client, int dogId, IFormFile photo)
@@ -162,4 +194,6 @@ public static class R2Storage
             return false;
         }
     }
+
+
 }

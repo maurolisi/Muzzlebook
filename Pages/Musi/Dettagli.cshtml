@@ -101,73 +101,145 @@
         </div>
     </div>
 
-    <!-- Nuova Sezione: Accordion Fascicolo Sanitario (con data-section) -->
+<!-- Nuova Sezione: Media del Muso -->
     <div class="mt-5">
-        <h4 class="fw-bold mb-3"><i class="bi bi-folder2-open text-primary me-2"></i>Fascicolo Sanitario</h4>
+        <!-- Bottone per espandere/richiudere i media -->
+        <button class="btn btn-light w-100 text-start d-flex justify-content-between align-items-center p-3 shadow-sm rounded-4 mb-3 border-0" 
+                type="button" data-bs-toggle="collapse" data-bs-target="#wrapperMedia" aria-expanded="false" aria-controls="wrapperMedia">
+            <h4 class="fw-bold mb-0 text-dark"><i class="bi bi-images text-success me-2"></i>Media del muso</h4>
+            <i class="bi bi-chevron-expand fs-4 text-muted"></i>
+        </button>
         
-        <div class="accordion shadow-sm rounded-4 overflow-hidden" id="accordionFascicolo">
+        <!-- Wrapper Collapse per la Galleria -->
+        <div class="collapse" id="wrapperMedia">
+            <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-outline-primary rounded-pill shadow-sm" onclick="document.getElementById('uploadMediaInput').click()">
+                    <i class="bi bi-cloud-arrow-up me-1"></i> Aggiungi Foto/Video
+                </button>
+                <input type="file" id="uploadMediaInput" class="d-none" accept="image/*,video/*" onchange="uploadDogMedia(@Model.CurrentDog.Id, this)" />
+            </div>
             
-            <!-- 1. Vaccinazioni -->
-            <div class="accordion-item border-0 border-bottom">
-                <h2 class="accordion-header" id="headingVaccinazioni">
-                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVaccinazioni" aria-expanded="false" aria-controls="collapseVaccinazioni">
-                        <i class="bi bi-syringe text-success me-2 fs-5"></i> Vaccinazioni
-                    </button>
-                </h2>
-                <div id="collapseVaccinazioni" class="accordion-collapse collapse" data-section="vaccinazioni" aria-labelledby="headingVaccinazioni" data-bs-parent="#accordionFascicolo">
-                    <div class="accordion-body bg-light">
-                        <div class="contenitore-dati text-muted mb-0">Clicca per caricare i dati...</div>
-                    </div>
+            <!-- Galleria Media -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-light">
+                <div class="row g-3" id="dogMediaGallery">
+                    @if (Model.DogMedia == null || !Model.DogMedia.Any())
+                    {
+                        <!-- Messaggio per galleria vuota -->
+                        <div class="col-12 text-center text-muted py-4" id="emptyMediaMessage">
+                            <i class="bi bi-camera fs-1 d-block mb-2 opacity-50"></i>
+                            Nessuna foto o video. Condividi un momento speciale del tuo muso!
+                        </div>
+                    }
+                    else
+                    {
+                        foreach (var media in Model.DogMedia)
+                        {
+                            var realUrl = "https://media.muzzlebook.it" + media.WebLink;
+                            bool isVideo = media.ContentType?.ToLower() == "video" || media.MimeTipe?.StartsWith("video/") == true;
+
+                            <div class="col-6 col-md-3" id="mediaBox_@media.IdMedia">
+                                <div class="position-relative rounded-3 overflow-hidden shadow-sm ratio ratio-1x1 border bg-dark">
+                                    <!-- Pulsante di eliminazione sovrimpresso -->
+                                    <button class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle z-3 shadow" 
+                                            onclick="deleteDogMedia(@media.IdMedia)" title="Rimuovi"
+                                            style="width: 35px; height: 35px;">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                    
+                                    @if (isVideo)
+                                    {
+                                        <video src="@realUrl" class="object-fit-contain w-100 h-100" controls></video>
+                                    }
+                                    else
+                                    {
+                                        <a href="@realUrl" target="_blank">
+                                            <img src="@realUrl" class="object-fit-cover w-100 h-100" alt="@media.OriginalName" />
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- 2. Trattamenti Parassitari -->
-            <div class="accordion-item border-0 border-bottom">
-                <h2 class="accordion-header" id="headingParassitari">
-                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseParassitari" aria-expanded="false" aria-controls="collapseParassitari">
-                        <i class="bi bi-bug text-warning me-2 fs-5"></i> Trattamenti Parassitari
-                    </button>
-                </h2>
-                <div id="collapseParassitari" class="accordion-collapse collapse" data-section="parassitari" aria-labelledby="headingParassitari" data-bs-parent="#accordionFascicolo">
-                    <div class="accordion-body bg-light">
-                        <div class="contenitore-dati text-muted mb-0">Clicca per caricare i dati...</div>
+    <!-- Sezione: Accordion Fascicolo Sanitario -->
+    <div class="mt-5">
+        <!-- Bottone per espandere/richiudere tutto il fascicolo -->
+        <button class="btn btn-light w-100 text-start d-flex justify-content-between align-items-center p-3 shadow-sm rounded-4 mb-3 border-0" 
+                type="button" data-bs-toggle="collapse" data-bs-target="#wrapperFascicolo" aria-expanded="false" aria-controls="wrapperFascicolo">
+            <h4 class="fw-bold mb-0 text-dark"><i class="bi bi-folder2-open text-primary me-2"></i>Fascicolo Sanitario</h4>
+            <i class="bi bi-chevron-expand fs-4 text-muted"></i>
+        </button>
+        
+        <!-- Wrapper Collapse per il Fascicolo -->
+        <div class="collapse" id="wrapperFascicolo">
+            <div class="accordion shadow-sm rounded-4 overflow-hidden" id="accordionFascicolo">
+                
+                <!-- 1. Vaccinazioni -->
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingVaccinazioni">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVaccinazioni" aria-expanded="false" aria-controls="collapseVaccinazioni">
+                            <i class="bi bi-syringe text-success me-2 fs-5"></i> Vaccinazioni
+                        </button>
+                    </h2>
+                    <div id="collapseVaccinazioni" class="accordion-collapse collapse" data-section="vaccinazioni" aria-labelledby="headingVaccinazioni" data-bs-parent="#accordionFascicolo">
+                        <div class="accordion-body bg-light">
+                            <div class="contenitore-dati text-muted mb-0">Clicca per caricare i dati...</div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- 3. Visite Mediche -->
-            <div class="accordion-item border-0 border-bottom">
-                <h2 class="accordion-header" id="headingVisite">
-                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVisite" aria-expanded="false" aria-controls="collapseVisite">
-                        <i class="bi bi-heart-pulse text-danger me-2 fs-5"></i> Visite Mediche
-                    </button>
-                </h2>
-                <div id="collapseVisite" class="accordion-collapse collapse" data-section="visite" aria-labelledby="headingVisite" data-bs-parent="#accordionFascicolo">
-                    <div class="accordion-body bg-light">
-                        <div class="contenitore-dati text-muted mb-0">Clicca per caricare i dati...</div>
+                <!-- 2. Trattamenti Parassitari -->
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingParassitari">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseParassitari" aria-expanded="false" aria-controls="collapseParassitari">
+                            <i class="bi bi-bug text-warning me-2 fs-5"></i> Trattamenti Parassitari
+                        </button>
+                    </h2>
+                    <div id="collapseParassitari" class="accordion-collapse collapse" data-section="parassitari" aria-labelledby="headingParassitari" data-bs-parent="#accordionFascicolo">
+                        <div class="accordion-body bg-light">
+                            <div class="contenitore-dati text-muted mb-0">Clicca per caricare i dati...</div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- 4. Documenti Clinici -->
-            <div class="accordion-item border-0">
-                <h2 class="accordion-header" id="headingDocumenti">
-                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDocumenti" aria-expanded="false" aria-controls="collapseDocumenti">
-                        <i class="bi bi-file-earmark-medical text-info me-2 fs-5"></i> Documenti Clinici
-                    </button>
-                </h2>
-                <div id="collapseDocumenti" class="accordion-collapse collapse" data-section="documenti" aria-labelledby="headingDocumenti" data-bs-parent="#accordionFascicolo">
-                    <div class="accordion-body bg-light">
-                        <div class="contenitore-dati text-muted mb-0">Clicca per caricare i dati...</div>
+                <!-- 3. Visite Mediche -->
+                <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header" id="headingVisite">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVisite" aria-expanded="false" aria-controls="collapseVisite">
+                            <i class="bi bi-heart-pulse text-danger me-2 fs-5"></i> Visite Mediche
+                        </button>
+                    </h2>
+                    <div id="collapseVisite" class="accordion-collapse collapse" data-section="visite" aria-labelledby="headingVisite" data-bs-parent="#accordionFascicolo">
+                        <div class="accordion-body bg-light">
+                            <div class="contenitore-dati text-muted mb-0">Clicca per caricare i dati...</div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
+                <!-- 4. Documenti Clinici -->
+                <div class="accordion-item border-0">
+                    <h2 class="accordion-header" id="headingDocumenti">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDocumenti" aria-expanded="false" aria-controls="collapseDocumenti">
+                            <i class="bi bi-file-earmark-medical text-info me-2 fs-5"></i> Documenti Clinici
+                        </button>
+                    </h2>
+                    <div id="collapseDocumenti" class="accordion-collapse collapse" data-section="documenti" aria-labelledby="headingDocumenti" data-bs-parent="#accordionFascicolo">
+                        <div class="accordion-body bg-light">
+                            <div class="contenitore-dati text-muted mb-0">Clicca per caricare i dati...</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Script per la Fetch Dinamica -->
+<!-- Script per la Fetch Dinamica e Media -->
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -199,6 +271,7 @@
                     }
             });
         });
+        
         //#region Gestione Imagine
           uploadProfilePhoto = async (dogId, inputElement)=> {
             const file = inputElement.files[0];
@@ -222,7 +295,7 @@
             try {
                 // 2. Anteprima locale immediata
                 imgPreview.src = URL.createObjectURL(file);
-                imgCurrent.src = URL.createObjectURL(file);
+                if (imgCurrent) imgCurrent.src = URL.createObjectURL(file);
 
                 // 3. Ridimensionamento lato client tramite Canvas
                 const resizedBlob = await resizeImage(file, 800, 0.85);
@@ -239,13 +312,13 @@
                 formData.append("__RequestVerificationToken", token);
 
                 // 5. Invio all'handler Razor Pages
-        const response = await fetch("/musi/index?handler=UploadPhoto", {
-            method: "POST",
-            headers: {
-                "RequestVerificationToken": token
-            },
-            body: formData
-        });
+                const response = await fetch("/musi/index?handler=UploadPhoto", {
+                    method: "POST",
+                    headers: {
+                        "RequestVerificationToken": token
+                    },
+                    body: formData
+                });
 
                 if (!response.ok) {
                     throw new Error("Errore durante il caricamento");
@@ -253,9 +326,8 @@
 
                 const data = await response.json();
                 if (data.newUrl) {
-                    imgPreview.src = baseUrl + data.newUrl; // Imposta il nuovo URL di Cloudflare R2
-                    imgCurrent.src = baseUrl + data.newUrl; // Imposta il nuovo URL di Cloudflare R2
-                    //document.getElementById(`deletePicBtn_${dogId}`).classList.remove('d-none');
+                    imgPreview.src = baseUrl + data.newUrl; 
+                    if (imgCurrent) imgCurrent.src = baseUrl + data.newUrl; 
                 }
 
             
@@ -272,6 +344,7 @@
                 inputElement.value = ""; // Resetta l'input file
             }
         }
+
         deletePicDog = async (dogId, dogName) =>{
             box.confirm(`Sei sicuro di voler eliminare la foto profilo di ${dogName}?`, async (ok) => {
                 if (ok) {
@@ -281,14 +354,13 @@
                     if (response.ok) {
                         document.getElementById(`dogImg_${dogId}`).src = "/images/logo.png";
                         box.hideAll();
-                        //document.getElementById(`image-profile-current`).src = "/images/logo.png";
-                        //document.getElementById(`deletePicBtn_${dogId}`).classList.add('d-none');
                     } else {
                         box.alert('Errore durante l\'eliminazione della foto.');
                     }
                 }
             }, "Conferma eliminazione", "confirm-delete");
         }
+
       openProfileImage = async (dogId) => {
         const loader = "<div id='divImageProfile'><div class='text-center p-4'><i class='spinner-border text-primary me-2'></i>Caricamento immagine...</div></div>";
         box.dialog(loader,'', 'w-90');
@@ -308,6 +380,140 @@
           }
       }
       //#endregion
+      
+    //#region Gestione Media del Muso
+    uploadDogMedia = async (dogId, inputElement) => {
+        const file = inputElement.files[0];
+        if (!file) return;
+
+        const isVideo = file.type.startsWith('video/');
+        const isImage = file.type.startsWith('image/');
     
+        if(!isVideo && !isImage) {
+            if (typeof box !== 'undefined' && box.alert) {
+                    box.alert("Per favore seleziona solo foto o video.");
+            } else {
+                    alert("Per favore seleziona solo foto o video.");
+            }
+            inputElement.value = '';
+            return;
+        }
+
+        // Nasconde l'eventuale messaggio di "nessun media"
+        const emptyMsg = document.getElementById('emptyMediaMessage');
+        if (emptyMsg) emptyMsg.style.display = 'none';
+
+        // Predisposizione dell'anteprima in pagina
+        const gallery = document.getElementById('dogMediaGallery');
+        const localUrl = URL.createObjectURL(file);
+    
+        const colDiv = document.createElement('div');
+        colDiv.className = 'col-6 col-md-3';
+    
+        // Mostra uno spinner di caricamento come overlay
+        colDiv.innerHTML = `
+            <div class="position-relative rounded-3 overflow-hidden shadow-sm ratio ratio-1x1 border bg-light">
+                <div class="position-absolute top-50 start-50 translate-middle text-primary" style="z-index: 10;">
+                        <i class="spinner-border"></i>
+                </div>
+                    ${isImage 
+                    ? `<img src="${localUrl}" class="object-fit-cover w-100 h-100 opacity-50" />` 
+                    : `<video src="${localUrl}" class="object-fit-cover w-100 h-100 opacity-50"></video>`}
+            </div>
+        `;
+        gallery.prepend(colDiv);
+
+        try {
+            const formData = new FormData();
+            formData.append("dogId", dogId);
+        
+            // Se è un'immagine, la ridimensioniamo prima di inviarla per risparmiare spazio e banda
+            if (isImage) {
+                    const resizedBlob = await resizeImage(file, 1200, 0.85); // Usa la funzione di resize che c'è in site.js
+                    formData.append("mediaFile", resizedBlob, file.name || "media.webp");
+            } else {
+                    formData.append("mediaFile", file);
+            }
+
+            const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+            const token = tokenElement ? tokenElement.value : "";
+            formData.append("__RequestVerificationToken", token);
+
+            const response = await fetch("?handler=UploadMedia", {
+                method: "POST",
+                headers: {
+                    "RequestVerificationToken": token
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error("Errore durante il caricamento");
+            }
+
+            const data = await response.json();
+        
+            if (data.success && data.url) {
+                // Aggiorna l'anteprima rimuovendo lo spinner e caricando l'url reale di R2
+                const realUrl = "https://media.muzzlebook.it" + data.url;
+                colDiv.innerHTML = `
+                    <div class="position-relative rounded-3 overflow-hidden shadow-sm ratio ratio-1x1 border bg-dark">
+                        ${data.isVideo 
+                            ? `<video src="${realUrl}" class="object-fit-contain w-100 h-100" controls></video>` 
+                            : `<img src="${realUrl}" class="object-fit-cover w-100 h-100" />`}
+                    </div>
+                `;
+            }
+        } catch (error) {
+            if (typeof box !== 'undefined' && box.alert) {
+                box.alert("Si è verificato un errore durante il caricamento del file.");
+            } else {
+                alert("Si è verificato un errore durante il caricamento del file.");
+            }
+            colDiv.remove(); // Rimuove l'anteprima fallita
+            console.error(error);
+        } finally {
+            inputElement.value = ""; // Resetta l'input per permettere nuovi caricamenti
+        }
+    }
+deleteDogMedia = async (mediaId) => {
+        box.confirm(`Sei sicuro di voler eliminare questo file?`, async (ok) => {
+            if (ok) {
+                const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+                const token = tokenElement ? tokenElement.value : "";
+                
+                try {
+                    const response = await fetch(`?handler=DeleteMedia&mediaId=${mediaId}`, {
+                        method: "POST",
+                        headers: {
+                            "RequestVerificationToken": token
+                        }
+                    });
+
+                    if (response.ok) {
+                        // Rimuove visivamente l'elemento dalla pagina
+                        document.getElementById(`mediaBox_${mediaId}`).remove();
+                        box.hideAll();
+                        
+                        // Opzionale: rimostrare il messaggio vuoto se non ci sono più elementi
+                        const gallery = document.getElementById('dogMediaGallery');
+                        if (gallery.children.length === 0) {
+                            gallery.innerHTML = `
+                                <div class="col-12 text-center text-muted py-4" id="emptyMediaMessage">
+                                    <i class="bi bi-camera fs-1 d-block mb-2 opacity-50"></i>
+                                    Nessuna foto o video. Condividi un momento speciale del tuo muso!
+                                </div>`;
+                        }
+                    } else {
+                        box.alert('Errore durante l\'eliminazione del file.');
+                    }
+                } catch (error) {
+                    console.error(error);
+                    box.alert('Si è verificato un errore di rete.');
+                }
+            }
+        }, "Conferma eliminazione", "confirm-delete");
+    }
+    //#endregion
     </script>
 }
