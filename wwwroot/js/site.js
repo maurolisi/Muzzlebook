@@ -8,13 +8,54 @@ const baseUrl = 'https://media.muzzlebook.it';
 // ==========================================
 const menuInstallItem = document.getElementById('menu-install-pwa');
 const menuInstallBtn = document.getElementById('menu-install-btn');
+let deferredPrompt = null;
+const pwaBanner = document.getElementById('pwa-install-banner');
+const acceptBtn = document.getElementById('pwa-accept-btn');
+const closeBtn = document.getElementById('pwa-close-btn');
+const installedStorageKey = 'muzzlebook_pwa_installed';
 
 // Verifica se l'app è già installata (modalità standalone)
-const isAppInstalled = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+const isStandaloneDisplayMode = () =>
+    window.matchMedia('(display-mode: standalone)').matches ||
+    ('standalone' in window.navigator && Boolean(window.navigator.standalone));
+
+function wasAppInstalled() {
+    try {
+        return localStorage.getItem(installedStorageKey) === 'true';
+    } catch (error) {
+        console.error('Impossibile leggere lo stato di installazione della PWA:', error);
+        return false;
+    }
+}
+
+function markAppInstalled() {
+    try {
+        localStorage.setItem(installedStorageKey, 'true');
+    } catch (error) {
+        console.error('Impossibile salvare lo stato di installazione della PWA:', error);
+    }
+}
+
+function syncInstallUi() {
+    const installed = isStandaloneDisplayMode() || wasAppInstalled();
+
+    if (menuInstallItem) {
+        menuInstallItem.classList.toggle('d-none', installed);
+    }
+
+    if (installed && pwaBanner) {
+        nascondiBanner();
+    }
+}
 
 // Mostra la voce di menu se l'app NON è installata
-if (!isAppInstalled && menuInstallItem) {
-    menuInstallItem.classList.remove('d-none');
+syncInstallUi();
+
+const standaloneMedia = window.matchMedia('(display-mode: standalone)');
+if (standaloneMedia && typeof standaloneMedia.addEventListener === 'function') {
+    standaloneMedia.addEventListener('change', syncInstallUi);
+} else if (standaloneMedia && typeof standaloneMedia.addListener === 'function') {
+    standaloneMedia.addListener(syncInstallUi);
 }
 
 // Gestisci il click sul link di menu per avviare il prompt d'installazione
@@ -34,10 +75,8 @@ if (menuInstallBtn) {
         console.log(`Scelta utente PWA da menu: ${outcome}`);
 
         if (outcome === 'accepted') {
-            // Nascondi la voce di menu dopo l'installazione
-            if (menuInstallItem) {
-                menuInstallItem.classList.add('d-none');
-            }
+            markAppInstalled();
+            syncInstallUi();
         }
         
         deferredPrompt = null;
@@ -46,18 +85,13 @@ if (menuInstallBtn) {
 // ==========================================
 // GESTIONE PWA INSTALL BANNER (Mostra a ogni ricarica/sessione)
 // ==========================================
-let deferredPrompt = null;
-const pwaBanner = document.getElementById('pwa-install-banner');
-const acceptBtn = document.getElementById('pwa-accept-btn');
-const closeBtn = document.getElementById('pwa-close-btn');
-
 // Funzione per verificare se siamo nella Home e lo schermo è piccolo (mobile)
 function shouldShowBanner() {
     const isMobile = window.innerWidth < 768;
     // Controlla se siamo esattamente nella root ("/" o "/Index")
     const isHome = window.location.pathname === '/' || window.location.pathname.toLowerCase() === '/index';
     
-    return isMobile && isHome;
+    return isMobile && isHome && !isStandaloneDisplayMode() && !wasAppInstalled();
 }
 
 // 1. Intercetta l'evento di installabilità del browser
@@ -86,6 +120,11 @@ if (acceptBtn) {
         const { outcome } = await deferredPrompt.userChoice;
         console.log(`Scelta utente PWA: ${outcome}`);
 
+        if (outcome === 'accepted') {
+            markAppInstalled();
+            syncInstallUi();
+        }
+
         deferredPrompt = null;
         nascondiBanner();
     });
@@ -100,6 +139,12 @@ if (closeBtn) {
     });
 }
 
+window.addEventListener('resize', () => {
+    if (!shouldShowBanner()) {
+        nascondiBanner();
+    }
+});
+
 function nascondiBanner() {
     if (pwaBanner) {
         pwaBanner.classList.remove('show-banner');
@@ -110,6 +155,8 @@ function nascondiBanner() {
 // 4. Nascondi il banner se la PWA è già stata installata
 window.addEventListener('appinstalled', () => {
     console.log('Muzzlebook PWA è stata installata con successo!');
+    markAppInstalled();
+    syncInstallUi();
     nascondiBanner();
     deferredPrompt = null;
 });
