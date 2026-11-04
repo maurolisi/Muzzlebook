@@ -9,6 +9,7 @@ public static class DatabaseInitializer
 {
     public static void Initialize(IDbConnection db)
     {
+        return;//per il momento non lo eseguo, poi ci penso
         // Se la connessione non è aperta, la apriamo (anche se solitamente 
         // viene passata già configurata, è bene esserne sicuri)
         if (db.State != ConnectionState.Open)
