@@ -245,7 +245,7 @@ namespace Muzzlebook.Pages.Musi
 
             // 2. Eliminazione del file da Cloudflare R2
             // Sfrutto il metodo statico creato in R2StorageHelper (che pulisce il path e rimuove da R2)
-            bool r2DeleteSuccess = await R2Storage.DelDogMediaAsync(_s3Client, mediaRecord.WebLink);
+            bool r2DeleteSuccess = await R2Storage.DelDogMediaAsync(_s3Client, mediaRecord.WebLink!);
 
             if (!r2DeleteSuccess)
             {
