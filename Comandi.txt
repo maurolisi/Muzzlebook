@@ -1,6 +1,6 @@
 ﻿#pubblicare su github (da fare qunando ho finito di lavorare)
 git add .
-git commit -m "Modificato link banner"
+git commit -m "aggiunta Sezione Diary"
 git push origin main
 
 #ricevere da github (fa fare prima di cominciare)
