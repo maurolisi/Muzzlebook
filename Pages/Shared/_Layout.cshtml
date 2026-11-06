@@ -171,39 +171,6 @@ string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti
             document.body.addEventListener('htmx:configRequest', function (evt) {
                 evt.detail.headers['X-Requested-With'] = 'HTMX';
             });
-            document.addEventListener('DOMContentLoaded', () => {
-            // Incolla qui la logica per il controllo della posizione al caricamento
-            ckFissa();
-        });
-        ckFissa=()=> {
-            const btnFissa=document.getElementById('btn-fissa');
-            const btnRimuovi=document.getElementById('btn-rimuovi'); 
-            const navIconLX = document.getElementById('nav-fissa-icon-lx');
-            const navIconDX = document.getElementById('nav-fissa-icon-dx');
-            const formSwitch = document.getElementById('form-switch');
-            if (sessionStorage.getItem('posizioneFissaAttiva') === 'true') {
-                if(navIconLX) navIconLX.classList.remove('d-none');
-                if(navIconDX) navIconDX.classList.remove('d-none');
-                btnFissa.classList.add('d-none');
-                btnRimuovi.classList.remove('d-none');
-                formSwitch.classList.add('opacity-50', 'pe-none');
-            }
-            else {
-                
-                if(navIconLX) navIconLX.classList.add('d-none');
-                if(navIconDX) navIconDX.classList.add('d-none');
-                btnFissa.classList.remove('d-none');
-                btnRimuovi.classList.add('d-none');
-                formSwitch.classList.remove('opacity-50', 'pe-none');
-            }
-            const isMobileWidth = window.innerWidth < 768;
-            if (isMobileWidth) {
-                if(navIconDX) navIconDX.remove();
-            }
-            else {
-                if(navIconLX) navIconLX.remove();
-            }   
-        };
     </script>
     <script>
             //gestione della sessione
