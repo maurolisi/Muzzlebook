@@ -26,8 +26,8 @@ string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti
     <link href="~/lib/box/css/box.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
-
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
+    <!-- Bootstrap Icons (valutare se inserirle direttamente nell'applicazione) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
     @await RenderSectionAsync("Styles", required: false)
 
 </head>
@@ -73,6 +73,14 @@ string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti
                             <a class="nav-link @IsActive("/Meticci") fw-semibold" asp-area="" asp-page="/Meticci">
                                 <i class="bi bi-journal-bookmark-fill me-1"></i>Viva i Meticci
                             </a>
+                        </li>
+                        <li class="nav-item d-flex align-items-center ms-lg-3 my-2 my-lg-0">
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input c-p bg-secondary border-0" type="checkbox" role="switch" id="globalLocationToggle">
+                                <label class="form-check-label text-white small fw-semibold ms-1 c-p" for="globalLocationToggle">
+                                    <i class="bi bi-geo-alt-fill text-danger me-1"></i>Tracciamento
+                                </label>
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @IsActive("/Login") fw-semibold" asp-area="" asp-page="/Index" asp-page-handler="Logout">
@@ -175,6 +183,69 @@ string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti
                 // // (Consigliato: copre i casi in cui l'utente interagisce senza fare fetch)
                 // document.addEventListener('click', window.resetTimerSessione);
     </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const togglePos = document.getElementById('globalLocationToggle');
+        if (!togglePos) return; 
+
+        let trackingInterval = null;
+
+        // 1. Usa sessionStorage al posto di localStorage
+        if (sessionStorage.getItem('trackingPosizione') === 'true') {
+            togglePos.checked = true;
+            avviaTracciamento();
+        }
+
+        // 2. Evento al click sull'interruttore
+        togglePos.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                sessionStorage.setItem('trackingPosizione', 'true'); // Modificato qui
+                avviaTracciamento();
+                if (typeof box !== 'undefined' && box.toast) {
+                    box.toast("Tracciamento attivato per questa sessione.", "success");
+                }
+            } else {
+                sessionStorage.setItem('trackingPosizione', 'false'); // Modificato qui
+                fermaTracciamento();
+                if (typeof box !== 'undefined' && box.toast) {
+                    box.toast("Tracciamento interrotto.", "warning");
+                }
+            }
+        });
+
+        function avviaTracciamento() {
+            inviaPosizioneGlobale(); 
+            trackingInterval = setInterval(inviaPosizioneGlobale, 60000); 
+        }
+
+        function fermaTracciamento() {
+            if (trackingInterval) clearInterval(trackingInterval);
+        }
+
+        function inviaPosizioneGlobale() {
+            if (!navigator.geolocation) return;
+
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+
+                try {
+                    await fetch("/TrackPosition", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ latitude: lat, longitude: lng })
+                    });
+                } catch (error) {
+                    console.error("Errore invio posizione background:", error);
+                }
+            }, 
+            (err) => console.warn("Errore GPS background:", err.message), 
+            { enableHighAccuracy: true });
+        }
+    });
+</script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
