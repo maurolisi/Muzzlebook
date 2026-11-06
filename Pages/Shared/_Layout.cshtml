@@ -74,13 +74,10 @@ string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti
                                 <i class="bi bi-journal-bookmark-fill me-1"></i>Viva i Meticci
                             </a>
                         </li>
-                        <li class="nav-item d-flex align-items-center ms-lg-3 my-2 my-lg-0">
-                            <div class="form-check form-switch mb-0">
-                                <input class="form-check-input c-p bg-secondary border-0" type="checkbox" role="switch" id="globalLocationToggle">
-                                <label class="form-check-label text-white small fw-semibold ms-1 c-p" for="globalLocationToggle">
-                                    <i class="bi bi-geo-alt-fill text-danger me-1"></i>Tracciamento
-                                </label>
-                            </div>
+                        <li class="nav-item">
+                            <a class="nav-link @IsActive("/mappa") fw-semibold" asp-area="" asp-page="/Mappa">
+                                <i class="bi bi-journal-bookmark-fill me-1"></i>Radar Musi
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @IsActive("/Login") fw-semibold" asp-area="" asp-page="/Index" asp-page-handler="Logout">
@@ -184,67 +181,95 @@ string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti
                 // document.addEventListener('click', window.resetTimerSessione);
     </script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const togglePos = document.getElementById('globalLocationToggle');
-        if (!togglePos) return; 
+    // document.addEventListener('DOMContentLoaded', () => {
+    //     const togglePos = document.getElementById('globalLocationToggle');
+    //     if (!togglePos) return; 
 
-        let trackingInterval = null;
+    //     let trackingInterval = null;
 
-        // 1. Usa sessionStorage al posto di localStorage
-        if (sessionStorage.getItem('trackingPosizione') === 'true') {
-            togglePos.checked = true;
-            avviaTracciamento();
+    //     // 1. Usa sessionStorage al posto di localStorage
+    //     if (sessionStorage.getItem('trackingPosizione') === 'true') {
+    //         togglePos.checked = true;
+    //         avviaTracciamento();
+    //     }
+
+    //     // 2. Evento al click sull'interruttore
+    //     togglePos.addEventListener('change', (e) => {
+    //         if (e.target.checked) {
+    //             sessionStorage.setItem('trackingPosizione', 'true'); // Modificato qui
+    //             avviaTracciamento();
+    //             if (typeof box !== 'undefined' && box.toast) {
+    //                 box.toast("Tracciamento attivato per questa sessione.", "success");
+    //             }
+    //         } else {
+    //             sessionStorage.setItem('trackingPosizione', 'false'); // Modificato qui
+    //             fermaTracciamento();
+    //             if (typeof box !== 'undefined' && box.toast) {
+    //                 box.toast("Tracciamento interrotto.", "warning");
+    //             }
+    //         }
+    //     });
+
+let trackingInterval = null;
+let invioInCorso = false;
+
+function avviaTracciamento() {
+    if (trackingInterval) return; // evita doppi intervalli
+    inviaPosizioneGlobale();
+    trackingInterval = setInterval(inviaPosizioneGlobale, 60000);
+}
+
+function fermaTracciamento() {
+    if (trackingInterval) {
+        clearInterval(trackingInterval);
+        trackingInterval = null;
+    }
+}
+function inviaPosizioneGlobale() {
+    if (!navigator.geolocation || invioInCorso) return;
+    invioInCorso = true;
+
+    const successo = async (pos) => {
+        try {
+            const token = document.querySelector('meta[name="csrf-token"]')?.content;
+            const res = await fetch("/TrackPosition", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "RequestVerificationToken": token
+                },
+                body: JSON.stringify({
+                    latitude: pos.coords.latitude,
+                    longitude: pos.coords.longitude
+                })
+            });
+            if (!res.ok) console.error("TrackPosition ha risposto", res.status);
+        } catch (error) {
+            console.error("Errore invio posizione background:", error);
+        } finally {
+            invioInCorso = false;
         }
+    };
 
-        // 2. Evento al click sull'interruttore
-        togglePos.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                sessionStorage.setItem('trackingPosizione', 'true'); // Modificato qui
-                avviaTracciamento();
-                if (typeof box !== 'undefined' && box.toast) {
-                    box.toast("Tracciamento attivato per questa sessione.", "success");
-                }
-            } else {
-                sessionStorage.setItem('trackingPosizione', 'false'); // Modificato qui
-                fermaTracciamento();
-                if (typeof box !== 'undefined' && box.toast) {
-                    box.toast("Tracciamento interrotto.", "warning");
-                }
-            }
-        });
+    const fallimentoFinale = (err) => {
+        console.warn("Errore GPS background:", err.code, err.message);
+        invioInCorso = false;
+    };
 
-        function avviaTracciamento() {
-            inviaPosizioneGlobale(); 
-            trackingInterval = setInterval(inviaPosizioneGlobale, 60000); 
-        }
-
-        function fermaTracciamento() {
-            if (trackingInterval) clearInterval(trackingInterval);
-        }
-
-        function inviaPosizioneGlobale() {
-            if (!navigator.geolocation) return;
-
-            navigator.geolocation.getCurrentPosition(async (pos) => {
-                const lat = pos.coords.latitude;
-                const lng = pos.coords.longitude;
-
-                try {
-                    await fetch("/TrackPosition", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ latitude: lat, longitude: lng })
-                    });
-                } catch (error) {
-                    console.error("Errore invio posizione background:", error);
-                }
-            }, 
-            (err) => console.warn("Errore GPS background:", err.message), 
-            { enableHighAccuracy: true });
-        }
-    });
+    // 1° tentativo: alta precisione (GPS), timeout breve
+    navigator.geolocation.getCurrentPosition(
+        successo,
+        () => {
+            // 2° tentativo: precisione bassa (Wi-Fi/IP), molto più veloce
+            navigator.geolocation.getCurrentPosition(
+                successo,
+                fallimentoFinale,
+                { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 }
+            );
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 5000 }
+    );
+}
 </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

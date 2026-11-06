@@ -1,0 +1,240 @@
+﻿@page
+@model Muzzlebook.Pages.MappaAmiciModel
+@{
+    ViewData["Title"] = "Mappa Amici";
+}
+<style>
+    /* Contenitore principale del marker personalizzato */
+.dog-marker-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.dog-marker-container:hover {
+    transform: scale(1.1); /* Effetto zoom al passaggio del mouse */
+}
+
+/* Stile dell'avatar circolare */
+.dog-avatar-pin {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%; /* Rende l'immagine un cerchio perfetto */
+    object-fit: cover;  /* Evita che l'immagine venga schiacciata */
+    border: 3px solid #ffffff; /* Bordo bianco in evidenza */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Ombra stile app */
+    background-color: #0D6EFD; /* Colore di fallback se l'immagine tarda a caricare */
+}
+</style>
+<div class="container my-4">
+    <div class="d-flex align-items-center mb-4 border-bottom pb-2">
+        <h2 class="text-primary fw-bold mb-0"><i class="bi bi-map-fill me-2 text-danger"></i>Radar Musi</h2>
+        <span class="badge bg-success ms-3" id="statusBadge">Aggiornamento in corso...</span>
+    </div>
+                                <div class="form-check form-switch mb-0">
+                                <input class="form-check-input c-p bg-secondary border-0" type="checkbox" role="switch" id="globalLocationToggle">
+                                <label class="form-check-label small fw-semibold ms-1 c-p" for="globalLocationToggle">
+                                    <i class="bi bi-geo-alt-fill text-danger me-1"></i>Condividi la posizione 
+                                </label>
+                            </div>
+    <!-- Contenitore Mappa -->
+    <div id="map" class="shadow-sm border border-2 rounded-4" style="width: 100%; height: 70vh;"></div>
+</div>
+
+@section Scripts {
+    <script>
+    let map;
+    let activeMarkers = {};
+    let infoWindow;
+    let AdvancedMarkerElement;
+    let mioMarker = null;
+    let watchId = null;
+
+    const MAP_ID = "INSERISCI_QUI_IL_TUO_MAP_ID";
+
+    async function initMap() {
+        const { Map, InfoWindow } = await google.maps.importLibrary("maps");
+        ({ AdvancedMarkerElement } = await google.maps.importLibrary("marker"));
+
+        const centroDefault = { lat: 41.9028, lng: 12.4964 }; // Roma, solo come riserva
+
+        map = new Map(document.getElementById("map"), {
+            zoom: 14,
+            center: centroDefault,
+            mapId: MAP_ID
+        });
+        infoWindow = new InfoWindow();
+
+        seguiPosizioneUtente();
+
+        await aggiornaPosizioni();
+        setInterval(aggiornaPosizioni, 60000);
+    }
+
+    function seguiPosizioneUtente() {
+        if (!navigator.geolocation) {
+            console.warn("Geolocalizzazione non supportata da questo browser.");
+            return;
+        }
+
+        let primoFix = true;
+
+        watchId = navigator.geolocation.watchPosition(
+            (pos) => {
+                const mia = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+
+                if (!mioMarker) {
+                    const punto = document.createElement('div');
+                    punto.style.cssText =
+                        "width:16px;height:16px;border-radius:50%;" +
+                        "background:#4285F4;border:3px solid #fff;" +
+                        "box-shadow:0 0 6px rgba(0,0,0,.4);";
+
+                    mioMarker = new AdvancedMarkerElement({
+                        map: map,
+                        position: mia,
+                        title: "La tua posizione",
+                        content: punto,
+                        zIndex: 1000
+                    });
+                } else {
+                    mioMarker.position = mia;
+                }
+
+                if (primoFix) {
+                    map.setCenter(mia);
+                    primoFix = false;
+                }
+            },
+            (err) => {
+                console.warn("Geolocalizzazione non disponibile:", err.message);
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        );
+    }
+
+    async function aggiornaPosizioni() {
+        try {
+            const response = await fetch("?handler=PosizioniAttive");
+            if (!response.ok) throw new Error("Errore rete");
+
+            const cani = await response.json();
+            const currentDogIds = new Set();
+            const coordinateOccupate = {};
+
+            cani.forEach(cane => {
+                currentDogIds.add(cane.dogId);
+
+                let lat = cane.latitude;
+                let lng = cane.longitude;
+
+                // Evita sovrapposizioni (~2 metri)
+                const coordKey = `${lat.toFixed(5)}_${lng.toFixed(5)}`;
+                if (coordinateOccupate[coordKey] !== undefined) {
+                    coordinateOccupate[coordKey]++;
+                    const offset = coordinateOccupate[coordKey] * 0.00002;
+                    lat += offset;
+                    lng += offset;
+                } else {
+                    coordinateOccupate[coordKey] = 0;
+                }
+
+                const oraFormat = new Date(cane.timestamp)
+                    .toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+
+                const iconUrl = cane.profileImageUrl
+                    ? "https://media.muzzlebook.it" + cane.profileImageUrl
+                    : "/images/logo.png";
+
+                const nuovaPosizione = { lat, lng };
+                const esistente = activeMarkers[cane.dogId];
+
+                if (esistente) {
+                    esistente.position = nuovaPosizione;
+                    esistente._ora = oraFormat;
+                    return;
+                }
+
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'dog-marker-container';
+                const img = document.createElement('img');
+                img.src = iconUrl;
+                img.alt = cane.name;
+                img.className = 'dog-avatar-pin';
+                contentDiv.appendChild(img);
+
+                const marker = new AdvancedMarkerElement({
+                    map: map,
+                    position: nuovaPosizione,
+                    title: cane.name,
+                    content: contentDiv,
+                    gmpClickable: true
+                });
+                marker._ora = oraFormat;
+
+                marker.addListener('click', () => {
+                    const box = document.createElement('div');
+                    box.className = 'text-center p-2';
+                    box.innerHTML = `
+                        <strong class="fs-6 d-block text-primary"></strong>
+                        <span class="small text-muted"><i class="bi bi-clock me-1"></i>Visto alle <span class="ora"></span></span>`;
+                    box.querySelector('strong').textContent = cane.name;
+                    box.querySelector('.ora').textContent = marker._ora;
+
+                    infoWindow.setContent(box);
+                    infoWindow.open({ anchor: marker, map: map });
+                });
+
+                activeMarkers[cane.dogId] = marker;
+            });
+
+            // Rimuove i marker scaduti
+            for (const dogId in activeMarkers) {
+                if (!currentDogIds.has(parseInt(dogId))) {
+                    activeMarkers[dogId].map = null;
+                    delete activeMarkers[dogId];
+                }
+            }
+        } catch (error) {
+            console.error("Errore fetch posizioni:", error);
+        }
+    }
+
+    window.addEventListener('beforeunload', () => {
+        if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+    });
+</script>
+    <!-- Sostituisci LA_TUA_API_KEY con la vera chiave di Google Maps -->
+    <script  async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN9W9hYm3KIPECKd7x3X1M_TVPg8accM4&libraries=marker&callback=initMap" async defer></script>
+
+    
+ <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const togglePos = document.getElementById('globalLocationToggle');
+            if (!togglePos) return;
+
+            if (sessionStorage.getItem('trackingPosizione') === 'true') {
+                togglePos.checked = true;
+                avviaTracciamento();
+            }
+
+            togglePos.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    sessionStorage.setItem('trackingPosizione', 'true');
+                    avviaTracciamento();
+                    if (typeof box !== 'undefined' && box.toast) {
+                        box.toast("Tracciamento attivato per questa sessione.", "success");
+                    }
+                } else {
+                    sessionStorage.setItem('trackingPosizione', 'false');
+                    fermaTracciamento();
+                    if (typeof box !== 'undefined' && box.toast) {
+                        box.toast("Tracciamento interrotto.", "warning");
+                    }
+                }
+            });
+        }); // <-- era questa la chiusura mancante
+    </script>
+}
