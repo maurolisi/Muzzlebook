@@ -29,7 +29,18 @@ string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti
     <!-- Bootstrap Icons (valutare se inserirle direttamente nell'applicazione) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
     @await RenderSectionAsync("Styles", required: false)
+    <style>
+@@keyframes pulse-icon {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
 
+.icon-pulsing {
+    animation: pulse-icon 1.5s infinite ease-in-out;
+    display: inline-block; /* Necessario per permettere il transform: scale sull'icona */
+}
+</style>
 </head>
 <body>
     <header class="sticky-top">
@@ -45,6 +56,10 @@ string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti
                         <div style="font-size: 0.5em;">Il libro dei musi</div>
                     </div>
                 </a>
+                <div id="nav-fissa-icon-lx" class="position-relative d-none c-p" title="Rimuovi Posizione Fissa">
+                    <i class="bi bi-pin-angle-fill text-danger icon-pulsing" style="cursor: pointer;font-size: 2rem;" onclick="gestisciPosizioneFissa(false)"></i>
+                    <i class="bi bi-x-lg text-dark position-absolute" style="top: 55%; left: 30%; transform: translate(-50%, -50%);font-size: 2.5em;rotate: 15deg;"></i>
+                </div>
                 <!-- Toggler per Mobile -->
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -79,6 +94,11 @@ string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti
                                 <i class="bi bi-journal-bookmark-fill me-1"></i>Radar Musi
                             </a>
                         </li>
+@*                         <li class="nav-item d-none" id="nav-fissa-icon">
+                            <button type="button" class="btn btn-sm btn-outline-danger rounded-circle ms-2" title="Sblocca Posizione Fissa" onclick="gestisciPosizioneFissa(false)">
+                                <i class="bi bi-x-circle text-danger"></i>
+                            </button>
+                        </li> *@
                         <li class="nav-item">
                             <a class="nav-link @IsActive("/Login") fw-semibold" asp-area="" asp-page="/Index" asp-page-handler="Logout">
                                 <i class="bi bi-journal-bookmark-fill me-1"></i>@loginLabel
@@ -90,6 +110,10 @@ string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti
                             </a>
                         </li>
                     </ul>
+                </div>
+               <div id="nav-fissa-icon-dx" class="position-relative d-none c-p" title="Rimuovi Posizione Fissa" >
+                    <i class="bi bi-pin-angle-fill text-danger icon-pulsing" style="cursor: pointer;font-size: 2rem;" onclick="gestisciPosizioneFissa(false)"></i>
+                    <i class="bi bi-x-lg text-dark position-absolute" style="top: 55%; left: 30%; transform: translate(-50%, -50%);font-size: 2.5em;rotate: 15deg;"></i>
                 </div>
             </div>
         </nav>
@@ -141,14 +165,45 @@ string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti
                         .catch(err => console.error('Errore registrazione Service Worker:', err));
                 });
             }
-    </script>
-    <script>
             // Aggiunge un header custom a ogni richiesta HTMX.
             // Lato server (PageHandler) permette di distinguere chiamate HTMX da normali richieste browser:
             //if (Request.Headers["X-Requested-With"] == "HTMX") { return Partial(...) } else { return Page() }
             document.body.addEventListener('htmx:configRequest', function (evt) {
                 evt.detail.headers['X-Requested-With'] = 'HTMX';
             });
+            document.addEventListener('DOMContentLoaded', () => {
+            // Incolla qui la logica per il controllo della posizione al caricamento
+            ckFissa();
+        });
+        ckFissa=()=> {
+            const btnFissa=document.getElementById('btn-fissa');
+            const btnRimuovi=document.getElementById('btn-rimuovi'); 
+            const navIconLX = document.getElementById('nav-fissa-icon-lx');
+            const navIconDX = document.getElementById('nav-fissa-icon-dx');
+            const formSwitch = document.getElementById('form-switch');
+            if (sessionStorage.getItem('posizioneFissaAttiva') === 'true') {
+                if(navIconLX) navIconLX.classList.remove('d-none');
+                if(navIconDX) navIconDX.classList.remove('d-none');
+                btnFissa.classList.add('d-none');
+                btnRimuovi.classList.remove('d-none');
+                formSwitch.classList.add('opacity-50', 'pe-none');
+            }
+            else {
+                
+                if(navIconLX) navIconLX.classList.add('d-none');
+                if(navIconDX) navIconDX.classList.add('d-none');
+                btnFissa.classList.remove('d-none');
+                btnRimuovi.classList.add('d-none');
+                formSwitch.classList.remove('opacity-50', 'pe-none');
+            }
+            const isMobileWidth = window.innerWidth < 768;
+            if (isMobileWidth) {
+                if(navIconDX) navIconDX.remove();
+            }
+            else {
+                if(navIconLX) navIconLX.remove();
+            }   
+        };
     </script>
     <script>
             //gestione della sessione
@@ -364,6 +419,106 @@ document.addEventListener('visibilitychange', () => {
 ['click', 'touchstart'].forEach(evento =>
     document.addEventListener(evento, richiediWakeLock, { once: true, passive: true })
 );
+
+
+
+//fissa posizione
+// Funzione globale richiamabile da qualsiasi pagina
+window.gestisciPosizioneFissa = async function(fissa) {
+    // Evita click multipli accidentali durante l'elaborazione
+    if (window.fissaggioInCorso) return;
+    window.fissaggioInCorso = true;
+
+    // 1. Gestione Session Storage
+    if (fissa) {
+        sessionStorage.setItem('posizioneFissaAttiva', 'true');
+    } else {
+        sessionStorage.removeItem('posizioneFissaAttiva');
+    }
+
+    let lat = 0;
+    let lng = 0;
+
+    // 2. Lettura GPS con strategia a due tentativi (High -> Low)
+    if (fissa) {
+        if (!navigator.geolocation) {
+            if (typeof box !== 'undefined' && box.alert) box.alert("La geolocalizzazione non è supportata.");
+            window.fissaggioInCorso = false;
+            return;
+        }
+
+        try {
+            const position = await new Promise((resolve, reject) => {
+                // Funzione di fallback: 2° tentativo (bassa precisione, per PC e Wi-Fi)
+                const fallback = (err) => {
+                    console.warn("GPS alta precisione fallito, tento con rete/IP:", err.message);
+                    navigator.geolocation.getCurrentPosition(
+                        resolve, 
+                        reject, // Fallimento finale
+                        { enableHighAccuracy: false, timeout: 15000, maximumAge: 60000 }
+                    );
+                };
+
+                // 1° tentativo: cerca il chip GPS (smartphone)
+                navigator.geolocation.getCurrentPosition(
+                    resolve, 
+                    fallback, 
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 5000 }
+                );
+            });
+
+            lat = position.coords.latitude;
+            lng = position.coords.longitude;
+            
+        } catch (error) {
+            console.warn("Errore GPS definitivo:", error.message);
+            if (typeof box !== 'undefined' && box.alert) box.alert("Impossibile recuperare la posizione. Controlla i permessi.");
+            window.fissaggioInCorso = false;
+            return;
+        }
+    }
+
+    // 3. Invio al server
+    const tokenElement = document.querySelector('input[name="__RequestVerificationToken"]');
+    const token = tokenElement ? tokenElement.value : "";
+
+    try {
+        const response = await fetch("/TrackPosition?handler=FissaPosizione", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "RequestVerificationToken": token
+            },
+            body: JSON.stringify({ 
+                latitude: lat, 
+                longitude: lng, 
+                fissa: fissa 
+            })
+        });
+
+        if (response.ok) {
+            if (typeof box !== 'undefined' && box.toast) {
+                box.toast(fissa ? "Posizione fissa registrata!" : "Posizione sbloccata.", fissa ? "success" : "warning");
+            }
+            
+            // Aggiorna la visibilità dell'icona nella navbar
+            const navIcon = document.getElementById('nav-fissa-icon');
+            if (navIcon) {
+                if (fissa) navIcon.classList.remove('d-none');
+                else navIcon.classList.add('d-none');
+            }
+        } else {
+            console.error("Errore server durante il salvataggio.");
+        }
+    } catch (error) {
+        console.error("Errore di rete:", error);
+    } finally {
+        // Sblocca la funzione per click successivi
+        window.fissaggioInCorso = false;
+        ckFissa();
+        aggiornaPosizioni();
+    }
+};
 </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

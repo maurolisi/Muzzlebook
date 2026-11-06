@@ -68,5 +68,62 @@ namespace Muzzlebook.Pages
 
             return new JsonResult(new { success = true });
         }
+
+        // DTO per mappare i dati in arrivo dalla fetch
+        public class FissaPosizioneDto
+        {
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
+            public bool Fissa { get; set; }
+        }
+
+        // Handler POST per gestire l'attivazione o la rimozione della posizione fissa
+        public async Task<IActionResult> OnPostFissaPosizioneAsync([FromBody] FissaPosizioneDto data)
+        {
+            if (data == null)
+            {
+                return BadRequest("Payload non valido o vuoto.");
+            }
+
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
+            {
+                return Unauthorized();
+            }
+            // Trova il primo cane associato all'utente loggato (in ordine crescente di ID, come richiesto)
+            var sqlDog = @"
+            SELECT DogId 
+            FROM DogOwners 
+            WHERE UserId = @UserId 
+            ORDER BY DogId desc 
+            LIMIT 1;";
+            var dogId = await _db.ExecuteScalarAsync<int?>(sqlDog, new { UserId = userId });
+            if (data.Fissa)
+            {
+                if (!dogId.HasValue)
+                {
+                    return BadRequest("Nessun cane associato all'utente.");
+                }
+                var sqlUpsert = @"
+            INSERT INTO DogLastPosition (DogId, Latitude, Longitude, Timestamp) 
+            VALUES (@DogId, @Latitude, @Longitude, '2050-01-01 00:00:00')
+            ON CONFLICT(DogId) DO UPDATE SET 
+                Latitude = excluded.Latitude, 
+                Longitude = excluded.Longitude, 
+                Timestamp = '2050-01-01 00:00:00';";
+
+                await _db.ExecuteAsync(sqlUpsert, new { DogId = dogId.Value, data.Latitude, data.Longitude });
+            }
+            else
+            {
+                // Cancella le posizioni di TUTTI i cani appartenenti a questo utente
+                var sqlDelete = @"
+            DELETE FROM DogLastPosition 
+            WHERE DogId = @DogId;";
+                await _db.ExecuteAsync(sqlDelete, new { DogId = dogId.Value });
+            }
+
+            return new JsonResult(new { success = true });
+        }
     }
 }
