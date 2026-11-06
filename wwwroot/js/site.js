@@ -190,39 +190,40 @@ async function resizeImage(file, maxDimension = 800, quality = 0.85) {
     });
 }
 
-//funzione per il tracciamento fisso della posizione dell'utente, utile per il radar dei musi
-        ckFissa=()=> {
-            const btnFissa=document.getElementById('btn-fissa');
-            const btnRimuovi=document.getElementById('btn-rimuovi'); 
-            const navIconLX = document.getElementById('nav-fissa-icon-lx');
-            const navIconDX = document.getElementById('nav-fissa-icon-dx');
-            const formSwitch = document.getElementById('form-switch');
-            if (sessionStorage.getItem('posizioneFissaAttiva') === 'true') {
-                if(navIconLX) navIconLX.classList.remove('d-none');
-                if(navIconDX) navIconDX.classList.remove('d-none');
-                btnFissa.classList.add('d-none');
-                btnRimuovi.classList.remove('d-none');
-                formSwitch.classList.add('opacity-50', 'pe-none');
-            }
-            else {
-                
-                if(navIconLX) navIconLX.classList.add('d-none');
-                if(navIconDX) navIconDX.classList.add('d-none');
-                btnFissa.classList.remove('d-none');
-                btnRimuovi.classList.add('d-none');
-                formSwitch.classList.remove('opacity-50', 'pe-none');
-            }
-            const isMobileWidth = window.innerWidth < 768;
-            if (isMobileWidth) {
-                if(navIconDX) navIconDX.remove();
-            }
-            else {
-                if(navIconLX) navIconLX.remove();
-            }   
-        };
+// 1. Definisci la funzione in modo esplicito sull'oggetto window per garantirne lo scope globale
+window.ckFissa = function() {
+    const btnFissa = document.getElementById('btn-fissa');
+    const btnRimuovi = document.getElementById('btn-rimuovi'); 
+    const navIconLX = document.getElementById('nav-fissa-icon-lx');
+    const navIconDX = document.getElementById('nav-fissa-icon-dx');
+    const formSwitch = document.getElementById('form-switch');
+    
+    // Controlla se la posizione fissa è attiva
+    if (sessionStorage.getItem('posizioneFissaAttiva') === 'true') {
+        if(navIconLX) navIconLX.classList.remove('d-none');
+        if(navIconDX) navIconDX.classList.remove('d-none');
+        if(btnFissa) btnFissa.classList.add('d-none');
+        if(btnRimuovi) btnRimuovi.classList.remove('d-none');
+        if(formSwitch) formSwitch.classList.add('opacity-50', 'pe-none');
+    } else {
+        if(navIconLX) navIconLX.classList.add('d-none');
+        if(navIconDX) navIconDX.classList.add('d-none');
+        if(btnFissa) btnFissa.classList.remove('d-none');
+        if(btnRimuovi) btnRimuovi.classList.add('d-none');
+        if(formSwitch) formSwitch.classList.remove('opacity-50', 'pe-none');
+    }
+    
+    // Gestione mobile / desktop dell'icona navbar
+    const isMobileWidth = window.innerWidth < 768;
+    if (isMobileWidth) {
+        if(navIconDX) navIconDX.remove();
+    } else {
+        if(navIconLX) navIconLX.remove();
+    }   
+};
 
-                // 2. Chiamala al caricamento classico della pagina (ricarica con F5 o primo accesso)
-document.addEventListener('DOMContentLoaded', ckFissa);
+// 2. Chiamala al caricamento classico della pagina (ricarica con F5 o primo accesso)
+document.addEventListener('DOMContentLoaded', window.ckFissa);
 
-// 3. Chiamala dopo ogni transizione di pagina gestita da HTMX (se utilizzato)
-document.body.addEventListener('htmx:afterSwap', ckFissa);
+// 3. Chiamala dopo ogni transizione di pagina gestita da HTMX (se utilizzato nel progetto)
+document.body.addEventListener('htmx:afterSwap', window.ckFissa);
