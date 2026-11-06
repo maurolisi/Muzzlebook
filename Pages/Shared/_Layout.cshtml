@@ -2,7 +2,7 @@
 @{
     string IdUtente = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
     string loginLabel = (string.IsNullOrEmpty(IdUtente)) ? "Login" : "Logout";
-string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti per accedere a questa area' class='fa-solid fa-lock'></i>" : "";
+string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti per accedere a questa area' class='fa-solid fa-lock me-1'></i>" : "<i class='bi bi-journal-bookmark-fill me-1'></i>";
     string IsActive(string page) =>
         string.Equals(ViewContext.RouteData.Values["page"]?.ToString(), page, StringComparison.OrdinalIgnoreCase)
             ? "text-white active"
@@ -61,7 +61,7 @@ string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @IsActive("/Musi/Index") fw-semibold" asp-area="" asp-page="/Musi/Index">
-                                <i class="bi bi-journal-bookmark-fill me-1"></i>I miei Musi @Html.Raw(unLogin)
+                                 @Html.Raw(unLogin)I miei Musi
                             </a>
                         </li>
                         <li class="nav-item">
