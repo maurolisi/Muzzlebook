@@ -6,7 +6,7 @@ using System.Data;
 
 namespace Muzzlebook.Pages
 {
-    [Authorize] // Attenzione: Assicurati di essere loggato per usarla
+    [Authorize]
     public class AdminDbModel : PageModel
     {
         private readonly IDbConnection _db;
@@ -19,11 +19,19 @@ namespace Muzzlebook.Pages
         [BindProperty(SupportsGet = true)]
         public string? SelectedTable { get; set; }
 
+        [BindProperty]
+        public string? CustomQuery { get; set; }
+
         public List<string> Tables { get; set; } = new();
         public List<ColumnInfo> Columns { get; set; } = new();
         public List<dynamic> Rows { get; set; } = new();
 
-        // Classe per mappare l'output di "PRAGMA table_info()"
+        // Proprietà per i risultati della query personalizzata
+        public IEnumerable<dynamic> QueryResultRows { get; set; } = Enumerable.Empty<dynamic>();
+        public List<string> QueryResultColumns { get; set; } = new();
+        public string? QueryError { get; set; }
+        public string? QuerySuccessMessage { get; set; }
+
         public class ColumnInfo
         {
             public string Name { get; set; } = string.Empty;
@@ -33,26 +41,63 @@ namespace Muzzlebook.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            // 1. Legge tutte le tabelle create nel database SQLite
             Tables = (await _db.QueryAsync<string>("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;")).ToList();
 
             if (!string.IsNullOrEmpty(SelectedTable) && Tables.Contains(SelectedTable))
             {
-                // 2. Legge dinamicamente lo schema della tabella selezionata
                 Columns = (await _db.QueryAsync<ColumnInfo>($"PRAGMA table_info({SelectedTable});")).ToList();
-
-                // Cerca la chiave primaria per ordinare gli ultimi inserimenti
                 string pkCol = Columns.FirstOrDefault(c => c.Pk == 1)?.Name ?? "";
                 string orderClause = !string.IsNullOrEmpty(pkCol) ? $"ORDER BY {pkCol} DESC" : "";
 
-                // 3. Recupera gli ultimi 100 record
                 Rows = (await _db.QueryAsync($"SELECT * FROM {SelectedTable} {orderClause} LIMIT 100;")).ToList();
             }
 
             return Page();
         }
 
-        // Handler per l'Eliminazione
+        // Handler per eseguire la query personalizzata inserita nella Textbox
+        public async Task<IActionResult> OnPostExecuteQueryAsync()
+        {
+            Tables = (await _db.QueryAsync<string>("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;")).ToList();
+
+            if (string.IsNullOrWhiteSpace(CustomQuery))
+            {
+                QueryError = "Inserisci una query SQL valida.";
+                return Page();
+            }
+
+            string trimmedQuery = CustomQuery.Trim().ToUpperInvariant();
+
+            try
+            {
+                if (trimmedQuery.StartsWith("SELECT"))
+                {
+                    // Esegue la SELECT e mappa i risultati come dizionari per leggere le chiavi dinamicamente
+                    var results = (await _db.QueryAsync(CustomQuery)).ToList();
+                    QueryResultRows = results;
+
+                    if (results.Any())
+                    {
+                        var firstRow = (IDictionary<string, object>)results.First();
+                        QueryResultColumns = firstRow.Keys.ToList();
+                    }
+                    QuerySuccessMessage = $"Query eseguita con successo. Restituiti {results.Count} record.";
+                }
+                else
+                {
+                    // Esegue comandi di modifica (INSERT, UPDATE, DELETE, CREATE, ecc.)
+                    int affectedRows = await _db.ExecuteAsync(CustomQuery);
+                    QuerySuccessMessage = "Comando eseguito con successo. Righe interessate: " + affectedRows;
+                }
+            }
+            catch (Exception ex)
+            {
+                QueryError = $"Errore SQL: {ex.Message}";
+            }
+
+            return Page();
+        }
+
         public async Task<IActionResult> OnPostDeleteAsync(string tableName, string pkName, string pkValue)
         {
             var validTables = await _db.QueryAsync<string>("SELECT name FROM sqlite_master WHERE type='table';");
@@ -64,7 +109,6 @@ namespace Muzzlebook.Pages
             return RedirectToPage(new { SelectedTable = tableName });
         }
 
-        // Handler Universale per Inserimento e Modifica (Upsert)
         public async Task<IActionResult> OnPostSaveRecordAsync(string tableName, IFormCollection form)
         {
             var validTables = (await _db.QueryAsync<string>("SELECT name FROM sqlite_master WHERE type='table'")).ToList();
@@ -73,7 +117,6 @@ namespace Muzzlebook.Pages
             var cols = await _db.QueryAsync<ColumnInfo>($"PRAGMA table_info({tableName})");
             string pkName = cols.FirstOrDefault(c => c.Pk == 1)?.Name ?? "Id";
 
-            // Se la Primary Key è compilata nel form, è un Update, altrimenti un Insert
             bool isUpdate = form.ContainsKey(pkName) && !string.IsNullOrWhiteSpace(form[pkName]);
 
             var parameters = new DynamicParameters();
@@ -84,7 +127,7 @@ namespace Muzzlebook.Pages
             foreach (var col in cols)
             {
                 string cName = col.Name;
-                if (cName == pkName && !isUpdate) continue; // Salta la PK in fase di inserimento (è AUTOINCREMENT)
+                if (cName == pkName && !isUpdate) continue;
 
                 if (form.ContainsKey(cName))
                 {
@@ -99,12 +142,11 @@ namespace Muzzlebook.Pages
                     }
                     else if (isUpdate)
                     {
-                        parameters.Add(cName, val); // Serve solo per la condizione WHERE dell'Update
+                        parameters.Add(cName, val);
                     }
                 }
             }
 
-            // Esecuzione dinamica
             if (isUpdate)
             {
                 var sql = $"UPDATE {tableName} SET {string.Join(", ", updateSets)} WHERE {pkName} = @{pkName}";

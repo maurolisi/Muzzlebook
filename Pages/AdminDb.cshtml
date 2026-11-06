@@ -6,14 +6,72 @@
 
 <div class="container my-4">
     <div class="d-flex align-items-center mb-4 border-bottom pb-2">
-        <h2 class="text-danger fw-bold mb-0"><i class="fa-solid fa-database me-2"></i>Gestore Database</h2>
+        <h2 class="text-danger fw-bold mb-0"><i class="fa-solid fa-database me-2"></i>Gestore Database & Console SQL</h2>
     </div>
 
-    <div class="alert alert-warning shadow-sm rounded-4">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i><strong>Pagina di Servizio:</strong> Permette di bypassare l'interfaccia utente modificando il DB grezzo. Utilizzare con attenzione ed eliminare una volta terminati i test.
+    <!-- Sezione Console Query Personalizzata -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4 bg-light">
+        <div class="card-body p-4">
+            <h5 class="fw-bold text-primary mb-3"><i class="bi bi-terminal-fill me-2"></i>Esegui Query SQL Personalizzata</h5>
+            
+            <form id="sqlQueryForm" method="post" asp-page-handler="ExecuteQuery">
+                <div class="mb-3">
+                    <textarea asp-for="CustomQuery" id="customQueryInput" class="form-control font-monospace" rows="3" placeholder="Scrivi qui la tua query (es. SELECT * FROM Dogs oppure UPDATE ...)"></textarea>
+                </div>
+                <button type="button" onclick="confermaEdEseguiQuery()" class="btn btn-dark px-4 rounded-pill shadow-sm">
+                    <i class="bi bi-play-fill me-1"></i> Esegui Query
+                </button>
+            </form>
+
+            @if (!string.IsNullOrEmpty(Model.QueryError))
+            {
+                <div class="alert alert-danger mt-3 mb-0 rounded-3">
+                    <i class="bi bi-exclamation-octagon-fill me-2"></i>@Model.QueryError
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.QuerySuccessMessage))
+            {
+                <div class="alert alert-success mt-3 mb-0 rounded-3">
+                    <i class="bi bi-check-circle-fill me-2"></i>@Model.QuerySuccessMessage
+                </div>
+            }
+
+            <!-- Risultati della SELECT personalizzata -->
+            @if (Model.QueryResultColumns.Any())
+            {
+                <div class="mt-4">
+                    <h6 class="fw-bold text-secondary">Risultati della Query:</h6>
+                    <div class="table-responsive shadow-sm bg-white rounded-4 border overflow-hidden" style="max-height: 400px;">
+                        <table class="table table-striped table-hover align-middle mb-0">
+                            <thead class="table-dark sticky-top">
+                                <tr>
+                                    @foreach (var colName in Model.QueryResultColumns)
+                                    {
+                                        <th>@colName</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var row in Model.QueryResultRows)
+                                {
+                                    var rowDict = (IDictionary<string, object>)row;
+                                    <tr>
+                                        @foreach (var colName in Model.QueryResultColumns)
+                                        {
+                                            <td>@(rowDict.ContainsKey(colName) ? rowDict[colName] : "")</td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 
-    <!-- Selezione Tabella -->
+    <!-- Selezione Tabella Standard -->
     <form method="get" class="mb-4 bg-light p-3 rounded-4 shadow-sm">
         <div class="d-flex align-items-center gap-3">
             <label class="fw-bold text-nowrap">Seleziona Tabella:</label>
@@ -115,23 +173,22 @@
     }
 </div>
 
+@Html.AntiForgeryToken()
+
 @section Scripts {
     <script>
         const modal = typeof bootstrap !== 'undefined' ? new bootstrap.Modal(document.getElementById('recordModal')) : null;
 
         function openRecordModal() {
             document.getElementById('modalTitle').innerText = "Nuovo Record (Lascia l'ID vuoto)";
-            // Svuota tutti gli input formattandoli per un insert pulito
             document.querySelectorAll('#recordModal input[type="text"]').forEach(i => i.value = '');
             modal.show();
         }
 
         function editRecord(btn) {
             document.getElementById('modalTitle').innerText = "Modifica Record";
-            // Prende i dati serializzati dall'attributo del pulsante 
             const data = JSON.parse(btn.getAttribute('data-json'));
 
-            // Scorre le chiavi JSON e popola i campi input corrispondenti
             for (const key in data) {
                 const input = document.getElementById('input_' + key);
                 if (input) {
@@ -139,6 +196,33 @@
                 }
             }
             modal.show();
+        }
+
+        // Funzione per controllare la query e attivare box.confirm se non è una SELECT
+        function confermaEdEseguiQuery() {
+            const queryText = document.getElementById('customQueryInput').value.trim();
+            const upperQuery = queryText.toUpperCase();
+
+            if (!queryText) {
+                if (typeof box !== 'undefined' && box.alert) {
+                    box.alert("Inserisci una query SQL.");
+                } else {
+                    alert("Inserisci una query SQL.");
+                }
+                return;
+            }
+
+            // Se inizia con SELECT, esegue direttamente senza conferma
+            if (upperQuery.startsWith("SELECT")) {
+                document.getElementById('sqlQueryForm').submit();
+            } else {
+                // Altrimenti usa box.confirm come richiesto
+                box.confirm("Attenzione: stai per eseguire un comando di modifica/scrittura sul database. Vuoi procedere?", (ok) => {
+                    if (ok) {
+                        document.getElementById('sqlQueryForm').submit();
+                    }
+                }, "Conferma operazione SQL", "confirm-sql-action");
+            }
         }
     </script>
 }
