@@ -181,35 +181,7 @@ string unLogin = (string.IsNullOrEmpty(IdUtente)) ? "<i title='Devi autenticarti
                 // document.addEventListener('click', window.resetTimerSessione);
     </script>
   <script>
-    // document.addEventListener('DOMContentLoaded', () => {
-    //     const togglePos = document.getElementById('globalLocationToggle');
-    //     if (!togglePos) return; 
-
-    //     let trackingInterval = null;
-
-    //     // 1. Usa sessionStorage al posto di localStorage
-    //     if (sessionStorage.getItem('trackingPosizione') === 'true') {
-    //         togglePos.checked = true;
-    //         avviaTracciamento();
-    //     }
-
-    //     // 2. Evento al click sull'interruttore
-    //     togglePos.addEventListener('change', (e) => {
-    //         if (e.target.checked) {
-    //             sessionStorage.setItem('trackingPosizione', 'true'); // Modificato qui
-    //             avviaTracciamento();
-    //             if (typeof box !== 'undefined' && box.toast) {
-    //                 box.toast("Tracciamento attivato per questa sessione.", "success");
-    //             }
-    //         } else {
-    //             sessionStorage.setItem('trackingPosizione', 'false'); // Modificato qui
-    //             fermaTracciamento();
-    //             if (typeof box !== 'undefined' && box.toast) {
-    //                 box.toast("Tracciamento interrotto.", "warning");
-    //             }
-    //         }
-    //     });
-
+// Gestione del tracciamento della posizione globale
 let trackingInterval = null;
 let invioInCorso = false;
 
@@ -270,6 +242,41 @@ function inviaPosizioneGlobale() {
         { enableHighAccuracy: true, timeout: 5000, maximumAge: 5000 }
     );
 }
+</script>
+
+<script>
+// gestione schermo acceso (Wake Lock API) per evitare che il browser metta in pausa la geolocalizzazione quando la pagina va in background 
+let wakeLock = null;
+
+async function richiediWakeLock() {
+    if (!('wakeLock' in navigator)) {
+        console.warn("Wake Lock non supportato da questo browser.");
+        return;
+    }
+    if (wakeLock || document.visibilityState !== 'visible') return;
+
+    try {
+        wakeLock = await navigator.wakeLock.request('screen');
+        wakeLock.addEventListener('release', () => { wakeLock = null; });
+    } catch (err) {
+        // Può fallire con risparmio energetico attivo o senza interazione utente
+        console.warn("Wake Lock non ottenuto:", err.name, err.message);
+    }
+}
+
+// All'avvio
+richiediWakeLock();
+
+// Il browser rilascia il lock quando la pagina va in background: va richiesto di nuovo
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') richiediWakeLock();
+});
+
+// Rete di sicurezza: se la richiesta iniziale è stata rifiutata,
+// riprova al primo tocco dell'utente
+['click', 'touchstart'].forEach(evento =>
+    document.addEventListener(evento, richiediWakeLock, { once: true, passive: true })
+);
 </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
