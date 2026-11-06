@@ -33,12 +33,30 @@
         <h2 class="text-primary fw-bold mb-0"><i class="bi bi-map-fill me-2 text-danger"></i>Radar Musi</h2>
         <span class="badge bg-success ms-3" id="statusBadge">Aggiornamento in corso...</span>
     </div>
-                                <div class="form-check form-switch mb-0">
-                                <input class="form-check-input c-p bg-secondary border-0" type="checkbox" role="switch" id="globalLocationToggle">
-                                <label class="form-check-label small fw-semibold ms-1 c-p" for="globalLocationToggle">
-                                    <i class="bi bi-geo-alt-fill text-danger me-1"></i>Condividi la posizione 
-                                </label>
-                            </div>
+    <div class="d-flex justify-content-between mb-1">
+        <div class="form-check form-switch mb-0">
+            <input class="form-check-input c-p bg-secondary border-0" type="checkbox" role="switch" id="globalLocationToggle">
+            <label class="form-check-label small fw-semibold ms-1 c-p" for="globalLocationToggle">
+                <i class="bi bi-geo-alt-fill text-danger me-1"></i>Condividi la posizione 
+            </label>
+        </div>
+        @*<button type="button" class="btn btn-outline-primary rounded-pill px-3" style="zoom: .7;">
+            <i class="bi bi-geo-alt-fill me-1"></i> Fissa Posizione
+        </button>*@
+        <button type="button" class="btn btn-outline-danger rounded-pill px-3" style="zoom: .7;">
+            <i class="bi bi-pin-angle-fill text-danger me-1"></i> Posizione Fissata
+        </button>
+    </div>
+@*     <i class="bi bi-geo-alt-fill text-danger"></i> Fissa Posizione
+    <br />
+    <i class="bi bi-pin-angle-fill text-primary"></i> Posizione Fissata
+    <br />
+    <i class="bi bi-lock-fill text-warning"></i> Posizione Bloccata
+    <br />
+    <button  type="button" class="btn btn-outline-primary rounded-pill px-3">
+        <i class="bi bi-pin-angle-fill me-1"></i> Fissa Posizione
+    </button> *@
+
     <!-- Contenitore Mappa -->
     <div id="map" class="shadow-sm border border-2 rounded-4" style="width: 100%; height: 70vh;"></div>
 </div>
