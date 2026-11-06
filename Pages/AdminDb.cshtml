@@ -1,0 +1,144 @@
+﻿@page
+@model Muzzlebook.Pages.AdminDbModel
+@{
+    ViewData["Title"] = "Gestione DB (Admin)";
+}
+
+<div class="container my-4">
+    <div class="d-flex align-items-center mb-4 border-bottom pb-2">
+        <h2 class="text-danger fw-bold mb-0"><i class="fa-solid fa-database me-2"></i>Gestore Database</h2>
+    </div>
+
+    <div class="alert alert-warning shadow-sm rounded-4">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i><strong>Pagina di Servizio:</strong> Permette di bypassare l'interfaccia utente modificando il DB grezzo. Utilizzare con attenzione ed eliminare una volta terminati i test.
+    </div>
+
+    <!-- Selezione Tabella -->
+    <form method="get" class="mb-4 bg-light p-3 rounded-4 shadow-sm">
+        <div class="d-flex align-items-center gap-3">
+            <label class="fw-bold text-nowrap">Seleziona Tabella:</label>
+            <select name="SelectedTable" class="form-select w-auto" onchange="this.form.submit()">
+                <option value="">-- Seleziona --</option>
+                @foreach (var t in Model.Tables)
+                {
+                    <option value="@t" selected="@(Model.SelectedTable == t)">@t</option>
+                }
+            </select>
+        </div>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.SelectedTable) && Model.Columns.Any())
+    {
+        string pkCol = Model.Columns.FirstOrDefault(c => c.Pk == 1)?.Name ?? "Id";
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0 text-primary">Contenuto di <span class="fw-bold">@Model.SelectedTable</span></h4>
+            <button class="btn btn-primary shadow-sm" onclick="openRecordModal()">
+                <i class="bi bi-plus-lg me-1"></i> Nuovo Record
+            </button>
+        </div>
+
+        <div class="table-responsive shadow-sm bg-white rounded-4 border overflow-hidden">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        @foreach (var col in Model.Columns)
+                        {
+                            <th>@col.Name</th>
+                        }
+                        <th class="text-end">Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model.Rows)
+                    {
+                        var rowDict = (IDictionary<string, object>)row;
+                        var pkValue = rowDict.ContainsKey(pkCol) ? rowDict[pkCol]?.ToString() : "";
+
+                        <tr>
+                            @foreach (var col in Model.Columns)
+                            {
+                                <td class="text-truncate" style="max-width: 200px;">@(rowDict.ContainsKey(col.Name) ? rowDict[col.Name] : "")</td>
+                            }
+                            <td class="text-end text-nowrap">
+                                <button class="btn btn-sm btn-light text-primary me-1 shadow-sm border"
+                                        onclick="editRecord(this)"
+                                        data-json="@System.Text.Json.JsonSerializer.Serialize(rowDict)">
+                                    <i class="fa-solid fa-pen"></i>
+                                </button>
+                                <form method="post" asp-page-handler="Delete" class="d-inline" onsubmit="return confirm('Sei sicuro di voler eliminare definitivamente questo record?');">
+                                    <input type="hidden" name="tableName" value="@Model.SelectedTable" />
+                                    <input type="hidden" name="pkName" value="@pkCol" />
+                                    <input type="hidden" name="pkValue" value="@pkValue" />
+                                    <button type="submit" class="btn btn-sm btn-light text-danger shadow-sm border"><i class="fa-solid fa-trash-can"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Modale Dinamico per Insert / Update -->
+        <div class="modal fade" id="recordModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <form method="post" asp-page-handler="SaveRecord">
+                    <div class="modal-content rounded-4 shadow">
+                        <div class="modal-header border-bottom bg-light">
+                            <h5 class="modal-title fw-bold text-primary" id="modalTitle">Modifica Record</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body row g-3 p-4">
+                            <input type="hidden" name="tableName" value="@Model.SelectedTable" />
+                            
+                            @foreach (var col in Model.Columns)
+                            {
+                                bool isPk = col.Pk == 1;
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">
+                                        @col.Name 
+                                        <small class="text-muted fw-normal">(@col.Type)</small>
+                                        @if(isPk){ <i class="bi bi-key-fill text-warning" title="Primary Key"></i> }
+                                    </label>
+                                    <input type="text" class="form-control" name="@col.Name" id="input_@col.Name" @(isPk ? "readonly" : "") />
+                                </div>
+                            }
+                        </div>
+                        <div class="modal-footer bg-light border-top">
+                            <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Annulla</button>
+                            <button type="submit" class="btn btn-primary rounded-pill px-4">Salva Dati</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        const modal = typeof bootstrap !== 'undefined' ? new bootstrap.Modal(document.getElementById('recordModal')) : null;
+
+        function openRecordModal() {
+            document.getElementById('modalTitle').innerText = "Nuovo Record (Lascia l'ID vuoto)";
+            // Svuota tutti gli input formattandoli per un insert pulito
+            document.querySelectorAll('#recordModal input[type="text"]').forEach(i => i.value = '');
+            modal.show();
+        }
+
+        function editRecord(btn) {
+            document.getElementById('modalTitle').innerText = "Modifica Record";
+            // Prende i dati serializzati dall'attributo del pulsante 
+            const data = JSON.parse(btn.getAttribute('data-json'));
+
+            // Scorre le chiavi JSON e popola i campi input corrispondenti
+            for (const key in data) {
+                const input = document.getElementById('input_' + key);
+                if (input) {
+                    input.value = data[key] === null ? '' : data[key];
+                }
+            }
+            modal.show();
+        }
+    </script>
+}
