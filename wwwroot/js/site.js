@@ -199,7 +199,7 @@ window.ckFissa = function() {
     const formSwitch = document.getElementById('form-switch');
     
     // Controlla se la posizione fissa è attiva
-    if (sessionStorage.getItem('posizioneFissaAttiva') === 'true') {
+    if (localStorage.getItem('posizioneFissaAttiva') === 'true') {
         if(navIconLX) navIconLX.classList.remove('d-none');
         if(navIconDX) navIconDX.classList.remove('d-none');
         if(btnFissa) btnFissa.classList.add('d-none');

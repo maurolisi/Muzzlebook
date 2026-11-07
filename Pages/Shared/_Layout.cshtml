@@ -398,9 +398,9 @@ window.gestisciPosizioneFissa = async function(fissa) {
 
     // 1. Gestione Session Storage
     if (fissa) {
-        sessionStorage.setItem('posizioneFissaAttiva', 'true');
+        localStorage.setItem('posizioneFissaAttiva', 'true');
     } else {
-        sessionStorage.removeItem('posizioneFissaAttiva');
+        localStorage.removeItem('posizioneFissaAttiva');
     }
 
     let lat = 0;
