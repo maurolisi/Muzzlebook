@@ -222,8 +222,38 @@ window.ckFissa = function() {
     }   
 };
 
-// 2. Chiamala al caricamento classico della pagina (ricarica con F5 o primo accesso)
-document.addEventListener('DOMContentLoaded', window.ckFissa);
+// // 2. Chiamala al caricamento classico della pagina (ricarica con F5 o primo accesso)
+// document.addEventListener('DOMContentLoaded', window.ckFissa);
 
-// 3. Chiamala dopo ogni transizione di pagina gestita da HTMX (se utilizzato nel progetto)
-document.body.addEventListener('htmx:afterSwap', window.ckFissa);
+// // 3. Chiamala dopo ogni transizione di pagina gestita da HTMX (se utilizzato nel progetto)
+// document.body.addEventListener('htmx:afterSwap', window.ckFissa);
+
+    window.sincronizzaStatoFissa = async function() {
+    try {
+        // Chiama l'handler GET appena creato
+        const response = await fetch("/TrackPosition?handler=CheckFissa");
+        
+        if (response.ok) {
+            const data = await response.json();
+            
+            // Imposta o rimuove la variabile nel local storage in base al database
+            if (data.isFissaAttiva) {
+                localStorage.setItem('posizioneFissaAttiva', 'true');
+            } else {
+                localStorage.removeItem('posizioneFissaAttiva');
+            }
+
+            // Se hai già la funzione ckFissa() nel file, chiamala per aggiornare la UI
+            if (typeof window.ckFissa === 'function') {
+                window.ckFissa();
+            }
+        }
+    } catch (error) {
+        console.error("Errore durante il controllo della posizione fissa dal server:", error);
+    }
+};
+
+document.addEventListener('DOMContentLoaded', window.sincronizzaStatoFissa);
+
+// Se usi HTMX per le transizioni di pagina:
+document.body.addEventListener('htmx:afterSwap', window.sincronizzaStatoFissa);

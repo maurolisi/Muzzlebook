@@ -125,5 +125,43 @@ namespace Muzzlebook.Pages
 
             return new JsonResult(new { success = true });
         }
+
+        public async Task<IActionResult> OnGetCheckFissaAsync()
+        {
+            // Recupera l'ID dell'utente loggato in modo sicuro
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdStr) || !int.TryParse(userIdStr, out int userId))
+            {
+                return Unauthorized();
+            }
+
+            // Conta se esiste almeno un record per i cani dell'utente con la data fissa
+            var sql = @"
+        SELECT COUNT(1) 
+                FROM DogLastPosition p
+                INNER JOIN DogOwners o ON p.DogId = o.DogId 
+                WHERE o.UserId = @UserId AND p.Timestamp = '2050-01-01 00:00:00';";
+
+            var count = await _db.ExecuteScalarAsync<int>(sql, new { UserId = userId });
+
+            // Ritorna true o false sotto forma di JSON
+            return new JsonResult(new { isFissaAttiva = count > 0 });
+        }
     }
 }
+
+
+/*
+var sql = @"
+    SELECT COUNT(1) 
+    FROM DogOwners 
+    INNER JOIN DogLastPosition ON DogLastPosition.DogId = DogOwners.DogId 
+    WHERE DogLastPosition.Timestamp = '2050-01-01 00:00:00' 
+      AND DogOwners.UserId = @UserId;";
+
+// Esegue la query passando il parametro in modo sicuro contro le SQL injection
+var count = await _db.ExecuteScalarAsync<int>(sql, new { UserId = 1 });
+
+// Restituisce true se trova almeno un record, false se non ne trova nessuno
+bool esiste = count > 0;
+ */
