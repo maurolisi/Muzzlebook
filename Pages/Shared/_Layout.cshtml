@@ -347,6 +347,7 @@ function inviaPosizioneGlobale() {
                     delete activeMarkers[dogId];
                 }
             }
+            window.sincronizzaStatoFissa();
         } catch (error) {
             console.error("Errore fetch posizioni:", error);
         }
